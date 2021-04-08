@@ -1,0 +1,55 @@
+Target :
+•	material requirements (accessories, isi budget)
+•	marker check production
+•	consumption
+
+
+* supplier :
+-   ppn dapat ditambahkan (di buatkan fitur master data PPN)
+
+* Sales Order
+-	di buatkan fitur sycn tolerance agar user tidak harus berulang kali mengisi value tolerance yang sama.
+-   material requirement bisa di input jika quantitiy breakdown dan budget telah di input (budget yang diinput adalah budget internal (-5%))
+-	material requirement di pisah antara kain dan accessories, di buatkan button terpisah
+-	Material Requirements ngelink dari RKK, tidak perlu input ulang lagi. Hanya input code RKK saja
+-	Untuk validasi, budget kain ada di RKK. Sedangkan untuk Accs ada di PO.
+-	Muncul warning jika budget di PO lebih besar dari budget costsheet.
+
+
+* Quotation
+-	Untuk budget internal handling dan sales fee jangan di kurangi.
+-	Hasil pengurangan dari setiap value di tambahkan ke margin untuk budget internal
+
+* Marker Check Production
+-	breakdown di link sama “SO – assortment” sehingga tidak usah input ulang, dan nanti di beri pilihan untuk quantity nya apakah sama atau mau di tambah (value penambahnya dalam bentuk %).
+
+=======================================================================================
+Fahmi :
+- print_rekkons : cell actual
+- upload pdf
+- print detail
+- create/edit wsheet jika hapus row maka variabel yang terintegrasi juga ikut berkurang nilainya
+
+Fahmi :
+-   Isi tabel detail melalui phpyadmin (ok)
+-   tampilkan tabel detail (ok)
+-   DOM pada form tambah (ok)
+-   fitur penambahan tabel detail (ok)
+-   fitur edit setiap mcp (ok)
+-   fitur show mcp detail (ok)
+-   fitur confirm melalui btn confirm (ok)
+-   nomor dokumen disamakan karena nomor tersebut menjelaskan dokumen apa itu, bukan nomor urut
+-   rekap Konsumsi
+-   rekap piping
+-   update pdf
+-   add worksheet jika dihapus row maka error calculatenya
+-   ajax di dalam modal tidak berfungsi
+
+
+•	Rumus perhitungan quantity di marker worksheet adalah Worksheet Qty + tolerance(dalam bentuk %)
+•	Perhitungan Konsumsi Kg/Dz = (Panjang + toleransi) x (Lebar + toleransi) x (Gramasi / 1000) / Skala x 12
+•	Perhitungan Konsumsi Yard/Dz = (Panjang + toleransi)  / 0.914 / Skala x 12
+•	Perhitungan Konsumsi Meter/Dz = (Panjang + toleransi) / Skala x 12
+•	Perhitungan Qty per Yard, Kg dan meter = Jumlah Ampar x Total Skala x Konsumsi / 12
+•	Perhitungan untuk “ujung kain” di skip dulu
+•	Perhitungan untuk costing di marker calculation details tidak perlu di bagi 12 karena value yang di butuhkan adalah per pcs

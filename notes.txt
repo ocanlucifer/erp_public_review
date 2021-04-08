@@ -1,0 +1,25 @@
+- 2 Route: ajax-form, ajax
+- jquery cdn
+- e.preventDefault
+
+- meta name="csrf-token" content="{{csrf_token()}}"
+$.ajaxSetup({
+	headers: {
+		'X-CSRF-TOKEN': $("meta[name='csrf_token']").attr('content')
+	}
+})
+
+- $.ajax({
+    url: "{{url('/ajax')}}",
+    method: "POST",
+    data: {data: $("#file").val()},
+    success: function(result){
+        $(".alert".html(result.success))
+    }
+
+})
+
+- public function ajax(Request $request)
+{
+    return response()->json(['success'=>$request->file]);
+}

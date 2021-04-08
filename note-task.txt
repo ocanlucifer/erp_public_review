@@ -1,0 +1,2 @@
+isi tabel jangan id,id,id biar bisa langsung terpanggil
+perbaiki lagi crud sales order dan sample
