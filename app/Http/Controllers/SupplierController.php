@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 use App\Supplier;
 use App\Ppn;
-use Input;
 use File;
 use Session;
 use Auth; 

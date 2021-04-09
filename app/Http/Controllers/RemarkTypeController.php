@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Remarktype;
 use Illuminate\Http\Request;
 
-use Input;
+use Requests;
 use File;
 use Session;
 use Auth;
@@ -48,8 +48,8 @@ class RemarkTypeController extends Controller
 
     public function new($id_sales_sample)
     {
-        $id                 = Input::get('id');
-        $name               = Input::get('name');
+        $id                 = Requests::input('id');
+        $name               = Requests::input('name');
         Remarktype::create([
             'id'            => strtoupper($id),
             'name'          => $name
@@ -61,8 +61,8 @@ class RemarkTypeController extends Controller
 
     public function update($id_sales_sample)
     {
-        $id                 = Input::get('id');
-        $name               = Input::get('name');
+        $id                 = Requests::input('id');
+        $name               = Requests::input('name');
         Remarktype::where('id', $id)->update([
             'name'           =>  $name,
         ]);

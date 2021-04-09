@@ -8,7 +8,7 @@ use App\Salessample;
 use App\Sizes;
 use App\Sizespec;
 
-use Input;
+use Requests;
 use File;
 use Session;
 use Auth;
@@ -42,14 +42,14 @@ class SizespecsController extends Controller
 
     public function new()
     {
-        $id                         = Input::get('id');
-        $id_sales_sample            = Input::get('id_sales_sample');
-        $id_size                    = Input::get('code_size');
-        $value                   = Input::get('value');
-        $specification              = Input::get('specification');
-        $allowance                  = Input::get('allowance');
-        $position                   = Input::get('position');
-        $unit                       = Input::get('unit');
+        $id                         = Requests::input('id');
+        $id_sales_sample            = Requests::input('id_sales_sample');
+        $id_size                    = Requests::input('code_size');
+        $value                      = Requests::input('value');
+        $specification              = Requests::input('specification');
+        $allowance                  = Requests::input('allowance');
+        $position                   = Requests::input('position');
+        $unit                       = Requests::input('unit');
         Sizespec::create([
             'id'                    =>  strtoupper($id),
             'id_sales_sample'       =>  $id_sales_sample,
@@ -89,14 +89,14 @@ class SizespecsController extends Controller
 
     public function update()
     {
-        $id                         = Input::get('id');
-        $id_sales_sample            = Input::get('id_sales_sample');
-        $id_size                    = Input::get('code_size');
-        $value                      = Input::get('value');
-        $specification              = Input::get('specification');
-        $allowance                  = Input::get('allowance');
-        $position                   = Input::get('position');
-        $unit                       = Input::get('unit');
+        $id                         = Requests::input('id');
+        $id_sales_sample            = Requests::input('id_sales_sample');
+        $id_size                    = Requests::input('code_size');
+        $value                      = Requests::input('value');
+        $specification              = Requests::input('specification');
+        $allowance                  = Requests::input('allowance');
+        $position                   = Requests::input('position');
+        $unit                       = Requests::input('unit');
 
         Sizespec::where('id', $id)->update([
             'id_sales_sample'       =>  $id_sales_sample,

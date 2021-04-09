@@ -7,7 +7,7 @@ use App\Fabricconst;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-use Input;
+use Requests;
 use File;
 use Session;
 use Auth;
@@ -55,10 +55,10 @@ class fabriccompController extends Controller
 
     public function new()
     {
-        $id             = Input::get('id');
-        $name           = Input::get('name');
-        $fabricconstruct_id  = Input::get('fabricconstruct_id');
-        $type_name      = Input::get('type_name');
+        $id             = Requests::input('id');
+        $name           = Requests::input('name');
+        $fabricconstruct_id  = Requests::input('fabricconstruct_id');
+        $type_name      = Requests::input('type_name');
         $state          = 'pending';
         Fabriccomp::create([
             'id'                      =>    strtoupper($id),
@@ -74,11 +74,11 @@ class fabriccompController extends Controller
 
     public function update()
     {
-        $id                  = Input::get('id');
-        $name                = Input::get('name');
-        $fabricconstruct_id       = Input::get('fabricconstruct_id');
-        $type_name               = Input::get('type_name');
-        $state               = Input::get('state');
+        $id                  = Requests::input('id');
+        $name                = Requests::input('name');
+        $fabricconstruct_id       = Requests::input('fabricconstruct_id');
+        $type_name               = Requests::input('type_name');
+        $state               = Requests::input('state');
         Fabriccomp::where('id', $id)->update([
             'name'              =>  $name,
             'fabricconstruct_id'    =>  $fabricconstruct_id,

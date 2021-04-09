@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Unit;
-use Input;
+use Requests;
 use File;
 use Session;
 use Auth;
@@ -65,9 +65,9 @@ class UnitController extends Controller
 
     public function new()
     {
-        $code         = Input::get('code');
-        $name         = Input::get('name');
-        $type         = Input::get('type');
+        $code         = Requests::input('code');
+        $name         = Requests::input('name');
+        $type         = Requests::input('type');
 
         Unit::create([
             'code'            =>    strtoupper($code),
@@ -81,9 +81,9 @@ class UnitController extends Controller
 
     public function update()
     {
-        $code          = Input::get('code');
-        $name          = Input::get('name');
-        $type          = Input::get('type');
+        $code          = Requests::input('code');
+        $name          = Requests::input('name');
+        $type          = Requests::input('type');
         Unit::where('code', $code)->update([
             'name'       =>  strtoupper($name),
             'type'       =>  strtoupper($type),

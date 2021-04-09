@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Consumption;
 use Illuminate\Http\Request;
 
-use Input;
+use Requests;
 use File;
 use Session;
 use Auth;
@@ -64,16 +64,16 @@ class ConsumptionController extends Controller
         $nomor = "RKK/" . $year . "/";
         $number = $nomor . sprintf("%05s", $number);
 
-        $id                     = Input::get('id');
+        $id                     = Requests::input('id');
         $code                   = $number;
-        $code_quotation         = Input::get('code_quotation');
-        $customer               = Input::get('customer');
-        $customer_style         = strtoupper(Input::get('customer_style'));
-        $number_mp              = Input::get('number_mp');
-        $size_tengah            = strtoupper(Input::get('size_tengah'));
-        $delivery_date          = Input::get('delivery_date');
-        $references_date        = Input::get('references_date');
-        $net_price              = Input::get('net_price');
+        $code_quotation         = Requests::input('code_quotation');
+        $customer               = Requests::input('customer');
+        $customer_style         = strtoupper(Requests::input('customer_style'));
+        $number_mp              = Requests::input('number_mp');
+        $size_tengah            = strtoupper(Requests::input('size_tengah'));
+        $delivery_date          = Requests::input('delivery_date');
+        $references_date        = Requests::input('references_date');
+        $net_price              = Requests::input('net_price');
         $status                 = strtoupper('pending');
 
         Consumption::create([
@@ -102,17 +102,17 @@ class ConsumptionController extends Controller
 
     public function update()
     {
-        $id                     = Input::get('id');
-        $code                   = Input::get('code');
-        $code_quotation         = Input::get('code_quotation');
-        $customer               = Input::get('customer');
-        $customer_style         = strtoupper(Input::get('customer_style'));
-        $number_mp              = Input::get('number_mp');
-        $size_tengah            = strtoupper(Input::get('size_tengah'));
-        $delivery_date          = Input::get('delivery_date');
-        $references_date        = Input::get('references_date');
-        $net_price              = Input::get('net_price');
-        $status                 = Input::get('status');
+        $id                     = Requests::input('id');
+        $code                   = Requests::input('code');
+        $code_quotation         = Requests::input('code_quotation');
+        $customer               = Requests::input('customer');
+        $customer_style         = strtoupper(Requests::input('customer_style'));
+        $number_mp              = Requests::input('number_mp');
+        $size_tengah            = strtoupper(Requests::input('size_tengah'));
+        $delivery_date          = Requests::input('delivery_date');
+        $references_date        = Requests::input('references_date');
+        $net_price              = Requests::input('net_price');
+        $status                 = Requests::input('status');
 
 
         Consumption::where('id', $id)->update([

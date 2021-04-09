@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\TipeBC;
-use Input;
+use Requests;
 use File;
 use Session;
 use Auth; 
@@ -67,9 +67,9 @@ class TipeBCController extends Controller
 
     public function new()
     {
-    	$name 				= Input::get('name');
-    	$description 		= Input::get('description');
-    	$jenis 				= Input::get('jenis');
+    	$name 				= Requests::input('name');
+    	$description 		= Requests::input('description');
+    	$jenis 				= Requests::input('jenis');
 
 		TipeBC::create([
 			'name'					=>	strtoupper($name),
@@ -83,10 +83,10 @@ class TipeBCController extends Controller
 
     public function update()
     {
-        $id      			= Input::get('id');
-        $name    	  		= Input::get('name');
-    	$description 		= Input::get('description');
-    	$jenis 				= Input::get('jenis');
+        $id      			= Requests::input('id');
+        $name    	  		= Requests::input('name');
+    	$description 		= Requests::input('description');
+    	$jenis 				= Requests::input('jenis');
         TipeBC::where('id',$id)->update([
             'name'       			=>  strtoupper($name),
 			'description'			=>	strtoupper($description),

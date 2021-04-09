@@ -353,7 +353,7 @@ class QuotationImport implements WithMappedCells, WithMultipleSheets, SkipsUnkno
                 $tahun      = date('Y');
                 $bulan      = date('m');
 
-                $folder_upload  = strtoupper('QUOTATION_SKETCH/'.$tahun.'/'.$bulan);
+                $folder_upload  = strtoupper('storage/QUOTATION_SKETCH/'.$tahun.'/'.$bulan);
                 $myFileName = $file_name;
                 if(!File::exists($folder_upload)) {
                     File::makeDirectory($folder_upload, $mode = 0777, true, true);

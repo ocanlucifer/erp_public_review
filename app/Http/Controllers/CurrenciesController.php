@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Currencies;
-use Input;
+use Requests;
 use File;
 use Session;
 use Auth; 
@@ -59,9 +59,9 @@ class CurrenciesController extends Controller
 
     public function new()
     {
-    	$code 		= Input::get('code');
-    	$nama 		= Input::get('nama');
-        $sign       = Input::get('sign');
+    	$code 		= Requests::input('code');
+    	$nama 		= Requests::input('nama');
+        $sign       = Requests::input('sign');
 
 		Currencies::create([
 			'code'			=>	strtoupper($code),
@@ -75,9 +75,9 @@ class CurrenciesController extends Controller
 
     public function update()
     {
-        $code      	= Input::get('code');
-        $nama    	= Input::get('nama');
-        $sign       = Input::get('sign');
+        $code      	= Requests::input('code');
+        $nama    	= Requests::input('nama');
+        $sign       = Requests::input('sign');
         Currencies::where('code',$code)->update([
             'nama'       =>  $nama,
             'sign'       =>  $sign,

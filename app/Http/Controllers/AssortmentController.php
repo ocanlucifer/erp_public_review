@@ -12,6 +12,7 @@ use App\Style;
 use App\StyleSample;
 use App\Quotation;
 use Illuminate\Http\Request;
+use Requests;
 
 use Input;
 use File;
@@ -54,12 +55,12 @@ class AssortmentController extends Controller
 
     public function new()
     {
-        $id                         = Input::get('id');
-        $id_sales_sample            = Input::get('id_sales_sample');
-        $id_size                    = Input::get('code_size');
-        $id_color                   = Input::get('code_color');
-        $quantity                   = Input::get('quantity');
-        $tolerance                  = Input::get('tolerance');
+        $id                         = Requests::input('id');
+        $id_sales_sample            = Requests::input('id_sales_sample');
+        $id_size                    = Requests::input('code_size');
+        $id_color                   = Requests::input('code_color');
+        $quantity                   = Requests::input('quantity');
+        $tolerance                  = Requests::input('tolerance');
         Assortment::create([
             'id'                    =>  strtoupper($id),
             'id_sales_sample'       =>  $id_sales_sample,
@@ -99,12 +100,12 @@ class AssortmentController extends Controller
 
     public function update()
     {
-        $id                         = Input::get('id');
-        $id_sales_sample            = Input::get('id_sales_sample');
-        $id_size                    = Input::get('code_size');
-        $id_color                   = Input::get('code_color');
-        $quantity                   = Input::get('quantity');
-        $tolerance                  = Input::get('tolerance');
+        $id                         = Requests::input('id');
+        $id_sales_sample            = Requests::input('id_sales_sample');
+        $id_size                    = Requests::input('code_size');
+        $id_color                   = Requests::input('code_color');
+        $quantity                   = Requests::input('quantity');
+        $tolerance                  = Requests::input('tolerance');
 
         Assortment::where('id', $id)->update([
             'id_sales_sample'       =>  $id_sales_sample,

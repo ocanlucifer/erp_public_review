@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\ProductionMarker;
-use Input;
+use Requests;
 use File;
 use Session;
 use Auth;
@@ -50,10 +50,10 @@ class ProductionMarkerController extends Controller
 
     public function new()
     {
-        $id         = Input::get('id');
-        $number = Input::get('number');
-        $style_name       = Input::get('style_name');
-        $order_name       = Input::get('order_name');
+        $id         = Requests::input('id');
+        $number = Requests::input('number');
+        $style_name       = Requests::input('style_name');
+        $order_name       = Requests::input('order_name');
 
         ProductionMarker::create([
             'id'            =>    strtoupper($id),
@@ -68,10 +68,10 @@ class ProductionMarkerController extends Controller
 
     public function update()
     {
-        $id          = Input::get('id');
-        $number        = Input::get('number');
-        $style_name       = Input::get('style_name');
-        $order_name       = Input::get('order_name');
+        $id          = Requests::input('id');
+        $number        = Requests::input('number');
+        $style_name       = Requests::input('style_name');
+        $order_name       = Requests::input('order_name');
 
         ProductionMarker::where('id', $id)->update([
             'number'       =>  $number,
