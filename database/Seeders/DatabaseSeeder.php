@@ -1,8 +1,15 @@
 <?php
 
-use App\Materialreq;
-use App\Quotation;
+namespace Database\Seeders;
+
+// use App\Materialreq;
+// use App\Quotation;
+// use Illuminate\Database\Seeder;
+
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {

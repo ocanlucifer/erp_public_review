@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use App\Remark;
 use Illuminate\Database\Seeder;
 

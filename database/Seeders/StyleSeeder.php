@@ -1,9 +1,11 @@
 <?php
 
-use Illuminate\Database\Seeder;
-use App\StyleSample;
+namespace Database\Seeders;
 
-class StyleSampleSeeder extends Seeder
+use Illuminate\Database\Seeder;
+use App\Style;
+
+class StyleSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,15 +14,15 @@ class StyleSampleSeeder extends Seeder
      */
     public function run()
     {
-        StyleSample::insert([
+        Style::insert([
             [
                 'id' => '1',
-                'name' => 'fit sample',
-                'tipe' => '6997 polo shirt'
+                'name' => 'belk-spring',
+                'tipe' => 'sweat jacket'
             ], [
                 'id' => '2',
-                'name' => 'extra sample',
-                'tipe' => '6998 polo shirt'
+                'name' => 'belk-summer',
+                'tipe' => 'ladies dress'
             ]
         ]);
     }

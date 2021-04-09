@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use App\Divisi;
 
@@ -13,8 +15,8 @@ class DivisiSeeder extends Seeder
     public function run()
     {
         Divisi::create([
-        	'id'				=>	1,
-        	'nama_divisi'		=>	'INFORMATION TECHNOLOGI',
+            'id'                =>    1,
+            'nama_divisi'        =>    'INFORMATION TECHNOLOGI',
         ]);
     }
 }
