@@ -12,17 +12,17 @@ class Consumption extends Model
 
     public function quotation()
     {
-        return $this->belongsTo(Quotation::class, 'code_quotation', 'code');
+        return $this->belongsTo(Quotation::class, 'code_quotation', 'code')->withDefault();
     }
 
     public function cust()
     {
-        return $this->belongsTo(Customer::class, 'customer', 'nama');
+        return $this->belongsTo(Customer::class, 'customer', 'nama')->withDefault();
     }
 
     public function style()
     {
-        return $this->belongsTo(Style::class, 'customer_style', 'name');
+        return $this->belongsTo(Style::class, 'customer_style', 'name')->withDefault();
     }
 
     // public function mp()
@@ -32,6 +32,6 @@ class Consumption extends Model
 
     public function salesorder()
     {
-        return $this->belongsTo(Salesorder::class, 'code_quotation', 'code_quotation');
+        return $this->belongsTo(Salesorder::class, 'code_quotation', 'code_quotation')->withDefault();
     }
 }

@@ -8,7 +8,7 @@
     <td class="td-input"> <a href="/so_assortment/{{$q->id}}">
             {{$q->number}}
         </a></td>
-    <td class="td-input">{{ $q->quotation['code']}}</td>
+    <td class="td-input">{{ $q->code_quotation}}</td>
     <td class="td-input">{{ $q->order_date }}</td>
     <td class="td-input">{{ $q->delivery_date }}</td>
     <td class="td-input">{{ $q->customer }}</td>

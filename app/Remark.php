@@ -12,11 +12,11 @@ class Remark extends Model
 
     public function salessample()
     {
-        return $this->belongsTo(Salessample::class, 'id_sales_sample', 'id');
+        return $this->belongsTo(Salessample::class, 'id_sales_sample', 'id')->withDefault();
     }
 
     public function remarktype()
     {
-        return $this->belongsTo(Remarktype::class, 'id_remark_type', 'id');
+        return $this->belongsTo(Remarktype::class, 'id_remark_type', 'id')->withDefault();
     }
 }

@@ -12,11 +12,11 @@ class Sizespec extends Model
 
     public function salessample()
     {
-        return $this->belongsTo(Salessample::class, 'id_sales_sample', 'id');
+        return $this->belongsTo(Salessample::class, 'id_sales_sample', 'id')->withDefault();
     }
 
     public function sizes()
     {
-        return $this->belongsTo(Sizes::class, 'id_size', 'id');
+        return $this->belongsTo(Sizes::class, 'id_size', 'id')->withDefault();
     }
 }

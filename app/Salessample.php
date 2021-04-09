@@ -16,21 +16,21 @@ class Salessample extends Model
 
     public function customer()
     {
-        return $this->belongsTo(Customer::class, 'customer', 'code');
+        return $this->belongsTo(Customer::class, 'customer', 'code')->withDefault();
     }
 
     public function style()
     {
-        return $this->belongsTo(Style::class, 'style', 'id');
+        return $this->belongsTo(Style::class, 'style', 'id')->withDefault();
     }
 
     public function stylesample()
     {
-        return $this->belongsTo(StyleSample::class, 'sample_type', 'id');
+        return $this->belongsTo(StyleSample::class, 'sample_type', 'id')->withDefault();
     }
 
     public function brand()
     {
-        return $this->belongsTo(Brand::class, 'brand', 'id');
+        return $this->belongsTo(Brand::class, 'brand', 'id')->withDefault();
     }
 }

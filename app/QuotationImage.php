@@ -13,6 +13,6 @@ class QuotationImage extends Model
     ];
 
     public function gambar_header(){
-    	return $this->belongsTo('App\Quotation','code');
+    	return $this->belongsTo('App\Quotation','code')->withDefault();
     }
 }

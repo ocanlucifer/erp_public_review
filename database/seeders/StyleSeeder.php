@@ -1,9 +1,10 @@
 <?php
+namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Brand;
+use App\Style;
 
-class BrandSeeder extends Seeder
+class StyleSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,16 +13,15 @@ class BrandSeeder extends Seeder
      */
     public function run()
     {
-        Brand::insert([
+        Style::insert([
             [
                 'id' => '1',
-                'name' => 'sun-valley'
+                'name' => 'belk-spring',
+                'tipe' => 'sweat jacket'
             ], [
                 'id' => '2',
-                'name' => 'macys'
-            ], [
-                'id' => '3',
-                'name' => 'BELK'
+                'name' => 'belk-summer',
+                'tipe' => 'ladies dress'
             ]
         ]);
     }
