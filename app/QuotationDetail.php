@@ -16,6 +16,6 @@ class QuotationDetail extends Model
     ];
 
     public function quot_header(){
-    	return $this->belongsTo('App\Quotation','code');
+    	return $this->belongsTo('App\Quotation','code')->withDefault();
     }
 }

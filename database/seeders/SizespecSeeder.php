@@ -1,4 +1,5 @@
 <?php
+namespace Database\Seeders;
 
 use App\Sizespec;
 use Illuminate\Database\Seeder;

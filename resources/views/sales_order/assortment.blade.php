@@ -84,7 +84,7 @@
                                             <td>{{$as->tolerance}}</td>
                                             <td>
                                                 <a href="/so_assortment/delete/{{ $as->id }}"
-                                                    onclick="return confirm('Hapus sample dengan no. {{ $as->salessample['number'] }}, Lanjutkan?');"
+                                                    onclick="return confirm('Hapus sample dengan no. {, Lanjutkan?');"
                                                     class="btn btn-danger btn-xs tooltips" data-popup="tooltip"
                                                     data-original-title="Delete" data-placement="top"><i
                                                         class="icon-x"></i></a> &nbsp

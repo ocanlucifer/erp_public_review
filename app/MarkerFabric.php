@@ -17,16 +17,16 @@ class MarkerFabric extends Model
 
     public function fabricconst()
     {
-        return $this->belongsTo(Fabricconst::class, 'id_fabric_construct', 'id');
+        return $this->belongsTo(Fabricconst::class, 'id_fabric_construct', 'id')->withDefault();
     }
 
     public function fabriccomp()
     {
-        return $this->belongsTo(Fabriccomp::class, 'id_fabric_compost', 'id');
+        return $this->belongsTo(Fabriccomp::class, 'id_fabric_compost', 'id')->withDefault();
     }
 
     public function marker()
     {
-        return $this->belongsTo(Marker::class, 'id_marker', 'id');
+        return $this->belongsTo(Marker::class, 'id_marker', 'id')->withDefault();
     }
 }

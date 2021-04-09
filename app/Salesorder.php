@@ -16,21 +16,21 @@ class Salesorder extends Model
 
     public function customer_list()
     {
-        return $this->belongsTo(Customer::class, 'customer', 'code');
+        return $this->belongsTo(Customer::class, 'customer', 'code')->withDefault();
     }
 
     public function style_list()
     {
-        return $this->belongsTo(Style::class, 'style', 'id');
+        return $this->belongsTo(Style::class, 'style', 'id')->withDefault();
     }
 
     public function brand_list()
     {
-        return $this->belongsTo(Brand::class, 'brand', 'id');
+        return $this->belongsTo(Brand::class, 'brand', 'id')->withDefault();
     }
 
     public function quotation()
     {
-        return $this->belongsTo(Quotation::class, 'code_quotation', 'code');
+        return $this->belongsTo(Quotation::class, 'code_quotation', 'code')->withDefault();
     }
 }

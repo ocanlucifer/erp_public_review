@@ -20,21 +20,21 @@ class Quotation extends Model
 
     public function quot_detail()
     {
-        return $this->hasMany('App\QuotationDetail', 'id_quot_header');
+        return $this->hasMany('App\QuotationDetail', 'id_quot_header')->withDefault();
     }
 
     public function quot_gambar()
     {
-        return $this->hasMany('App\QuotationImage', 'id_quot_header');
+        return $this->hasMany('App\QuotationImage', 'id_quot_header')->withDefault();
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'create_by');
+        return $this->belongsTo(User::class, 'create_by')->withDefault();
     }
 
     public function user_update()
     {
-        return $this->belongsTo(User::class, 'update_by');
+        return $this->belongsTo(User::class, 'update_by')->withDefault();
     }
 }
