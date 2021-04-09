@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Marker;
-use Input;
+use Requests;
 use File;
 use Session;
 use Auth;
@@ -57,9 +57,9 @@ class MarkerController extends Controller
 
     public function new()
     {
-        $id                 = Input::get('id');
-        $nama               = Input::get('nama_marker');
-        $style              = Input::get('style');
+        $id                 = Requests::input('id');
+        $nama               = Requests::input('nama_marker');
+        $style              = Requests::input('style');
         $no_document        = 'CM-MARK-' . $id;
         $date               = date("Y-m-d");
 
@@ -77,9 +77,9 @@ class MarkerController extends Controller
 
     public function update()
     {
-        $id                 = Input::get('id');
-        $name               = Input::get('nama_marker');
-        $style              = Input::get('style');
+        $id                 = Requests::input('id');
+        $name               = Requests::input('nama_marker');
+        $style              = Requests::input('style');
         $no_document        = 'CM-MARK-' . $id;
         Marker::where('id', $id)->update([
             'nama_marker'           =>  $name,

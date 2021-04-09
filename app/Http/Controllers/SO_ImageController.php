@@ -6,7 +6,6 @@ use App\SO_Image;
 use App\Salesorder;
 
 use Illuminate\Http\Request;
-use Input;
 use File;
 use Session;
 use Auth;

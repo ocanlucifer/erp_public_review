@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-use Input;
+use Requests;
 use Image;
 use File;
 use Session;
@@ -173,29 +173,29 @@ class QuotationController extends Controller
 
     public function create()
     {
-        $c = count(Input::get('jenis'));
+        $c = count(Requests::input('jenis'));
 
 
-        $cust           = strtoupper(Input::get('cust'));
-        $brand          = strtoupper(Input::get('brand'));
-        $season         = strtoupper(Input::get('season'));
-        $style          = strtoupper(Input::get('style'));
-        $descript         = Input::get('descript');
-        $bu             = strtoupper(Input::get('bu'));
-        $forecast_qty   = Input::get('forecast_qty');
-        $delivery       = strtoupper(Input::get('delivery'));
-        $size_range     = strtoupper(Input::get('size_range'));
-        $destination    = strtoupper(Input::get('destination'));
-        $tgl_quot       = Input::get('tgl_quot');
-        $exchange_rate     = Input::get('exchange_rate');
-        $smv            = Input::get('smv');
-        $rate           = Input::get('rate');
-        $handling       = Input::get('handling');
-        $margin         = Input::get('margin');
-        $offer_price    = Input::get('offer_price');
-        $sales_fee      = Input::get('sales_fee');
-        $confirm_price  = Input::get('confirm_price');
-        $user_id         = Input::get('create_by');
+        $cust           = strtoupper(Requests::input('cust'));
+        $brand          = strtoupper(Requests::input('brand'));
+        $season         = strtoupper(Requests::input('season'));
+        $style          = strtoupper(Requests::input('style'));
+        $descript         = Requests::input('descript');
+        $bu             = strtoupper(Requests::input('bu'));
+        $forecast_qty   = Requests::input('forecast_qty');
+        $delivery       = strtoupper(Requests::input('delivery'));
+        $size_range     = strtoupper(Requests::input('size_range'));
+        $destination    = strtoupper(Requests::input('destination'));
+        $tgl_quot       = Requests::input('tgl_quot');
+        $exchange_rate     = Requests::input('exchange_rate');
+        $smv            = Requests::input('smv');
+        $rate           = Requests::input('rate');
+        $handling       = Requests::input('handling');
+        $margin         = Requests::input('margin');
+        $offer_price    = Requests::input('offer_price');
+        $sales_fee      = Requests::input('sales_fee');
+        $confirm_price  = Requests::input('confirm_price');
+        $user_id         = Requests::input('create_by');
 
 
         // Get the last order id
@@ -265,12 +265,12 @@ class QuotationController extends Controller
 
 
         $files          = Input::file('gmbr');
-        $nama_user       = strtoupper(Input::get('create_by_name'));
+        $nama_user       = strtoupper(Requests::input('create_by_name'));
 
         if ($files) {
             foreach ($files as $file) {
                 // menyimpan data file yang diupload ke variabel $file
-                $folder_upload     = strtoupper('QUOTATION_SKETCH/' . $tahun . '/' . $bulan);
+                $folder_upload     = strtoupper('storage/QUOTATION_SKETCH/' . $tahun . '/' . $bulan);
 
                 $nama_file = time() . "_" . $nama_user . "_" . $file->getClientOriginalName();
 
@@ -282,16 +282,16 @@ class QuotationController extends Controller
                 $quotation_image->save();
             }
         }
-        $jenis          = Input::get('jenis');
-        $position       = Input::get('position');
-        $jenis_detail   = Input::get('jenis_detail');
-        $description    = Input::get('description');
-        $supplier       = Input::get('supplier');
-        $width          = Input::get('width');
-        $cons              = Input::get('cons');
-        $allowance      = Input::get('allowance');
-        $price              = Input::get('price');
-        $freight          = Input::get('freight');
+        $jenis          = Requests::input('jenis');
+        $position       = Requests::input('position');
+        $jenis_detail   = Requests::input('jenis_detail');
+        $description    = Requests::input('description');
+        $supplier       = Requests::input('supplier');
+        $width          = Requests::input('width');
+        $cons              = Requests::input('cons');
+        $allowance      = Requests::input('allowance');
+        $price              = Requests::input('price');
+        $freight          = Requests::input('freight');
 
         for ($i = 0; $i < $c; ++$i) {
             $quotation_detail                             = new QuotationDetail;
@@ -314,29 +314,29 @@ class QuotationController extends Controller
 
     public function update()
     {
-        $c = count(Input::get('jenis'));
+        $c = count(Requests::input('jenis'));
 
-        $id_header           = Input::get('id_header');
-        $cust           = strtoupper(Input::get('cust'));
-        $brand          = strtoupper(Input::get('brand'));
-        $season         = strtoupper(Input::get('season'));
-        $style          = strtoupper(Input::get('style'));
-        $descript         = Input::get('descript');
-        $bu             = strtoupper(Input::get('bu'));
-        $forecast_qty   = Input::get('forecast_qty');
-        $delivery       = strtoupper(Input::get('delivery'));
-        $size_range     = strtoupper(Input::get('size_range'));
-        $destination    = strtoupper(Input::get('destination'));
-        $tgl_quot       = Input::get('tgl_quot');
-        $exchange_rate     = Input::get('exchange_rate');
-        $smv            = Input::get('smv');
-        $rate           = Input::get('rate');
-        $handling       = Input::get('handling');
-        $margin         = Input::get('margin');
-        $offer_price    = Input::get('offer_price');
-        $sales_fee      = Input::get('sales_fee');
-        $confirm_price  = Input::get('confirm_price');
-        $user_id             = Input::get('update_by');
+        $id_header           = Requests::input('id_header');
+        $cust           = strtoupper(Requests::input('cust'));
+        $brand          = strtoupper(Requests::input('brand'));
+        $season         = strtoupper(Requests::input('season'));
+        $style          = strtoupper(Requests::input('style'));
+        $descript         = Requests::input('descript');
+        $bu             = strtoupper(Requests::input('bu'));
+        $forecast_qty   = Requests::input('forecast_qty');
+        $delivery       = strtoupper(Requests::input('delivery'));
+        $size_range     = strtoupper(Requests::input('size_range'));
+        $destination    = strtoupper(Requests::input('destination'));
+        $tgl_quot       = Requests::input('tgl_quot');
+        $exchange_rate     = Requests::input('exchange_rate');
+        $smv            = Requests::input('smv');
+        $rate           = Requests::input('rate');
+        $handling       = Requests::input('handling');
+        $margin         = Requests::input('margin');
+        $offer_price    = Requests::input('offer_price');
+        $sales_fee      = Requests::input('sales_fee');
+        $confirm_price  = Requests::input('confirm_price');
+        $user_id             = Requests::input('update_by');
         $tgl_update          = date(NOW());
 
         Quotation::where('code', $id_header)->update([
@@ -391,7 +391,7 @@ class QuotationController extends Controller
         $bulan         = date('m');
 
         $files          = Input::file('gmbr');
-        $nama_user       = strtoupper(Input::get('create_by_name'));
+        $nama_user       = strtoupper(Requests::input('create_by_name'));
 
         if ($files) {
             // hapus file
@@ -403,7 +403,7 @@ class QuotationController extends Controller
 
             foreach ($files as $file) {
                 // menyimpan data file yang diupload ke variabel $file
-                $folder_upload     = strtoupper('QUOTATION_SKETCH/' . $tahun . '/' . $bulan);
+                $folder_upload     = strtoupper('storage/QUOTATION_SKETCH/' . $tahun . '/' . $bulan);
 
                 $nama_file = time() . "_" . $nama_user . "_" . $file->getClientOriginalName();
 
@@ -415,16 +415,16 @@ class QuotationController extends Controller
                 $quotation_image->save();
             }
         }
-        $jenis          = Input::get('jenis');
-        $position       = Input::get('position');
-        $jenis_detail   = Input::get('jenis_detail');
-        $description    = Input::get('description');
-        $supplier       = Input::get('supplier');
-        $width          = Input::get('width');
-        $cons              = Input::get('cons');
-        $allowance      = Input::get('allowance');
-        $price              = Input::get('price');
-        $freight          = Input::get('freight');
+        $jenis          = Requests::input('jenis');
+        $position       = Requests::input('position');
+        $jenis_detail   = Requests::input('jenis_detail');
+        $description    = Requests::input('description');
+        $supplier       = Requests::input('supplier');
+        $width          = Requests::input('width');
+        $cons              = Requests::input('cons');
+        $allowance      = Requests::input('allowance');
+        $price              = Requests::input('price');
+        $freight          = Requests::input('freight');
 
         QuotationDetail::where('id_quot_header', $id_header)->delete();
 
@@ -464,9 +464,9 @@ class QuotationController extends Controller
 
         if (!$history) {
             // upload ke folder file_siswa di dalam folder public
-            $file->move('temp_excel', 'temp_.xlsm');
+            $file->move('storage/temp_excel', 'temp_.xlsm');
             // import data
-            $file_temp = '/temp_excel/temp_.xlsm';
+            $file_temp = 'storage/temp_excel/temp_.xlsm';
             $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(public_path($file_temp));
 
             for ($i = 2; $i <= $spreadsheet->getSheetCount() - 1; $i++) {

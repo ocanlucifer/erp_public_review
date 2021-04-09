@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Brand;
-use Input;
+use Requests;
 use File;
 use Session;
 use Auth; 
@@ -65,7 +65,7 @@ class BrandController extends Controller
 
     public function new()
     {
-    	$name 		= Input::get('name');
+    	$name 		= Requests::input('name');
 
 		Brand::create([
 			'name'			=>	strtoupper($name),
@@ -77,8 +77,8 @@ class BrandController extends Controller
 
     public function update()
     {
-        $id      	= Input::get('id');
-        $name    	= Input::get('name');
+        $id      	= Requests::input('id');
+        $name    	= Requests::input('name');
         Brand::where('id',$id)->update([
             'name'       =>  strtoupper($name),
         ]);

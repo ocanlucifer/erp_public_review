@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Requests;
 
 use App\Sizes;
-use Input;
 use File;
 use Session;
 use Auth; 
@@ -29,6 +29,7 @@ class SizeController extends Controller
     public function index(Request $request)
     {
         $result = Sizes::orderBy('name', 'asc')
+            ->orderBy('weight','asc')
             ->paginate(10);
     	
 
@@ -38,6 +39,7 @@ class SizeController extends Controller
           		    ->where('weight','like','%'.strtoupper($request->weight).'%')
           		    ->where('status','like','%'.$request->status.'%')
                   ->orderBy('name', 'asc')
+                  ->orderBy('weight','asc')
                   ->paginate(10);
 
     		$result->appends($request->all());
@@ -67,9 +69,9 @@ class SizeController extends Controller
 
     public function new()
     {
-    	$name 			= Input::get('name');
-    	$weight 		= Input::get('weight');
-    	$status 		= Input::get('status');
+    	$name 			= Requests::input('name');
+    	$weight 		= Requests::input('weight');
+    	$status 		= Requests::input('status');
 
 		Sizes::create([
 			'name'				=>	strtoupper($name),
@@ -83,9 +85,9 @@ class SizeController extends Controller
 
     public function update()
     {
-        $name      		= Input::get('name');
-        $weight    	  	= Input::get('weight');
-        $status    	  	= Input::get('status');
+        $name      		= Requests::input('name');
+        $weight    	  	= Requests::input('weight');
+        $status    	  	= Requests::input('status');
         Sizes::where('name',$name)->update([
             'weight'       =>  strtoupper($weight),
             'status'       =>  $status,

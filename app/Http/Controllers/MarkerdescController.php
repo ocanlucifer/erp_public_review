@@ -7,7 +7,7 @@ use App\MarkerFabric;
 use App\MarkerDesc;
 
 use App\Marker;
-use Input;
+use Requests;
 use File;
 use Session;
 use Auth;
@@ -43,14 +43,14 @@ class MarkerdescController extends Controller
 
     public function new()
     {
-        $id                   = Input::get('id');
-        $markerfab_id         = Input::get('markerfab_id');
-        $width                = Input::get('width');
-        $quantity             = Input::get('quantity');
-        $consumption          = Input::get('consumption');
-        $efficiency           = Input::get('efficiency');
-        $qty_unit             = Input::get('qty_unit');
-        $act_unit             = Input::get('act_unit');
+        $id                   = Requests::input('id');
+        $markerfab_id         = Requests::input('markerfab_id');
+        $width                = Requests::input('width');
+        $quantity             = Requests::input('quantity');
+        $consumption          = Requests::input('consumption');
+        $efficiency           = Requests::input('efficiency');
+        $qty_unit             = Requests::input('qty_unit');
+        $act_unit             = Requests::input('act_unit');
 
         MarkerDesc::create([
             'id'                    =>  strtoupper($id),
@@ -69,14 +69,14 @@ class MarkerdescController extends Controller
 
     public function update()
     {
-        $id                   = Input::get('id');
-        $markerfab_id         = Input::get('markerfab_id');
-        $width                = Input::get('width');
-        $quantity             = Input::get('quantity');
-        $consumption          = Input::get('consumption');
-        $efficiency           = Input::get('efficiency');
-        $qty_unit             = Input::get('qty_unit');
-        $act_unit             = Input::get('act_unit');
+        $id                   = Requests::input('id');
+        $markerfab_id         = Requests::input('markerfab_id');
+        $width                = Requests::input('width');
+        $quantity             = Requests::input('quantity');
+        $consumption          = Requests::input('consumption');
+        $efficiency           = Requests::input('efficiency');
+        $qty_unit             = Requests::input('qty_unit');
+        $act_unit             = Requests::input('act_unit');
 
         MarkerDesc::where('id', $id)->update([
             'id'                    =>  $id,

@@ -9,7 +9,7 @@ use App\SO_Sizespec;
 use App\SO_Remark;
 
 use Illuminate\Http\Request;
-use Input;
+use Requests;
 use File;
 use Session;
 use Auth;
@@ -65,24 +65,24 @@ class SO_MaterialreqController extends Controller
         $huruf = "MR" . $id_sales_order . "-";
         $nomor = $huruf . sprintf("%03s", $newnumber);
 
-        $id                         = Input::get('id');
+        $id                         = Requests::input('id');
         $number                     = $nomor;
         $id_sales_order            = $id_sales_order;
-        $id_fabric_construct         = Input::get('id_fabric_construct');
-        $id_fabric_compost          = Input::get('id_fabric_compost');
-        if (Input::get('fabric_description') == '') {
+        $id_fabric_construct         = Requests::input('id_fabric_construct');
+        $id_fabric_compost          = Requests::input('id_fabric_compost');
+        if (Requests::input('fabric_description') == '') {
             $fabric_description = '-';
         } else {
-            $fabric_description = Input::get('fabric_description');
+            $fabric_description = Requests::input('fabric_description');
         }
-        $budget                     = Input::get('budget');
-        $po_status                  = Input::get('po_status');
+        $budget                     = Requests::input('budget');
+        $po_status                  = Requests::input('po_status');
         $state                      = 'pending';
         $id_purchasing              = Auth::user()->id;
-        if (Input::get('note') == '') {
+        if (Requests::input('note') == '') {
             $note = '-';
         } else {
-            $note              = Input::get('note');
+            $note              = Requests::input('note');
         }
 
         SO_Materialreq::create([
@@ -119,24 +119,24 @@ class SO_MaterialreqController extends Controller
 
     public function update($id_sales_order)
     {
-        $id                         = Input::get('id');
-        $number                     = Input::get('number');
+        $id                         = Requests::input('id');
+        $number                     = Requests::input('number');
         $id_sales_order            = $id_sales_order;
-        $id_fabric_construct         = Input::get('id_fabric_construct');
-        $id_fabric_compost          = Input::get('id_fabric_compost');
-        if (Input::get('fabric_description') == '') {
+        $id_fabric_construct         = Requests::input('id_fabric_construct');
+        $id_fabric_compost          = Requests::input('id_fabric_compost');
+        if (Requests::input('fabric_description') == '') {
             $fabric_description = '-';
         } else {
-            $fabric_description = Input::get('fabric_description');
+            $fabric_description = Requests::input('fabric_description');
         }
-        $budget                     = Input::get('budget');
-        $po_status                  = Input::get('po_status');
+        $budget                     = Requests::input('budget');
+        $po_status                  = Requests::input('po_status');
         $state                      = 'pending';
         $id_purchasing              = Auth::user()->id;
-        if (Input::get('note') == '') {
+        if (Requests::input('note') == '') {
             $note = '-';
         } else {
-            $note              = Input::get('note');
+            $note              = Requests::input('note');
         }
         SO_Materialreq::where('id', $id)->update([
             'number'                =>  $number,
@@ -255,7 +255,7 @@ class SO_MaterialreqController extends Controller
 
     public function hapus_detail(Request $request)
     {
-        // $id = Input::get('id');
+        // $id = Requests::input('id');
         $id = $request->input('id');
         SO_MaterialDetail::where('id', $id)->delete();
 

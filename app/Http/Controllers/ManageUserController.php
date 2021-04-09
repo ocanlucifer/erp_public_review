@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
 use App\User;
-use Input;
+use Requests;
 use Session;
 use Auth;
 use Illuminate\Support\Facades\Hash;
@@ -71,8 +71,8 @@ class ManageUserController extends Controller
 
     public function updateRole()
     {
-    	$id 	= Input::get('id');
-    	$newrole 	= Input::get('newrole');
+    	$id 	= Requests::input('id');
+    	$newrole 	= Requests::input('newrole');
     	User::where('id',$id)->update([
 			'hak_akses'		=>	$newrole,
 		]);

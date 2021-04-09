@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Perusahaan;
-use Input;
+use Requests;
 use File;
 use Session;
 use Auth; 
@@ -63,10 +63,10 @@ class PerusahaanController extends Controller
 
     public function new()
     {
-    	$kd_perusahaan 		= Input::get('kd_perusahaan');
-    	$nama_perusahaan 	= Input::get('nama_perusahaan');
-        $alamat             = Input::get('alamat');
-    	$phone 			    = Input::get('phone');
+    	$kd_perusahaan 		= Requests::input('kd_perusahaan');
+    	$nama_perusahaan 	= Requests::input('nama_perusahaan');
+        $alamat             = Requests::input('alamat');
+    	$phone 			    = Requests::input('phone');
     	$file 				= Input::file('logo');
 
     	if ($file) {
@@ -89,10 +89,10 @@ class PerusahaanController extends Controller
 
     public function update()
     {
-        $kd_perusahaan      = Input::get('kd_perusahaan');
-        $nama_perusahaan    = Input::get('nama_perusahaan');
-        $alamat             = Input::get('alamat');
-        $phone              = Input::get('phone');
+        $kd_perusahaan      = Requests::input('kd_perusahaan');
+        $nama_perusahaan    = Requests::input('nama_perusahaan');
+        $alamat             = Requests::input('alamat');
+        $phone              = Requests::input('phone');
         $file               = Input::file('logo');
         if ($file) {
             $logo = Perusahaan::where('kd_perusahaan',$kd_perusahaan)->get();

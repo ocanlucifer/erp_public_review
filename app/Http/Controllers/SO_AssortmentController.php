@@ -8,8 +8,8 @@ use App\Salesorder;
 use App\Sizes;
 use App\Quotation;
 use Illuminate\Http\Request;
+use Requests;
 
-use Input;
 use File;
 use Session;
 use Auth;
@@ -59,28 +59,28 @@ class SO_AssortmentController extends Controller
 
     public function new()
     {
-        $id_sales_order                 = Input::get('id_sales_order');
+        $id_sales_order                 = Requests::input('id_sales_order');
 
         // cek size dengan warna yang sama sudah pernah diinput atau tidak
-        $color_cek                      = Input::get('code_color');
-        $size_cek                       = Input::get('code_size');
+        $color_cek                      = Requests::input('code_color');
+        $size_cek                       = Requests::input('code_size');
         $colorsize_cek = SO_Assortment::where('id_color', $color_cek)->where('id_size', $size_cek)->count();
 
         if ($colorsize_cek > 0) {
             Session::flash('error', 'Warna dan Size yang sama sudah ada.');
         } else {
-            $qty_cek = Input::get('quantity');
+            $qty_cek = Requests::input('quantity');
             // cek input quantity tidak boleh 0 atau minus
             if ($qty_cek <= 0) {
                 Session::flash('error', 'Quantity tidak boleh 0 atau kurang dari 0');
             } else {
                 // input data ke database
-                $id                         = Input::get('id');
-                $id_sales_order             = Input::get('id_sales_order');
-                $id_size                    = Input::get('code_size');
-                $id_color                   = Input::get('code_color');
-                $quantity                   = Input::get('quantity');
-                $tolerance                  = Input::get('tolerance');
+                $id                         = Requests::input('id');
+                $id_sales_order             = Requests::input('id_sales_order');
+                $id_size                    = Requests::input('code_size');
+                $id_color                   = Requests::input('code_color');
+                $quantity                   = Requests::input('quantity');
+                $tolerance                  = Requests::input('tolerance');
                 SO_Assortment::create([
                     'id'                    =>  strtoupper($id),
                     'id_sales_order'        =>  $id_sales_order,
@@ -121,12 +121,12 @@ class SO_AssortmentController extends Controller
 
     public function update()
     {
-        $id                             = Input::get('id');
-        $id_sales_order                 = Input::get('id_sales_order');
+        $id                             = Requests::input('id');
+        $id_sales_order                 = Requests::input('id_sales_order');
 
         // cek apakah size dan warna yang sama sudah di table?
-        $color_input                      = Input::get('code_color');
-        $size_input                       = Input::get('code_size');
+        $color_input                      = Requests::input('code_color');
+        $size_input                       = Requests::input('code_size');
         $colorsize_cek = SO_Assortment::where('id_color', $color_input)->where('id_size', $size_input)->count();
         $old_data = SO_Assortment::where('id', $id)->first();
         $new_data = SO_Assortment::where('id_color', $color_input)->where('id_size', $size_input)->first();
@@ -139,18 +139,18 @@ class SO_AssortmentController extends Controller
 
                 // cek apakah warna sama dengan data sebelumnya?
                 if ($new_data['id_color'] == $old_data['id_color']) {
-                    $qty_cek = Input::get('quantity');
+                    $qty_cek = Requests::input('quantity');
 
                     // cek input quantity tidak boleh 0 atau minus
                     if ($qty_cek <= 0) {
                         Session::flash('error', 'Quantity tidak boleh 0 atau kurang dari 0.');
                     } else {
-                        $id                         = Input::get('id');
-                        $id_sales_order             = Input::get('id_sales_order');
-                        $id_size                    = Input::get('code_size');
-                        $id_color                   = Input::get('code_color');
-                        $quantity                   = Input::get('quantity');
-                        $tolerance                  = Input::get('tolerance');
+                        $id                         = Requests::input('id');
+                        $id_sales_order             = Requests::input('id_sales_order');
+                        $id_size                    = Requests::input('code_size');
+                        $id_color                   = Requests::input('code_color');
+                        $quantity                   = Requests::input('quantity');
+                        $tolerance                  = Requests::input('tolerance');
 
                         // cek input quantity tidak boleh melebihi avail quantity
                         $getsalesorders = Salesorder::where('id', $id_sales_order)->first();
@@ -196,19 +196,19 @@ class SO_AssortmentController extends Controller
                 Session::flash('error', 'Gagal update data. kombinasi warna dan size sudah ada.');
             }
         } else {
-            $qty_cek = Input::get('quantity');
+            $qty_cek = Requests::input('quantity');
 
             // cek input quantity tidak boleh 0 atau minus
             if ($qty_cek <= 0) {
                 Session::flash('error', 'Quantity tidak boleh 0 atau kurang dari 0.');
             } else {
 
-                $id                         = Input::get('id');
-                $id_sales_order             = Input::get('id_sales_order');
-                $id_size                    = Input::get('code_size');
-                $id_color                   = Input::get('code_color');
-                $quantity                   = Input::get('quantity');
-                $tolerance                  = Input::get('tolerance');
+                $id                         = Requests::input('id');
+                $id_sales_order             = Requests::input('id_sales_order');
+                $id_size                    = Requests::input('code_size');
+                $id_color                   = Requests::input('code_color');
+                $quantity                   = Requests::input('quantity');
+                $tolerance                  = Requests::input('tolerance');
 
                 // cek input quantity tidak boleh melebihi avail quantity
                 $getsalesorders = Salesorder::where('id', $id_sales_order)->first();

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Ppn;
-use Input;
+use Requests;
 use File;
 use Session;
 use Auth; 
@@ -57,9 +57,9 @@ class PpnController extends Controller
 
     public function new()
     {
-    	$id 		= Input::get('id');
-    	$ppn 		= Input::get('ppn');
-    	$rate 		= Input::get('rate');
+    	$id 		= Requests::input('id');
+    	$ppn 		= Requests::input('ppn');
+    	$rate 		= Requests::input('rate');
     	
 		Ppn::create([
 			'ppn'			=>	$ppn,
@@ -80,9 +80,9 @@ class PpnController extends Controller
 
     public function update()
     {
-        $id      = Input::get('id');
-        $ppn    = Input::get('ppn');
-    	$rate 		= Input::get('rate');
+        $id      = Requests::input('id');
+        $ppn    = Requests::input('ppn');
+    	$rate 		= Requests::input('rate');
         
         Ppn::where('id',$id)->update([
             'ppn'       =>  $ppn,

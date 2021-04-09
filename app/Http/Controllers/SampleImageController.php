@@ -6,7 +6,7 @@ use App\SampleImage;
 use App\Salessample;
 
 use Illuminate\Http\Request;
-use Input;
+use Requests;
 use File;
 use Session;
 use Auth;
