@@ -17,6 +17,6 @@ class Fabriccomp extends Model
 
     public function fabricconst()
     {
-        return $this->belongsTo(Fabricconst::class, 'fabricconstruct_id', 'id');
+        return $this->belongsTo(Fabricconst::class, 'fabricconstruct_id', 'id')->withDefault();
     }
 }

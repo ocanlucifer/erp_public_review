@@ -7,7 +7,7 @@ use App\SO_Remarktype;
 use App\Salesorder;
 
 use Illuminate\Http\Request;
-use Input;
+use Requests;
 use File;
 use Session;
 use Auth;
@@ -49,10 +49,10 @@ class SO_RemarkController extends Controller
         foreach ($remarktype as $rt) :
             $id_remark_type = $rt->id;
             $id_sales_order = $idsalesorder;
-            if (Input::get('description' . $no) == '') {
+            if (Requests::input('description' . $no) == '') {
                 $description = '-';
             } else {
-                $description = Input::get('description' . $no);
+                $description = Requests::input('description' . $no);
             }
 
             SO_Remark::create([
@@ -74,13 +74,13 @@ class SO_RemarkController extends Controller
         foreach ($remarktype as $rt) :
             $name_id = 'id' . $no;
 
-            $id = Input::get($name_id);
+            $id = Requests::input($name_id);
             $id_remark_type = $rt->id;
             $id_sales_order = $idsalesorder;
-            if (Input::get('description' . $no) == '') {
+            if (Requests::input('description' . $no) == '') {
                 $description = '-';
             } else {
-                $description = Input::get('description' . $no);
+                $description = Requests::input('description' . $no);
             }
 
             SO_Remark::where('id', $id)->update([

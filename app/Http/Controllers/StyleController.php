@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Style;
-use Input;
+use Requests;
 use File;
 use Session;
 use Auth; 
@@ -67,8 +67,8 @@ class StyleController extends Controller
 
     public function new()
     {
-        $name       = Input::get('name');
-    	$tipe 		= Input::get('tipe');
+        $name       = Requests::input('name');
+    	$tipe 		= Requests::input('tipe');
 
 		Style::create([
             'name'          =>  strtoupper($name),
@@ -81,9 +81,9 @@ class StyleController extends Controller
 
     public function update()
     {
-        $id      		= Input::get('id');
-        $name           = Input::get('name');
-        $tipe    	  	= Input::get('tipe');
+        $id      		= Requests::input('id');
+        $name           = Requests::input('name');
+        $tipe    	  	= Requests::input('tipe');
         Style::where('id',$id)->update([
             'name'       =>  strtoupper($name),
             'tipe'       =>  strtoupper($tipe),

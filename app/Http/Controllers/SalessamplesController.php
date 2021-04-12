@@ -13,7 +13,7 @@ use App\Style;
 use App\StyleSample;
 use Illuminate\Http\Request;
 
-use Input;
+use Requests;
 use File;
 use Session;
 use Auth;
@@ -69,31 +69,31 @@ class SalessamplesController extends Controller
         $huruf = "SPL" . $year . "-";
         $nomor = $huruf . sprintf("%05s", $no_smpl);
 
-        $id                         = Input::get('id');
+        $id                         = Requests::input('id');
         $number                     = $nomor;
-        $order_date                 = Input::get('order_date');
-        $delivery_date              = Input::get('delivery_date');
-        $customer                   = strtoupper(Input::get('customer'));
-        $agent                      = strtoupper(Input::get('agent'));
+        $order_date                 = Requests::input('order_date');
+        $delivery_date              = Requests::input('delivery_date');
+        $customer                   = strtoupper(Requests::input('customer'));
+        $agent                      = strtoupper(Requests::input('agent'));
         $state                      = 'PENDING';
-        $style                      = strtoupper(Input::get('style'));
-        $art_number                 = strtoupper(Input::get('art_number'));
-        $brand                      = strtoupper(Input::get('brand'));
-        $season                     = strtoupper(Input::get('season'));
-        $garment_type               = strtoupper(Input::get('garment_type'));
-        $style_group                = strtoupper(Input::get('style_group'));
-        $sample_type                = strtoupper(Input::get('sample_type'));
-        $cust_style_name            = strtoupper(Input::get('cust_style_name'));
-        if (Input::get('description') == '') {
+        $style                      = strtoupper(Requests::input('style'));
+        $art_number                 = strtoupper(Requests::input('art_number'));
+        $brand                      = strtoupper(Requests::input('brand'));
+        $season                     = strtoupper(Requests::input('season'));
+        $garment_type               = strtoupper(Requests::input('garment_type'));
+        $style_group                = strtoupper(Requests::input('style_group'));
+        $sample_type                = strtoupper(Requests::input('sample_type'));
+        $cust_style_name            = strtoupper(Requests::input('cust_style_name'));
+        if (Requests::input('description') == '') {
             $description = '-';
         } else {
-            $description                = Input::get('description');
+            $description                = Requests::input('description');
         }
 
-        if (Input::get('revision_note') == '') {
+        if (Requests::input('revision_note') == '') {
             $revision_note = '-';
         } else {
-            $revision_note              = strtoupper(Input::get('revision_note'));
+            $revision_note              = strtoupper(Requests::input('revision_note'));
         }
 
         Salessample::create([
@@ -147,31 +147,31 @@ class SalessamplesController extends Controller
 
     public function update()
     {
-        $id                         = Input::get('id');
-        $number                     = Input::get('number');
-        $order_date                 = Input::get('order_date');
-        $delivery_date              = Input::get('delivery_date');
-        $customer                   = strtoupper(Input::get('customer'));
-        $agent                      = strtoupper(Input::get('agent'));
-        $state                      = strtoupper(Input::get('state'));
-        $style                      = strtoupper(Input::get('style'));
-        $art_number                 = strtoupper(Input::get('art_number'));
-        $brand                      = strtoupper(Input::get('brand'));
-        $season                     = strtoupper(Input::get('season'));
-        $garment_type               = strtoupper(Input::get('garment_type'));
-        $style_group                = strtoupper(Input::get('style_group'));
-        $sample_type                = strtoupper(Input::get('sample_type'));
-        $cust_style_name            = strtoupper(Input::get('cust_style_name'));
-        if (Input::get('description') == '') {
+        $id                         = Requests::input('id');
+        $number                     = Requests::input('number');
+        $order_date                 = Requests::input('order_date');
+        $delivery_date              = Requests::input('delivery_date');
+        $customer                   = strtoupper(Requests::input('customer'));
+        $agent                      = strtoupper(Requests::input('agent'));
+        $state                      = strtoupper(Requests::input('state'));
+        $style                      = strtoupper(Requests::input('style'));
+        $art_number                 = strtoupper(Requests::input('art_number'));
+        $brand                      = strtoupper(Requests::input('brand'));
+        $season                     = strtoupper(Requests::input('season'));
+        $garment_type               = strtoupper(Requests::input('garment_type'));
+        $style_group                = strtoupper(Requests::input('style_group'));
+        $sample_type                = strtoupper(Requests::input('sample_type'));
+        $cust_style_name            = strtoupper(Requests::input('cust_style_name'));
+        if (Requests::input('description') == '') {
             $description = '-';
         } else {
-            $description                = Input::get('description');
+            $description                = Requests::input('description');
         }
 
-        if (Input::get('revision_note') == '') {
+        if (Requests::input('revision_note') == '') {
             $revision_note = '-';
         } else {
-            $revision_note              = strtoupper(Input::get('revision_note'));
+            $revision_note              = strtoupper(Requests::input('revision_note'));
         }
 
         Salessample::where('id', $id)->update([

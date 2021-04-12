@@ -15,16 +15,16 @@ class Customer extends Model
 
     public function user_create()
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class, 'created_by')->withDefault();
     }
 
     public function user_update()
     {
-        return $this->belongsTo(User::class, 'updated_by');
+        return $this->belongsTo(User::class, 'updated_by')->withDefault();
     }
 
     public function country()
     {
-        return $this->belongsTo(Countries::class, 'country_code', 'kode');
+        return $this->belongsTo(Countries::class, 'country_code', 'kode')->withDefault();
     }
 }

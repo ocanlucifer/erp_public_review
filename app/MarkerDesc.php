@@ -16,6 +16,6 @@ class MarkerDesc extends Model
 
     public function markerFabric()
     {
-        return $this->belongsTo(MarkerFabric::class, 'markerfab_id', 'id');
+        return $this->belongsTo(MarkerFabric::class, 'markerfab_id', 'id')->withDefault();
     }
 }

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Countries;
-use Input;
+use Requests;
 use File;
 use Session;
 use Auth; 
@@ -66,8 +66,8 @@ class CountriesController extends Controller
 
     public function new()
     {
-    	$kode 		= Input::get('kode');
-    	$name 		= Input::get('name');
+    	$kode 		= Requests::input('kode');
+    	$name 		= Requests::input('name');
 
 		Countries::create([
 			'kode'			=>	strtoupper($kode),
@@ -80,9 +80,9 @@ class CountriesController extends Controller
 
     public function update()
     {
-        $id      	= Input::get('id');
-        $kode    	= Input::get('kode');
-        $name    	= Input::get('name');
+        $id      	= Requests::input('id');
+        $kode    	= Requests::input('kode');
+        $name    	= Requests::input('name');
         Countries::where('id',$id)->update([
             'kode'       =>  strtoupper($kode),
             'name'       =>  strtoupper($name),

@@ -9,7 +9,7 @@ use App\Mcp_type;
 use App\Mcp_detail;
 use Illuminate\Http\Request;
 
-use Input;
+use Requests;
 use File;
 use Session;
 use Auth;
@@ -69,29 +69,29 @@ class McpController extends Controller
         $nomor = "MCP/" . $year . "/";
         $number_set = $nomor . sprintf("%05s", $number_set);
 
-        $id                     = Input::get('id');
+        $id                     = Requests::input('id');
         $number                 = $number_set;
-        $order_name             = strtoupper(Input::get('order_name'));
-        $fabricconst            = strtoupper(Input::get('fabricconst'));
-        $fabriccomp             = strtoupper(Input::get('fabriccomp'));
+        $order_name             = strtoupper(Requests::input('order_name'));
+        $fabricconst            = strtoupper(Requests::input('fabricconst'));
+        $fabriccomp             = strtoupper(Requests::input('fabriccomp'));
 
-        if (Input::get('fabric_desc') == '') {
+        if (Requests::input('fabric_desc') == '') {
             $fabric_desc        = '-';
         } else {
-            $fabric_desc        = strtoupper(Input::get('fabric_desc'));
+            $fabric_desc        = strtoupper(Requests::input('fabric_desc'));
         }
-        $style                  = strtoupper(Input::get('style'));
-        if (Input::get('style_desc') == '') {
+        $style                  = strtoupper(Requests::input('style'));
+        if (Requests::input('style_desc') == '') {
             $style_desc         = '-';
         } else {
-            $style_desc         = strtoupper(Input::get('style_desc'));
+            $style_desc         = strtoupper(Requests::input('style_desc'));
         }
-        $delivery_date          = Input::get('delivery_date');
+        $delivery_date          = Requests::input('delivery_date');
         $revision_count         = 0;
-        if (Input::get('revisi_remark') == '') {
+        if (Requests::input('revisi_remark') == '') {
             $revisi_remark      = '-';
         } else {
-            $revisi_remark      = strtoupper(Input::get('revisi_remark'));
+            $revisi_remark      = strtoupper(Requests::input('revisi_remark'));
         }
         $state                  = strtoupper('pending');
         $created_by             = Auth::user()->name;
@@ -146,31 +146,31 @@ class McpController extends Controller
 
     public function update()
     {
-        $id                     = Input::get('id');
-        $number                 = strtoupper(Input::get('number'));
-        $order_name             = strtoupper(Input::get('order_name'));
-        $fabricconst            = strtoupper(Input::get('fabricconst'));
-        $fabriccomp             = strtoupper(Input::get('fabriccomp'));
+        $id                     = Requests::input('id');
+        $number                 = strtoupper(Requests::input('number'));
+        $order_name             = strtoupper(Requests::input('order_name'));
+        $fabricconst            = strtoupper(Requests::input('fabricconst'));
+        $fabriccomp             = strtoupper(Requests::input('fabriccomp'));
 
-        if (Input::get('fabric_desc') == '') {
+        if (Requests::input('fabric_desc') == '') {
             $fabric_desc        = '-';
         } else {
-            $fabric_desc        = strtoupper(Input::get('fabric_desc'));
+            $fabric_desc        = strtoupper(Requests::input('fabric_desc'));
         }
-        $style                  = strtoupper(Input::get('style'));
-        if (Input::get('style_desc') == '') {
+        $style                  = strtoupper(Requests::input('style'));
+        if (Requests::input('style_desc') == '') {
             $style_desc         = '-';
         } else {
-            $style_desc         = strtoupper(Input::get('style_desc'));
+            $style_desc         = strtoupper(Requests::input('style_desc'));
         }
-        $delivery_date          = Input::get('delivery_date');
-        $revision_count         = Input::get('revision_count') + 1;
-        if (Input::get('revisi_remark') == '') {
+        $delivery_date          = Requests::input('delivery_date');
+        $revision_count         = Requests::input('revision_count') + 1;
+        if (Requests::input('revisi_remark') == '') {
             $revisi_remark      = '-';
         } else {
-            $revisi_remark      = strtoupper(Input::get('revisi_remark'));
+            $revisi_remark      = strtoupper(Requests::input('revisi_remark'));
         }
-        $state                  = strtoupper(Input::get('state'));
+        $state                  = strtoupper(Requests::input('state'));
 
         Mcp::where('id', $id)->update([
             'number'            =>  $number,
@@ -223,10 +223,10 @@ class McpController extends Controller
 
     public function createws()
     {
-        $mcp = strtoupper(Input::get('mcp'));
-        $no_urut = strtoupper(Input::get('no_urut'));
-        $combo = strtoupper(Input::get('color'));
-        $total_qty = Input::get('ws_qty_tot');
+        $mcp = strtoupper(Requests::input('mcp'));
+        $no_urut = strtoupper(Requests::input('no_urut'));
+        $combo = strtoupper(Requests::input('color'));
+        $total_qty = Requests::input('ws_qty_tot');
 
         Mcp_wsheet_main::create([
             'mcp' => $mcp,
@@ -236,12 +236,12 @@ class McpController extends Controller
         ]);
         $id_mcpwsm = Mcp_wsheet_main::orderBy('id', 'desc')->first();
 
-        $c = count(Input::get('input_size'));
+        $c = count(Requests::input('input_size'));
 
-        $size_ar = Input::get('input_size');
-        $ws_qty_ar = Input::get('input_ws_qty');
-        $tolerance_ar = Input::get('input_tolerance');
-        $qty_tot_ar = Input::get('input_qty_tot');
+        $size_ar = Requests::input('input_size');
+        $ws_qty_ar = Requests::input('input_ws_qty');
+        $tolerance_ar = Requests::input('input_tolerance');
+        $qty_tot_ar = Requests::input('input_qty_tot');
 
         for ($i = 0; $i < $c; ++$i) {
             Mcp_wsheet::create([
@@ -275,11 +275,11 @@ class McpController extends Controller
 
     public function updatews()
     {
-        $id_mcpwsm = Input::get('id');
-        $mcp = strtoupper(Input::get('mcp'));
-        $no_urut = Input::get('no_urut');
-        $combo = strtoupper(Input::get('color'));
-        $total_qty = Input::get('ws_qty_tot');
+        $id_mcpwsm = Requests::input('id');
+        $mcp = strtoupper(Requests::input('mcp'));
+        $no_urut = Requests::input('no_urut');
+        $combo = strtoupper(Requests::input('color'));
+        $total_qty = Requests::input('ws_qty_tot');
 
         Mcp_wsheet_main::where('id', $id_mcpwsm)->update([
             'mcp' => $mcp,
@@ -288,12 +288,12 @@ class McpController extends Controller
             'total_qty' => $total_qty
         ]);
 
-        $size_ar = Input::get('input_size');
-        $ws_qty_ar = Input::get('input_ws_qty');
-        $tolerance_ar = Input::get('input_tolerance');
-        $qty_tot_ar = Input::get('input_qty_tot');
+        $size_ar = Requests::input('input_size');
+        $ws_qty_ar = Requests::input('input_ws_qty');
+        $tolerance_ar = Requests::input('input_tolerance');
+        $qty_tot_ar = Requests::input('input_qty_tot');
 
-        $c = count(Input::get('input_size'));
+        $c = count(Requests::input('input_size'));
 
         for ($i = 0; $i < $c; $i++) {
             Mcp_wsheet::where('mcp_wsheet_m', $id_mcpwsm)->update([
@@ -315,28 +315,28 @@ class McpController extends Controller
 
     public function createtype()
     {
-        $mcp = Input::get('mcp');
-        $id_wsheet = Input::get('id_wsheet');
-        $no_urut = Input::get('no_urut');
-        $type = strtoupper(Input::get('type'));
-        $fabricconst = strtoupper(Input::get('fabricconst'));
-        $fabriccomp = strtoupper(Input::get('fabriccomp'));
-        if (Input::get('fabric_desc') == '') {
+        $mcp = Requests::input('mcp');
+        $id_wsheet = Requests::input('id_wsheet');
+        $no_urut = Requests::input('no_urut');
+        $type = strtoupper(Requests::input('type'));
+        $fabricconst = strtoupper(Requests::input('fabricconst'));
+        $fabriccomp = strtoupper(Requests::input('fabriccomp'));
+        if (Requests::input('fabric_desc') == '') {
             $fabric_desc = '-';
         } else {
-            $fabric_desc = strtoupper(Input::get('fabric_desc'));
+            $fabric_desc = strtoupper(Requests::input('fabric_desc'));
         }
-        $component = strtoupper(Input::get('component'));
-        $warna = strtoupper(Input::get('color_form'));
-        if (Input::get('tujuan') == '') {
+        $component = strtoupper(Requests::input('component'));
+        $warna = strtoupper(Requests::input('color_form'));
+        if (Requests::input('tujuan') == '') {
             $tujuan = '-';
         } else {
-            $tujuan = strtoupper(Input::get('tujuan'));
+            $tujuan = strtoupper(Requests::input('tujuan'));
         }
-        if (Input::get('remark') == '') {
+        if (Requests::input('remark') == '') {
             $remark = '-';
         } else {
-            $remark = strtoupper(Input::get('remark'));
+            $remark = strtoupper(Requests::input('remark'));
         }
         $created_by = Auth::user()->name;
         $updated_by = '-';
@@ -371,19 +371,19 @@ class McpController extends Controller
 
     public function updatemcpt()
     {
-        $id_mcpt = Input::get('id');
-        $mcp = strtoupper(Input::get('mcp'));
-        $id_wsheet = strtoupper(Input::get('id_wsheet'));
-        $no_urut = Input::get('no_urut');
-        $type = strtoupper(Input::get('type'));
-        $fabricconst = strtoupper(Input::get('fabricconst'));
-        $fabriccomp = strtoupper(Input::get('fabriccomp'));
-        $fabricdesc = strtoupper(Input::get('fabric_desc'));
-        $component = strtoupper(Input::get('component'));
-        $warna = strtoupper(Input::get('color'));
-        $tujuan = strtoupper(Input::get('tujuan'));
-        $remark = strtoupper(Input::get('remark'));
-        $created_by = strtoupper(Input::get('created_by'));
+        $id_mcpt = Requests::input('id');
+        $mcp = strtoupper(Requests::input('mcp'));
+        $id_wsheet = strtoupper(Requests::input('id_wsheet'));
+        $no_urut = Requests::input('no_urut');
+        $type = strtoupper(Requests::input('type'));
+        $fabricconst = strtoupper(Requests::input('fabricconst'));
+        $fabriccomp = strtoupper(Requests::input('fabriccomp'));
+        $fabricdesc = strtoupper(Requests::input('fabric_desc'));
+        $component = strtoupper(Requests::input('component'));
+        $warna = strtoupper(Requests::input('color'));
+        $tujuan = strtoupper(Requests::input('tujuan'));
+        $remark = strtoupper(Requests::input('remark'));
+        $created_by = strtoupper(Requests::input('created_by'));
         $updated_by = strtoupper(Auth::user()->name);
 
         Mcp_type::where('id', $id_mcpt)->update([
@@ -409,28 +409,28 @@ class McpController extends Controller
 
     public function createdetail(Request $request)
     {
-        $mcp = strtoupper(Input::get('mcp'));
-        $id_type = Input::get('id_type');
-        $urutan = Input::get('urutan');
-        $code = strtoupper(Input::get('code'));
-        $marker_date = Input::get('marker_date');
-        $efisiensi = Input::get('efisiensi');
-        $perimeter = Input::get('perimeter');
-        $designer = strtoupper(Input::get('designer'));
-        $tole_pjg_m = Input::get('tole_pjg_m');
-        $tole_lbr_m = Input::get('tole_lbr_m');
-        $kons_sz_tgh = Input::get('kons_sz_tgh');
-        $tgl_sz_tgh = Input::get('tgl_sz_tgh');
-        $panjang_m = Input::get('panjang_m');
-        $lebar_m = Input::get('lebar_m');
-        $gramasi = Input::get('gramasi');
-        $total_skala = Input::get('total_skala');
-        $jml_marker = Input::get('jml_marker');
-        $jml_ampar = Input::get('jml_ampar');
+        $mcp = strtoupper(Requests::input('mcp'));
+        $id_type = Requests::input('id_type');
+        $urutan = Requests::input('urutan');
+        $code = strtoupper(Requests::input('code'));
+        $marker_date = Requests::input('marker_date');
+        $efisiensi = Requests::input('efisiensi');
+        $perimeter = Requests::input('perimeter');
+        $designer = strtoupper(Requests::input('designer'));
+        $tole_pjg_m = Requests::input('tole_pjg_m');
+        $tole_lbr_m = Requests::input('tole_lbr_m');
+        $kons_sz_tgh = Requests::input('kons_sz_tgh');
+        $tgl_sz_tgh = Requests::input('tgl_sz_tgh');
+        $panjang_m = Requests::input('panjang_m');
+        $lebar_m = Requests::input('lebar_m');
+        $gramasi = Requests::input('gramasi');
+        $total_skala = Requests::input('total_skala');
+        $jml_marker = Requests::input('jml_marker');
+        $jml_ampar = Requests::input('jml_ampar');
         $pdf_marker = '-';
-        $komponen = strtoupper(Input::get('komponen'));
-        $revisi = Input::get('revisi');
-        $revisi_remark = strtoupper(Input::get('revisi_remark'));
+        $komponen = strtoupper(Requests::input('komponen'));
+        $revisi = Requests::input('revisi');
+        $revisi_remark = strtoupper(Requests::input('revisi_remark'));
 
         Mcp_detail::create([
             'mcp' => $mcp,
@@ -479,32 +479,32 @@ class McpController extends Controller
 
     public function updatemcpd()
     {
-        $id = Input::get('id');
-        $mcp = strtoupper(Input::get('mcp'));
-        $id_type = Input::get('id_type');
-        $urutan = Input::get('urutan');
-        $code = strtoupper(Input::get('code'));
-        $marker_date = Input::get('marker_date');
-        $efisiensi = Input::get('efisiensi');
-        $perimeter = Input::get('perimeter');
-        $designer = strtoupper(Input::get('designer'));
-        $tole_pjg_m = Input::get('tole_pjg_m');
-        $tole_lbr_m = Input::get('tole_lbr_m');
-        $kons_sz_tgh = Input::get('kons_sz_tgh');
-        $tgl_sz_tgh = Input::get('tgl_sz_tgh');
-        $panjang_m = Input::get('panjang_m');
-        $lebar_m = Input::get('lebar_m');
-        $gramasi = Input::get('gramasi');
-        $total_skala = Input::get('total_skala');
-        $jml_marker = Input::get('jml_marker');
-        $jml_ampar = Input::get('jml_ampar');
-        $pdf_marker = Input::get('pdf_marker');
+        $id = Requests::input('id');
+        $mcp = strtoupper(Requests::input('mcp'));
+        $id_type = Requests::input('id_type');
+        $urutan = Requests::input('urutan');
+        $code = strtoupper(Requests::input('code'));
+        $marker_date = Requests::input('marker_date');
+        $efisiensi = Requests::input('efisiensi');
+        $perimeter = Requests::input('perimeter');
+        $designer = strtoupper(Requests::input('designer'));
+        $tole_pjg_m = Requests::input('tole_pjg_m');
+        $tole_lbr_m = Requests::input('tole_lbr_m');
+        $kons_sz_tgh = Requests::input('kons_sz_tgh');
+        $tgl_sz_tgh = Requests::input('tgl_sz_tgh');
+        $panjang_m = Requests::input('panjang_m');
+        $lebar_m = Requests::input('lebar_m');
+        $gramasi = Requests::input('gramasi');
+        $total_skala = Requests::input('total_skala');
+        $jml_marker = Requests::input('jml_marker');
+        $jml_ampar = Requests::input('jml_ampar');
+        $pdf_marker = Requests::input('pdf_marker');
         if ($pdf_marker == '') {
             $pdf_marker = '-';
         }
-        $komponen = strtoupper(Input::get('komponen'));
-        $revisi = Input::get('revisi');
-        $revisi_remark = strtoupper(Input::get('revisi_remark'));
+        $komponen = strtoupper(Requests::input('komponen'));
+        $revisi = Requests::input('revisi');
+        $revisi_remark = strtoupper(Requests::input('revisi_remark'));
 
         Mcp_detail::where('id', $id)->update([
             'mcp' => $mcp,

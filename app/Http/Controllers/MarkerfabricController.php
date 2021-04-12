@@ -9,7 +9,7 @@ use App\Fabriccomp;
 use App\Marker;
 use App\MarkerDesc;
 use App\Document;
-use Input;
+use Requests;
 use File;
 use Session;
 use Auth;
@@ -74,15 +74,15 @@ class MarkerfabricController extends Controller
 
     public function new()
     {
-        $id                  = Input::get('id');
-        $id_marker           = Input::get('id_marker');
-        $id_fabric_construct  = Input::get('id_fabric_construct');
-        $id_fabric_compost   = Input::get('id_fabric_compost');
-        $name                = Input::get('name');
-        $description             = Input::get('description');
-        $gramasi             = Input::get('gramasi');
-        $unit                = Input::get('unit');
-        $marker_type         = Input::get('marker_type');
+        $id                  = Requests::input('id');
+        $id_marker           = Requests::input('id_marker');
+        $id_fabric_construct  = Requests::input('id_fabric_construct');
+        $id_fabric_compost   = Requests::input('id_fabric_compost');
+        $name                = Requests::input('name');
+        $description             = Requests::input('description');
+        $gramasi             = Requests::input('gramasi');
+        $unit                = Requests::input('unit');
+        $marker_type         = Requests::input('marker_type');
 
         MarkerFabric::create([
             'id'                   =>  strtoupper($id),
@@ -102,14 +102,14 @@ class MarkerfabricController extends Controller
 
     public function update()
     {
-        $id          = Input::get('id');
-        $id_marker                  = Input::get('id_marker');
-        $id_fabric_construct       = Input::get('id_fabric_construct');
-        $id_fabric_compost       = Input::get('id_fabric_compost');
-        $description       = Input::get('description');
-        $gramasi       = Input::get('gramasi');
-        $unit       = Input::get('unit');
-        $marker_type       = Input::get('marker_type');
+        $id          = Requests::input('id');
+        $id_marker                  = Requests::input('id_marker');
+        $id_fabric_construct       = Requests::input('id_fabric_construct');
+        $id_fabric_compost       = Requests::input('id_fabric_compost');
+        $description       = Requests::input('description');
+        $gramasi       = Requests::input('gramasi');
+        $unit       = Requests::input('unit');
+        $marker_type       = Requests::input('marker_type');
 
         MarkerFabric::where('id', $id)->update([
             'id_marker'       =>  $id_marker,

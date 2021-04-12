@@ -13,16 +13,16 @@ class SO_Assortment extends Model
 
     public function salesorder()
     {
-        return $this->belongsTo(Salesorder::class, 'id_sales_order', 'id');
+        return $this->belongsTo(Salesorder::class, 'id_sales_order', 'id')->withDefault();
     }
 
     public function sizes()
     {
-        return $this->belongsTo(Sizes::class, 'id_size', 'id');
+        return $this->belongsTo(Sizes::class, 'id_size', 'id')->withDefault();
     }
 
     public function color()
     {
-        return $this->belongsTo(Color::class, 'id_color', 'id');
+        return $this->belongsTo(Color::class, 'id_color', 'id')->withDefault();
     }
 }

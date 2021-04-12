@@ -12,16 +12,16 @@ class SO_MaterialDetail extends Model
 
     public function materialRequest()
     {
-        return $this->belongsTo(Materialreq::class, 'id_material_req', 'id');
+        return $this->belongsTo(Materialreq::class, 'id_material_req', 'id')->withDefault();
     }
 
     public function gmtcolor()
     {
-        return $this->belongsto(Color::class, 'gmt_color', 'name');
+        return $this->belongsto(Color::class, 'gmt_color', 'name')->withDefault();
     }
 
     public function gmtsize()
     {
-        return $this->belongsTo(Size::class, 'gmt_size', 'name');
+        return $this->belongsTo(Size::class, 'gmt_size', 'name')->withDefault();
     }
 }

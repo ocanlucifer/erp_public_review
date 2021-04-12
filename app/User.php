@@ -41,11 +41,11 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function user_divisi(){
         // return $this->belongsTo(Divisi::class, 'kd_divisi');
-        return $this->hasOne('App\Divisi', 'id', 'kd_divisi');
+        return $this->hasOne('App\Divisi', 'id', 'kd_divisi')->withDefault();
     }
     public function user_perusahaan(){
         // return $this->belongsTo(Perusahaan::class, 'kd_perusahaan');
-        return $this->hasOne('App\Perusahaan', 'kd_perusahaan', 'kd_perusahaan');
+        return $this->hasOne('App\Perusahaan', 'kd_perusahaan', 'kd_perusahaan')->withDefault();
     }
 
 }

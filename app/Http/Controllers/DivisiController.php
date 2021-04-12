@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
 use App\Divisi;
-use Input;
+use Requests;
 use Session;
 use Auth;
 
@@ -55,7 +55,7 @@ class DivisiController extends Controller
 
     public function new()
     {
-        $nama_divisi     = Input::get('nama_divisi');
+        $nama_divisi     = Requests::input('nama_divisi');
         Divisi::create([
             'nama_divisi'        =>    strtoupper($nama_divisi),
         ]);
@@ -65,8 +65,8 @@ class DivisiController extends Controller
 
     public function update()
     {
-        $id             = Input::get('id');
-        $nama_divisi     = Input::get('nama_divisi');
+        $id             = Requests::input('id');
+        $nama_divisi     = Requests::input('nama_divisi');
         Divisi::where('id', $id)->update([
             'nama_divisi'        =>    $nama_divisi,
         ]);

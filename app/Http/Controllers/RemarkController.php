@@ -7,7 +7,7 @@ use App\Remarktype;
 use App\Salessample;
 
 use Illuminate\Http\Request;
-use Input;
+use Requests;
 use File;
 use Session;
 use Auth;
@@ -48,10 +48,10 @@ class RemarkController extends Controller
         foreach ($remarktype as $rt) :
             $id_remark_type = $rt->id;
             $id_sales_sample = $idsalessample;
-            if (Input::get('description' . $no) == '') {
+            if (Requests::input('description' . $no) == '') {
                 $description = '-';
             } else {
-                $description = Input::get('description' . $no);
+                $description = Requests::input('description' . $no);
             }
 
             Remark::create([
@@ -73,13 +73,13 @@ class RemarkController extends Controller
         foreach ($remarktype as $rt) :
             $name_id = 'id' . $no;
 
-            $id = Input::get($name_id);
+            $id = Requests::input($name_id);
             $id_remark_type = $rt->id;
             $id_sales_sample = $idsalessample;
-            if (Input::get('description' . $no) == '') {
+            if (Requests::input('description' . $no) == '') {
                 $description = '-';
             } else {
-                $description = Input::get('description' . $no);
+                $description = Requests::input('description' . $no);
             }
 
             Remark::where('id', $id)->update([
