@@ -184,9 +184,12 @@ foreach ($mcpd as $detail) {
                 $tot_actmtr = 0;
                 ?>
 
+                <?php $iteration = 0; ?>
                 @foreach ($mcpd as $detail)
                 @if ($detail->id_type == $type->id)
                 <?php
+                $iteration++;
+
                 $kons_kg = ($detail->panjang_m + $detail->tole_pjg_m)*($detail->lebar_m + $detail->tole_lbr_m)*($detail->gramasi/1000)/$detail->total_skala*12;
                 $qty_kg = $detail->jml_ampar * $detail->total_skala * $kons_kg/12;
 
@@ -201,12 +204,13 @@ foreach ($mcpd as $detail) {
                 <tr class="text-right">
                     <td></td>
                     <td>{{number_format($detail->lebar_m * 39.37, 2)}}</td>
-                    @foreach ($mcpwsm as $main)
+                    {{-- @foreach ($mcpwsm as $main)
                     @if ($main->id == $type->id_wsheet)
                     <td>{{$main->total_qty}}</td>
                     <?php $tot_qtypcs += $main->total_qty; ?>
                     @endif
-                    @endforeach
+                    @endforeach --}}
+                    <td>{{$detail->total_skala * $detail->jml_ampar}}</td>
                     <td>{{$detail->efisiensi}} %</td>
                     <td>{{number_format($kons_kg,2)}}
                     </td>
@@ -222,6 +226,7 @@ foreach ($mcpd as $detail) {
 
                 <?php
                 $tot_eff += $detail->efisiensi;
+                $tot_qtypcs += $detail->total_skala * $detail->jml_ampar;
                 $tot_konskg += $kons_kg;
                 $tot_qtykg += $qty_kg;
                 $tot_actkg += 0;
@@ -240,14 +245,14 @@ foreach ($mcpd as $detail) {
                     <td></td>
                     <td></td>
                     <td>{{$tot_qtypcs}}</td>
-                    <td>{{$tot_eff}} %</td>
-                    <td>{{number_format($tot_konskg,2)}}</td>
+                    <td>{{$tot_eff/$iteration}} %</td>
+                    <td>{{number_format($tot_konskg/$iteration,2)}}</td>
                     <td>{{number_format($tot_qtykg,2)}}</td>
                     <td>{{number_format($tot_actkg,2)}}</td>
-                    <td>{{number_format($tot_konsyd,2)}}</td>
+                    <td>{{number_format($tot_konsyd/$iteration,2)}}</td>
                     <td>{{number_format($tot_qtyyd,2)}}</td>
                     <td>{{number_format($tot_actyd,2)}}</td>
-                    <td>{{number_format($tot_konsmtr,2)}}</td>
+                    <td>{{number_format($tot_konsmtr/$iteration,2)}}</td>
                     <td>{{number_format($tot_qtymtr,2)}}</td>
                     <td>{{number_format($tot_actmtr,2)}}</td>
                 </tr>
@@ -265,32 +270,32 @@ foreach ($mcpd as $detail) {
     <br>
     <br>
     <div class="row mt-3">
-        <div class="col">Tanggal : .............................</div>
-        <div class="col"></div>
-        <div class="col"></div>
-        <div class="col">Tanggal : .............................</div>
-        <div class="col"></div>
+        <div class="col-sm-3">Tanggal : .............................</div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-3">Tanggal : .............................</div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-3">Tanggal : .............................</div>
     </div>
     <div class="row">
-        <div class="col">Disusun Oleh</div>
-        <div class="col"></div>
-        <div class="col"></div>
-        <div class="col">Diperiksa Oleh</div>
-        <div class="col"></div>
+        <div class="col-sm-3">Disusun Oleh</div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-3">Diperiksa Oleh</div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-3">Disetujui Oleh</div>
     </div>
     <div class="row" style="min-height: 100px;">
-        <div class="col"></div>
-        <div class="col"></div>
-        <div class="col"></div>
-        <div class="col"></div>
-        <div class="col"></div>
+        <div class="col-sm-3"></div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-3"></div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-3"></div>
     </div>
     <div class="row">
-        <div class="col border-top border-dark">Adm. Cek Produksi</div>
-        <div class="col"></div>
-        <div class="col"></div>
-        <div class="col border-top border-dark">GARTECH</div>
-        <div class="col"></div>
+        <div class="col-sm-3 border-top border-dark text-center">Adm. Cek Produksi</div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-3 border-top border-dark text-center">MARKER</div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-3 border-top border-dark text-center">MGR GARTECH</div>
     </div>
     </div>
     </div>
