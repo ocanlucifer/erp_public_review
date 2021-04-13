@@ -216,6 +216,7 @@
         });
         }
         });
+
         $('#fabriccomp').keyup(function(){
         var query = $(this).val();
         if(query != '')
@@ -239,6 +240,7 @@
         });
         }
         });
+
         $('#style').keyup(function(){
         var query = $(this).val();
         if(query != '')
