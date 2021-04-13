@@ -25,7 +25,7 @@
     </div>
     @endif
 
-    <?php $id_sales_sample = Request::segment(5); ?>
+    <?php $id_sales_sample = Requests::segment(5); ?>
 
     <div class="row">
         <div class="col-lg-12">

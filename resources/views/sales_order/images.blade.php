@@ -25,7 +25,7 @@
     </div>
     @endif
 
-    <?php $id_sales_order = Request::segment(3); ?>
+    <?php $id_sales_order = Requests::segment(3); ?>
     <input type="hidden" name="idsalesorder" id="idsalesorder" value="{{$id_sales_order}}">
 
     <div class="row">

@@ -17,7 +17,7 @@
     <td class="td-input">{{ $q->user['name'] }}</td>
     <td class="td-input">{{ $q->note }}</td>
     <td>
-        <?php $id_sales_order = Request::segment(3); ?>
+        <?php $id_sales_order = Requests::segment(3); ?>
         <center>
             <a href="/salesorders/materialrequirements/delete/{{ $q->id }}/{{$id_sales_order}}"
                 onclick="return confirm('Hapus material requirement, Lanjutkan?');"

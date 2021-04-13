@@ -25,7 +25,7 @@
     </div>
     @endif
 
-    <?php $id = Request::segment(3); ?>
+    <?php $id = Requests::segment(3); ?>
     <input type="hidden" name="id" value="{{$id}}">
 
     <div class="container">
@@ -74,7 +74,7 @@
             </div>
             <!-- <div class="row mt-3">
                 <div class="col-sm-12">
-                    <?php $id_sales_sample = Request::segment(3); ?>
+                    <?php $id_sales_sample = Requests::segment(3); ?>
                     <a class="btn btn-success" href="/salessamples/remark_type/{{$id_sales_sample}}"
                         style="width: 30vh;">Remark Type</a>
                 </div>

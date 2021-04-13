@@ -28,7 +28,7 @@
     </div>
     @endif
 
-    <?php $idsalessample = Request::segment(3); ?>
+    <?php $idsalessample = Requests::segment(3); ?>
 
     <div class="container">
         <div class="row">

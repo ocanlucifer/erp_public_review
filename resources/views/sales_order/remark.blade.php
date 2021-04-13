@@ -25,7 +25,7 @@
     </div>
     @endif
 
-    <?php $id = Request::segment(3); ?>
+    <?php $id = Requests::segment(3); ?>
     <input type="hidden" name="id" value="{{$id}}">
 
     <div class="container">

@@ -29,7 +29,7 @@
         Selisih Quantity Assortment Dengan Quantity Quotation Adalah {{$qty_avail}}
     </div>
 
-    <?php $id = Request::segment(2); ?>
+    <?php $id = Requests::segment(2); ?>
     <input type="hidden" name="id" value="{{$id}}">
 
     <div class="container">
