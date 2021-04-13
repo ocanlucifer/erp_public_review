@@ -13,6 +13,8 @@ use Requests;
 use File;
 use Session;
 use Auth;
+use PDFDOM;
+use PDFniklas;
 
 class McpController extends Controller
 {
@@ -48,15 +50,6 @@ class McpController extends Controller
         }
 
         return view('marker.mcp_index', ['result' => $result]);
-    }
-
-    public function cetakPdf()
-    {
-        $data = [
-            'foo' => 'bar'
-        ];
-        $pdf = PDF::loadView('pdf.document', $data);
-        return $pdf->stream('document.pdf');
     }
 
     public function create()
@@ -203,7 +196,7 @@ class McpController extends Controller
         $mcp = Mcp::where('id', $id)->first();
         $mcp_wsheet_m = Mcp_wsheet_main::where('mcp', $mcp['number'])->get();
         $mcp_wsheet = Mcp_wsheet::where('mcp', $mcp['number'])->get();
-        $mcp_type = Mcp_type::where('mcp', $mcp['number'])->get();
+        $mcp_type = Mcp_type::where('mcp', $mcp['number'])->orderBy('no_urut', 'asc')->get();
         $mcp_detail = Mcp_detail::where('mcp', $mcp['number'])->get();
 
         // if ($request->ajax()) {
@@ -218,7 +211,7 @@ class McpController extends Controller
         //     }
         // }
 
-        return view('marker.mcpd_index')->with(compact('mcp'))->with(compact('mcp_wsheet'))->with(compact('mcp_wsheet_m'))->with(compact('mcp_type'))->with(compact('mcp_detail'));
+        return view('marker.mcpd_index2')->with(compact('mcp'))->with(compact('mcp_wsheet'))->with(compact('mcp_wsheet_m'))->with(compact('mcp_type'))->with(compact('mcp_detail'));
     }
 
     public function createws()
@@ -281,12 +274,12 @@ class McpController extends Controller
         $combo = strtoupper(Requests::input('color'));
         $total_qty = Requests::input('ws_qty_tot');
 
-        Mcp_wsheet_main::where('id', $id_mcpwsm)->update([
-            'mcp' => $mcp,
-            'no_urut' => $no_urut,
-            'combo' => $combo,
-            'total_qty' => $total_qty
-        ]);
+        // Mcp_wsheet_main::where('id', $id_mcpwsm)->update([
+        //     'mcp' => $mcp,
+        //     'no_urut' => $no_urut,
+        //     'combo' => $combo,
+        //     'total_qty' => $total_qty
+        // ]);
 
         $size_ar = Requests::input('input_size');
         $ws_qty_ar = Requests::input('input_ws_qty');
@@ -294,19 +287,42 @@ class McpController extends Controller
         $qty_tot_ar = Requests::input('input_qty_tot');
 
         $c = count(Requests::input('input_size'));
+        $ws_object = Mcp_wsheet::where('mcp_wsheet_m', $id_mcpwsm)->get();
 
-        for ($i = 0; $i < $c; $i++) {
-            Mcp_wsheet::where('mcp_wsheet_m', $id_mcpwsm)->update([
-                'mcp'           =>  strtoupper($mcp),
-                'mcp_wsheet_m'  =>  $id_mcpwsm,
-                'no_urut'       =>  $no_urut,
-                'combo'         =>  $combo,
-                'size'          =>  strtoupper($size_ar[$i]),
-                'ws_qty'        =>  $ws_qty_ar[$i],
-                'tolerance'     =>  $tolerance_ar[$i],
-                'qty_tot'       =>  $qty_tot_ar[$i]
-            ]);
+        $i = 0;
+        foreach ($ws_object as $wso) {
+            if ($i < $c) {
+                // echo $wso['id'];
+                // echo '<br>';
+                // echo $i++;
+                // echo '<br>';
+                Mcp_wsheet::where('id', $wso['id'])->update([
+                    'mcp'           =>  strtoupper($mcp),
+                    'mcp_wsheet_m'  =>  $id_mcpwsm,
+                    'no_urut'       =>  $no_urut,
+                    'combo'         =>  $combo,
+                    'size'          =>  strtoupper($size_ar[$i]),
+                    'ws_qty'        =>  $ws_qty_ar[$i],
+                    'tolerance'     =>  $tolerance_ar[$i],
+                    'qty_tot'       =>  $qty_tot_ar[$i]
+                ]);
+            }
+            $i++;
         }
+        // die;
+
+        // for ($i = 0; $i < $c; $i++) {
+        //     Mcp_wsheet::where('mcp_wsheet_m', $id_mcpwsm)->update([
+        //         'mcp'           =>  strtoupper($mcp),
+        //         'mcp_wsheet_m'  =>  $id_mcpwsm,
+        //         'no_urut'       =>  $no_urut,
+        //         'combo'         =>  $combo,
+        //         'size'          =>  strtoupper($size_ar[$i]),
+        //         'ws_qty'        =>  $ws_qty_ar[$i],
+        //         'tolerance'     =>  $tolerance_ar[$i],
+        //         'qty_tot'       =>  $qty_tot_ar[$i]
+        //     ]);
+        // }
 
         $id_mcp = Mcp::where('number', $mcp)->first();
         // Session::flash('sukses', 'Data Worksheet Berhasil Di simpan');
@@ -376,8 +392,8 @@ class McpController extends Controller
         $id_wsheet = strtoupper(Requests::input('id_wsheet'));
         $no_urut = Requests::input('no_urut');
         $type = strtoupper(Requests::input('type'));
-        $fabricconst = strtoupper(Requests::input('fabricconst'));
-        $fabriccomp = strtoupper(Requests::input('fabriccomp'));
+        $fabricconst = strtoupper(Requests::input('fabric_construct'));
+        $fabriccomp = strtoupper(Requests::input('fabric_compost'));
         $fabricdesc = strtoupper(Requests::input('fabric_desc'));
         $component = strtoupper(Requests::input('component'));
         $warna = strtoupper(Requests::input('color'));
@@ -536,8 +552,30 @@ class McpController extends Controller
         return redirect('/mcp/detail/' . $id_mcp->id);
     }
 
+    // public function print_rekkonsdom($id_mcp)
+    // {
+    //     $mcp = Mcp::where('id', $id_mcp)->first();
+    //     $number = $mcp['number'];
+
+    //     $mcpwsm = Mcp_wsheet_main::where('mcp', $number)->get();
+    //     $mcpws = Mcp_wsheet::where('mcp', $number)->get();
+    //     $mcpt = Mcp_type::where('mcp', $number)->get();
+    //     $mcpd = Mcp_detail::where('mcp', $number)->get();
+
+    //     $pdf = PDFDOM::loadview('marker.print_rekkonsdom', [
+    //         'mcp' => $mcp,
+    //         'mcpwsm' => $mcpwsm,
+    //         'mcpws' => $mcpws,
+    //         'mcpt' => $mcpt,
+    //         'mcpd' => $mcpd
+    //     ]);
+    //     return $pdf->download('rekap-konsumsi-pdf');
+    // }
+
     public function print_rekkons($id_mcp)
     {
+
+
         $mcp = Mcp::where('id', $id_mcp)->first();
         $number = $mcp['number'];
 
@@ -546,34 +584,6 @@ class McpController extends Controller
         $mcpt = Mcp_type::where('mcp', $number)->get();
         $mcpd = Mcp_detail::where('mcp', $number)->get();
 
-        // echo 'mcp';
-        // echo '<br>';
-        // print_r($mcp);
-        // echo '<br>';
-        // echo '<br>';
-
-        // echo 'mcpwsm';
-        // echo '<br>';
-        // print_r($mcpwsm);
-        // echo '<br>';
-        // echo '<br>';
-
-        // echo 'mcpws';
-        // echo '<br>';
-        // print_r($mcpws);
-        // echo '<br>';
-        // echo '<br>';
-
-        // echo 'mcpt';
-        // echo '<br>';
-        // print_r($mcpt);
-        // echo '<br>';
-        // echo '<br>';
-
-        // echo 'mcpd';
-        // echo '<br>';
-        // print_r($mcpd);
-        // echo '<br>';
 
         return view('marker.print_rekkons')->with(compact('mcp'))->with(compact('mcpwsm'))->with(compact('mcpws'))->with(compact('mcpws'))->with(compact('mcpt'))->with(compact('mcpd'));
     }

@@ -79,16 +79,20 @@
                                 <div class="col-sm-4">
                                     {{ csrf_field() }}
                                     <div class="col-sm-4 text-right">Type</div>
-                                    <div class="col-sm-8"><select class="form-control" name="type" id="type" required>
+                                    <div class="col-sm-8">
+                                        {{-- <select class="form-control" name="type" id="type" required>
                                             <option value="{{$mcpt->type}}" selected>{{$mcpt->type}}</option>
-                                            <option value="" disabled>
-                                                <hr>
-                                            </option>
-                                            <option value="aplikasi">Aplikasi</option>
-                                            <option value="marker">Marker</option>
-                                            <option value="kain keras">Kain Keras</option>
-                                            <option value="Piping">Piping</option>
-                                        </select></div>
+                                        <option value="" disabled>
+                                            <hr>
+                                        </option>
+                                        <option value="aplikasi">Aplikasi</option>
+                                        <option value="marker">Marker</option>
+                                        <option value="kain keras">Kain Keras</option>
+                                        <option value="Piping">Piping</option>
+                                        </select> --}}
+                                        <input class="form-control" type="text" name="type" id="type"
+                                            value="{{$mcpt->type}}" readonly>
+                                    </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="col-sm-4 text-right">Component</div>
@@ -248,13 +252,13 @@
 
         $('#fabric_compost').keyup(function(){
         var query = $(this).val();
-        var fabricconstruct_id = $('input[name="id_fabric_construct"]').val();
         if(query != ''){
+        var id_fabricconst = $('input[name="id_fabric_construct"]').val();
         var _token = $('input[name="_token"]').val();
         $.ajax({
         url:"{{ route('autocomplete.fabriccomp') }}",
         method:"POST",
-        data:{query:query, fabricconstruct_id:fabricconstruct_id, _token:_token},
+        data:{query:query, id_fabricconst:id_fabricconst, _token:_token},
         success:function(data){
         if (data!='') {
         $('#fabric_compostlist').fadeIn();

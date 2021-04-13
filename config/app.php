@@ -165,6 +165,7 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
         // Kyslik\ColumnSortable\ColumnSortableServiceProvider::class,
 
         /*
@@ -236,7 +237,8 @@ return [
         'Input' => Illuminate\Support\Facades\Input::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-        'PDF' => niklasravnsborg\LaravelPdf\Facades\Pdf::class,
+        'PDFniklas' => niklasravnsborg\LaravelPdf\Facades\Pdf::class,
+        'PDFDOM' => Barryvdh\DomPDF\Facade::class,
         // 'Flash' => StanDaniels\Flash\FlashServiceProvider::class,
 
     ],

@@ -208,7 +208,7 @@
                 var tolerance = document.getElementById('input_tolerance_' + i).value;
 
                 var tolerance_val = ws_qty * tolerance * 0.01;
-                var tolerance_round = Math.round(tolerance_val);
+                var tolerance_round = Math.ceil(tolerance_val);
 
                 var qty_tot = parseInt(ws_qty) + parseInt(tolerance_round);
                 $('#input_qty_tot_'+i).val(qty_tot);

@@ -3,6 +3,7 @@
 $i_d = 0;
 foreach ($mcpd as $detail) {
     $grms[$i_d] = $detail['gramasi'];
+
     $i_d++;
 }
 
@@ -154,21 +155,15 @@ foreach ($mcpd as $detail) {
             <tbody>
                 <?php $i_d = 0; ?>
                 @foreach ($mcpt as $type)
-                @foreach ($mcpd as $det)
-                @if ($det->id_type == $type->id)
-
                 <tr class="font-weight-bold">
                     <td>{{$type->component}}</td>
                     <td colspan="4">{{$type->fabricconst}}</td>
-                    <td colspan="7">Gramasi : {{$grms[$i_d]}}
-                    <td>
+                    {{-- inii --}}
+                    {{-- <td colspan="8">Gramasi : {{$grms[$i_d]}}</td> --}}
                 </tr>
                 <tr class="font-weight-bold">
                     <td colspan="13">{{$type->warna}}</td>
                 </tr>
-
-                @endif
-                @endforeach
 
                 <?php
                 $tot_qtypcs = 0;

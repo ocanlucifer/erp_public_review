@@ -4,10 +4,3 @@ TANYA :
 2. di add detail mcp, apa bedanya marker date sama tanggal size tengah (fungsi masing2 apa).
 3. di rekap konsumsi, ada tanggal di bawah kode, itu dapet darimana?
 4. Rekap piping gimana, di staging pada kosong soalnya
-
-SOP UJI COBA :
-
-1. Create worksheet : kalo udah add row trs klik 'x'(delete row) masih error. jadi kalo mau input, kalo udah add row jangan di hapus, isi aja. sama jangan lupa setiap add calculate dulu
-2. Destroy worksheet belum, jadi gausah dipraktekin
-3. add Detail : upload pdf belum kosongin aja dulu kalo add detail. sama input yang ujung kain jadinya gimana? jangan lupa calculate sebelum kirim (te nanaon sih nu ieumah sabenerna teu calculate dulu ge, jaga2 weh)
-4. Cetak dokumen : ada button "Rekap Konsumsi" sama "Print Document", baru itu
