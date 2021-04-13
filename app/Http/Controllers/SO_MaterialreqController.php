@@ -157,14 +157,14 @@ class SO_MaterialreqController extends Controller
     // The Begining of Material Detail
     public function get_detail()
     {
-        $id_matreq = Input::post('id_matreq');
+        $id_matreq = Requests::input('id_matreq');
         $data_detail = SO_MaterialDetail::where('id_material_req', $id_matreq)->get();
         return response()->json($data_detail);
     }
 
     public function getData()
     {
-        $id = Input::post('id');
+        $id = Requests::input('id');
         $result = SO_MaterialDetail::where('id', $id)->first();
         return response()->json($result);
     }
