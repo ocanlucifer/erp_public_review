@@ -161,9 +161,9 @@ Route::get('/mcp/edit_mcpt/{id_mcpt}/{id_mcp}', 'McpController@editmcpt');
 Route::get('/mcp/edit_mcpd/{id_mcpd}/{id_mcp}/{qty_d}/{size_d}', 'McpController@editmcpd');
 Route::get('/mcp/delete/{id}', 'McpController@delete');
 Route::get('/mcp/detail/{id}', 'McpController@detail');
-Route::get('/mcp/cetak', 'McpController@cetakPdf');
 Route::get('/mcp/show_detail/{id_mcpd}/{id_mcp}/{qty_d}/{size_d}', 'McpController@showdetail');
 
+// Route::get('/mcp/print_rekkonsdom/{mcp_id}', 'McpController@print_rekkonsdom');
 Route::get('/mcp/print_rekkons/{mcp_id}', 'McpController@print_rekkons');
 Route::get('/mcp/print_ws/{mcp_id}/{mcpwsm_id}/{mcpt_id}/{mcpd_id}', 'McpController@print_ws');
 // Route::get('/mcp/print_ws/{mcp_id}/{mcpwsm_id}/{mcpt_id}/{mcpd_id}', 'McpController@print_ws')->name('mcp.print_ws');
