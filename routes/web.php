@@ -158,16 +158,21 @@ Route::get('/mcp/confirm/{id}/{state}', 'McpController@confirm');
 Route::get('/mcp/edit/{id}', 'McpController@edit');
 Route::get('/mcp/edit_ws/{id_mcpwsm}/{id_mcp}', 'McpController@editws');
 Route::get('/mcp/edit_mcpt/{id_mcpt}/{id_mcp}', 'McpController@editmcpt');
-Route::get('/mcp/edit_mcpd/{id_mcpd}/{id_mcp}/{qty_d}/{size_d}', 'McpController@editmcpd');
+Route::get('/mcp/edit_mcpd/{id_mcpd}/{id_mcp}/{id_mcpwsm}', 'McpController@editmcpd');
 Route::get('/mcp/delete/{id}', 'McpController@delete');
+Route::get('/mcp/delete_ws/{id}', 'McpController@deletews');
+Route::get('/mcp/delete_mcpt/{id}', 'McpController@deletemcpt');
+Route::get('/mcp/delete_mcpd/{id}', 'McpController@deletemcpd');
 Route::get('/mcp/detail/{id}', 'McpController@detail');
-Route::get('/mcp/show_detail/{id_mcpd}/{id_mcp}/{qty_d}/{size_d}', 'McpController@showdetail');
+Route::get('/mcp/show_detail/{id_mcpd}/{id_mcp}/{id_mcpwsm}', 'McpController@showdetail');
 
 // Route::get('/mcp/print_rekkonsdom/{mcp_id}', 'McpController@print_rekkonsdom');
 Route::get('/mcp/print_rekkons/{mcp_id}', 'McpController@print_rekkons');
 Route::get('/mcp/print_ws/{mcp_id}/{mcpwsm_id}/{mcpt_id}/{mcpd_id}', 'McpController@print_ws');
 // Route::get('/mcp/print_ws/{mcp_id}/{mcpwsm_id}/{mcpt_id}/{mcpd_id}', 'McpController@print_ws')->name('mcp.print_ws');
 
+Route::post('/mcp/geteditsize', 'McpController@edit_getsize');
+Route::post('/mcp/getsize', 'McpController@detail_getsize');
 Route::post('/mcp/create', 'McpController@create');
 Route::post('/mcp/update', 'McpController@update');
 Route::post('/mcp/create_ws', 'McpController@createws');

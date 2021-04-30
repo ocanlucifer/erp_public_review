@@ -8,8 +8,7 @@
 
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ url('/home') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active"><a href="{{url('/mcp')}}">Marker Check Production</a></li>
-        <li class="breadcrumb-item active"><a href="/mcp/detail/{{$mcp}}">Marker</a></li>
+        <li class="breadcrumb-item"><a href="{{url('/salesorders')}}">Marker Check Production</a></li>
         <li class="breadcrumb-item active">Edit MCP</li>
     </ol>
 
@@ -71,7 +70,6 @@
                             <input type="hidden" name="id" id="id" value="{{$mcpd->id}}">
                             <input type="hidden" name="mcp" id="mcp" value="{{$mcpd->mcp}}">
                             <input type="hidden" name="id_type" id="id_type" value="{{$mcpd->id_type}}">
-                            <input type="hidden" name="mcpwsm_id" id="mcpwsm_id" value="{{$mcpwsm_id}}">
                             <div class="row">
                                 <div class="col-sm-4">
                                     <div class="col-sm-4 text-right"><small><b>Marker ke</b></small></div>
@@ -92,7 +90,7 @@
                                 <div class="col-sm-4 mt-lg-1">
                                     <div class="col-sm-4 text-right"><small><b>Qty (yard)</b></small></div>
                                     <div class="col-sm-8"><input class="form-control" type="text" step="0.01"
-                                            name="qty_yard" id="qty_yard" readonly
+                                            name="qty_yard" id="qty_yard" value="{{$mcpd->qty_yard}}" readonly
                                             style="background-color: #FFB09F !important;">
                                     </div>
                                 </div>
@@ -112,7 +110,7 @@
                                 <div class="col-sm-4 mt-lg-1">
                                     <div class="col-sm-4 text-right"><small><b>Qty (kg)</b></small></div>
                                     <div class="col-sm-8"><input class="form-control" type="text" step="0.01"
-                                            name="qty_kg" id="qty_kg" readonly
+                                            name="qty_kg" id="qty_kg" value="{{$mcpd->qty_kg}}" readonly
                                             style="background-color: #FFB09F !important;">
                                     </div>
                                 </div>
@@ -133,7 +131,7 @@
                                 <div class="col-sm-4 mt-lg-1">
                                     <div class="col-sm-4 text-right"><small><b>Qty (m)</b></small></div>
                                     <div class="col-sm-8"><input class="form-control" type="text" step="0.01"
-                                            name="qty_m" id="qty_m" readonly
+                                            name="qty_m" id="qty_m" value="{{$mcpd->qty_m}}" readonly
                                             style="background-color: #FFB09F !important;">
                                     </div>
                                 </div>
@@ -216,7 +214,7 @@
                                 <div class="col-sm-4 mt-lg-1">
                                     <div class="col-sm-4 text-right"><small><b>Komponen / Pcs</b></small></div>
                                     <div class="col-sm-8"><textarea class="form-control" type="text" name="komponen"
-                                            id="komponen">{{$mcpd->komponen}}</textarea>
+                                            id="komponen" value="{{$mcpd->komponen}}"></textarea>
                                     </div>
                                 </div>
 
@@ -282,10 +280,50 @@
                                     </div>
                                 </div>
 
-                                <div class="col-sm-12 mt-20 mb-20">
-                                    <input type="submit" id="submit_detail" name="submit_detail"
-                                        class="btn btn-primary mr-20 float-right" value="Update">
-                                    <a href="/mcp/detail/{{$mcp}}" class="float-right mr-20 mt-10">Kembali</a>
+                                <div class="col-sm-12 mt-lg-1">
+                                    <div class="row mt-10">
+                                        <div class="col-sm-4">
+                                            <input type="submit" id="submit_detail" name="submit_detail"
+                                                class="btn btn-primary ml-10">
+                                            <div class="col-sm-4">
+                                            </div>
+                                            <a href="/mcp/detail/{{$mcp}}" class="btn btn-sm btn-primary">Kembali</a>
+                                            {{-- <button class="btn btn-sm btn-warning" type="button"
+                                                id="ws_calculate">Calculate</button> --}}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-lg-5">
+                                    <div class="col-sm-1"></div>
+                                    <div class="col-sm-10">
+                                        <table class="table table-condensed">
+                                            <thead>
+                                                <tr>
+                                                    <th>Size</th>
+                                                    <th>Qty Ws</th>
+                                                    <th>Scale</th>
+                                                    <th>Scales</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="table-detail">
+                                                <tr>
+                                                    <td><input type="text" class="form-control" name="detail_size"
+                                                            id="detail_size" value="{{$size_d}}" readonly>
+                                                    </td>
+                                                    <td><input type="text" class="form-control" name="detail_qty"
+                                                            id="detail_qty" value="{{$qty_d}}" readonly>
+                                                    </td>
+                                                    <td><input type="text" class="form-control" name="detail_scale"
+                                                            id="detail_scale"></td>
+                                                    <td><input type="text" class="form-control" name="detail_scales"
+                                                            id="detail_scales">
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -302,153 +340,81 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
     <script type="text/javascript">
-        $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
+        $.ajaxSetup({
+            headers: {
+                'csrftoken': '{{ csrf_token() }}'
+            }
+        });
     </script>
 
     <script type="text/javascript">
-        $(document).ready(function(){
+        $(document).ready(function() {
+            $("input").keyup(function() {
+                // function calculate_d(){
+                var panjang = document.getElementById('panjang_m').value;
+                var tole_panjang = document.getElementById('tole_pjg_m').value;
+                var lebar = document.getElementById('lebar_m').value;
+                var tole_lebar = document.getElementById('tole_lbr_m').value;
+                var gramasi = document.getElementById('gramasi').value;
+                var skala = document.getElementById('total_skala').value;
+                var jml_ampar = document.getElementById('jml_ampar').value;
+                var detail_scale = document.getElementById('total_skala').value;
+                // Perhitungan Lebar (m) to (inc)
+                var lebar_inc = lebar * 39.37;
+                document.getElementById('lebar_inc').value = Math.round(lebar_inc * 100) / 100;
 
-            detail_cal();
+                // Perhitungan Konsumsi Kg/Dz=(Panjang + toleransi) x (Lebar + toleransi) x (Gramasi / 1000) / Skala x 12
+                var kons_kgdz = (parseFloat(panjang) + parseFloat(tole_panjang)) * (parseFloat(lebar) + parseFloat(tole_lebar)) * (gramasi / 1000) / skala * 12;
+                console.log('kons_kgdz=' + kons_kgdz);
+                document.getElementById('kons_kgdz').value = Math.round(kons_kgdz * 100) / 100;
 
-            var mcpd_id = $('input[name="id"]').val();
-            // var mcpwsmid = $('input[name="mcpwsm_id"]').val();
-            var _token = $('input[name="_token"]').val();
+                // Perhitungan Konsumsi Yard/Dz=(Panjang + toleransi) / 0.914 / Skala x 12
+                var kons_yddz = (parseFloat(panjang) + parseFloat(tole_panjang)) / 0.914 / skala * 12;
+                console.log('kons_yddz=' + kons_yddz);
+                document.getElementById('kons_yddz').value = Math.round(kons_yddz * 100) / 100;
 
-            $.ajax({
-                url:"/mcp/geteditsize",
-                method:"POST",
-                data:{mcpd_id:mcpd_id, _token:_token},
-                success:function(data){
-                    console.log(data);
+                // Perhitungan Konsumsi Meter/Dz=(Panjang + toleransi) / Skala x 12
+                var kons_mdz = (parseFloat(panjang) + parseFloat(tole_panjang)) / skala * 12;
+                console.log('kons_mdz=' + kons_mdz);
+                document.getElementById('kons_mdz').value = Math.round(kons_mdz * 100) / 100;
 
-                    var i;
-                    for(i=0; i<data.length; i++){
-                        baris = '<tr>' +
-                            '<input class="form-control form-detail" type="hidden" name="input_id_mcpa[]" id="input_id_mcpa'+i+'" value="'+data[i].id+'" readonly>'+
-                            '<td>' +'<input class="form-control form-detail" type="text" name="input_det_size[]" id="input_det_size_'+i+'" value="'+data[i].size+'" readonly>'+'</td>'+
-                            '<td>'+'<input class="form-control form-detail" type="number" name="input_det_qty[]" id="input_det_qty_'+i+'" value="'+data[i].qty_ws+'" readonly>'+'</td>'+
-                            '<td>'+'<input class="form-control form-detail" type="number" name="input_det_scale[]" id="input_det_scale_'+i+'" value="'+data[i].scale+'">'+'</td>'+
-                            '<td>'+'<input class="form-control form-detail" type="number" name="input_det_scales[]" id="input_det_scales_'+i+'"'+' style="background-color: #FFB09F !important;"'+' value="'+data[i].qty_ws * data[i].scale+'" readonly>'+'</td>'+
-                            '</tr>'
-                        $('#detail-ass-tbody').append(baris);
-                    }
-                    baris2 = '<input type="hidden" name="index_assort" id="index_assort" value="'+i+'">'
-                    $('#detail-ass-tbody').append(baris2);
-                }
-            });
+                // isi input scale=total_skala
+                document.getElementById('detail_scale').value = detail_scale; // isi input scales=scale * jumlah ampar var
 
-                // var id_mcpt = $(this).data("mcptid");
-                // $("#id_type").val(id_mcpt);
+                detail_scales = detail_scale * jml_ampar;
+                document.getElementById('detail_scales').value = detail_scales;
 
-            $("input").keyup(function(){
-                    var panjang = document.getElementById('panjang_m').value;
-                    var tole_panjang = document.getElementById('tole_pjg_m').value;
-                    var lebar = document.getElementById('lebar_m').value;
-                    var tole_lebar = document.getElementById('tole_lbr_m').value;
-                    var gramasi = document.getElementById('gramasi').value;
-                    var skala = document.getElementById('total_skala').value;
-                    var jml_ampar = document.getElementById('jml_ampar').value;
-                    // var detail_scale = document.getElementById('total_skala').value;
+                // Perhitungan Qty per Yard, Kg dan meter=Jumlah Ampar x Total Skala x Konsumsi / 12
+                var qty_yard = jml_ampar * detail_scale * kons_yddz / 12;
+                var qty_kg = jml_ampar * detail_scale * kons_kgdz / 12;
+                var qty_m = jml_ampar * detail_scale * kons_mdz / 12;
 
-                    // Perhitungan Lebar (m) to (inc)
-                    var lebar_inc=lebar * 39.37;
-                    document.getElementById('lebar_inc').value = Math.round(lebar_inc * 100)/100;
-
-                    // Perhitungan Konsumsi Kg/Dz=(Panjang + toleransi) x (Lebar + toleransi) x (Gramasi / 1000) / Skala x 12
-                    var kons_kgdz = (parseFloat(panjang) + parseFloat(tole_panjang)) * (parseFloat(lebar) + parseFloat(tole_lebar)) * (gramasi/1000) / skala * 12;
-                    document.getElementById('kons_kgdz').value = Math.round(kons_kgdz * 100)/100;
-
-                    // Perhitungan Konsumsi Yard/Dz=(Panjang + toleransi) / 0.914 / Skala x 12
-                    var kons_yddz = (parseFloat(panjang) + parseFloat(tole_panjang)) / 0.914 / skala * 12;
-                    document.getElementById('kons_yddz').value = Math.round(kons_yddz * 100)/100;
-
-                    // Perhitungan Konsumsi Meter/Dz=(Panjang + toleransi) / Skala x 12
-                    var kons_mdz = (parseFloat(panjang) + parseFloat(tole_panjang)) / skala *12;
-                    document.getElementById('kons_mdz').value = Math.round(kons_mdz * 100)/100;
-
-                    // Perhitungan Qty per Yard, Kg dan meter=Jumlah Ampar x Total Skala x Konsumsi / 12
-                    var qty_yard = jml_ampar * skala * kons_yddz / 12;
-                    var qty_kg = jml_ampar * skala * kons_kgdz / 12;
-                    var qty_m = jml_ampar * skala * kons_mdz / 12;
-
-                    document.getElementById('qty_yard').value = Math.round(qty_yard * 100)/100;
-                    document.getElementById('qty_kg').value = Math.round(qty_kg * 100)/100;
-                    document.getElementById('qty_m').value = Math.round(qty_m * 100)/100;
+                document.getElementById('qty_yard').value = Math.round(qty_yard * 100) / 100;
+                document.getElementById('qty_kg').value = Math.round(qty_kg * 100) / 100;
+                document.getElementById('qty_m').value = Math.round(qty_m * 100) / 100;
+                // }
             });
         });
-
-        function detail_cal(){
-            var panjang = document.getElementById('panjang_m').value;
-            var tole_panjang = document.getElementById('tole_pjg_m').value;
-            var lebar = document.getElementById('lebar_m').value;
-            var tole_lebar = document.getElementById('tole_lbr_m').value;
-            var gramasi = document.getElementById('gramasi').value;
-            var skala = document.getElementById('total_skala').value;
-            var jml_ampar = document.getElementById('jml_ampar').value;
-            // var detail_scale = document.getElementById('total_skala').value;
-
-            // Perhitungan Lebar (m) to (inc)
-            var lebar_inc=lebar * 39.37;
-            document.getElementById('lebar_inc').value = Math.round(lebar_inc * 100)/100;
-
-            // Perhitungan Konsumsi Kg/Dz=(Panjang + toleransi) x (Lebar + toleransi) x (Gramasi / 1000) / Skala x 12
-            var kons_kgdz = (parseFloat(panjang) + parseFloat(tole_panjang)) * (parseFloat(lebar) + parseFloat(tole_lebar)) *
-            (gramasi/1000) / skala * 12;
-            document.getElementById('kons_kgdz').value = Math.round(kons_kgdz * 100)/100;
-
-            // Perhitungan Konsumsi Yard/Dz=(Panjang + toleransi) / 0.914 / Skala x 12
-            var kons_yddz = (parseFloat(panjang) + parseFloat(tole_panjang)) / 0.914 / skala * 12;
-            document.getElementById('kons_yddz').value = Math.round(kons_yddz * 100)/100;
-
-            // Perhitungan Konsumsi Meter/Dz=(Panjang + toleransi) / Skala x 12
-            var kons_mdz = (parseFloat(panjang) + parseFloat(tole_panjang)) / skala *12;
-            document.getElementById('kons_mdz').value = Math.round(kons_mdz * 100)/100;
-
-            // Perhitungan Qty per Yard, Kg dan meter=Jumlah Ampar x Total Skala x Konsumsi / 12
-            var qty_yard = jml_ampar * skala * kons_yddz / 12;
-            var qty_kg = jml_ampar * skala * kons_kgdz / 12;
-            var qty_m = jml_ampar * skala * kons_mdz / 12;
-
-            document.getElementById('qty_yard').value = Math.round(qty_yard * 100)/100;
-            document.getElementById('qty_kg').value = Math.round(qty_kg * 100)/100;
-            document.getElementById('qty_m').value = Math.round(qty_m * 100)/100;
-        }
-
-        function assort_cal(){
-            // mendapatkan total skala secara otomatis
-            var index_assort = document.getElementById('index_assort').value;
-            var tot_ass_scale = 0;
-
-            for(i = 0; i < index_assort; i++){
-                var ass_qtyws = document.getElementById("input_det_qty_"+i).value;
-                var ass_scale = document.getElementById("input_det_scale_"+i).value;
-                var ass_scales = ass_qtyws * ass_scale;
-                document.getElementById("input_det_scales_"+i).value=ass_scales;
-                tot_ass_scale += parseInt(ass_scale);
-            }
-            document.getElementById("total_skala").value=tot_ass_scale;
-        }
     </script>
 
     <script type="text/javascript">
         $(window).on('hashchange', function() {
-		if (window.location.hash) {
-			var page = window.location.hash.replace('#', '');
-			if (page == Number.NaN || page <= 0) {
-				return false;
-			} else {
-				getDatas(page);
-			}
-		}
-	});
+            if (window.location.hash) {
+                var page = window.location.hash.replace('#', '');
+                if (page == Number.NaN || page <= 0) {
+                    return false;
+                } else {
+                    getDatas(page);
+                }
+            }
+        });
 
-	$(document).ready(function() {
-		$(document).on('click', '.pagination a', function (e) {
-			// $('tbody').append('<img style="position: absolute; left: 0; top: 0; z-index: 100000;" src="../public/images/loading.gif" />');
-			var url = $(this).attr('href');
-			getDatas($(this).attr('href').split('page=')[1]);
-			e.preventDefault();
-		});
-    });
-
+        $(document).ready(function() {
+            $(document).on('click', '.pagination a', function(e) {
+                // $('tbody').append('<img style="position: absolute; left: 0; top: 0; z-index: 100000;" src="../public/images/loading.gif" />');
+                var url = $(this).attr('href');
+                getDatas($(this).attr('href').split('page=')[1]);
+                e.preventDefault();
+            });
+        });
     </script>

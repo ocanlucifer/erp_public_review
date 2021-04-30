@@ -7,6 +7,7 @@ use App\Mcp_wsheet_main;
 use App\Mcp_wsheet;
 use App\Mcp_type;
 use App\Mcp_detail;
+use App\Mcp_assort;
 use Illuminate\Http\Request;
 
 use Requests;
@@ -117,13 +118,13 @@ class McpController extends Controller
         if ($state == "1") {
             Mcp::where('id', $id)->update([
                 'state'             =>  'CONFIRMED',
-                'confirmed_by'      =>  Auth::user()->name
+                'confirmed_by'      =>  strtoupper(Auth::user()->name)
             ]);
             Session::flash('sukses', 'Data MCP Berhasil Di Konfirmasi');
         } else {
             Mcp::where('id', $id)->update([
                 'state'             =>  'UNCONFIRMED',
-                'confirmed_by'      =>  Auth::user()->name
+                'confirmed_by'      =>  strtoupper(Auth::user()->name)
             ]);
             Session::flash('sukses', 'Data MCP Berhasil Di Konfirmasi');
         }
@@ -186,7 +187,28 @@ class McpController extends Controller
 
     public function delete($id)
     {
+        $mcp = Mcp::where('id', $id)->first();
+        $mcpwsm = Mcp_wsheet_main::where('mcp', $mcp['number'])->get();
+
+        foreach ($mcpwsm as $wsm) {
+            // $mcpws = Mcp_wsheet::where('mcp_wsheet_m', $wsm['id'])->get();
+            $mcpt = Mcp_type::where('id_wsheet', $wsm['id'])->get();
+
+            foreach ($mcpt as $t) {
+                $mcpd = Mcp_detail::where('id_type', $t['id'])->get();
+                foreach ($mcpd as $d) {
+                    Mcp_assort::where('id_mcpd', $d['id'])->delete();
+                }
+                Mcp_detail::where('id_type', $t['id'])->delete();
+            }
+
+            Mcp_wsheet::where('mcp_wsheet_m', $wsm['id'])->delete();
+            Mcp_type::where('id_wsheet', $wsm['id'])->delete();
+        }
+
+        Mcp_wsheet_main::where('mcp', $mcp['number'])->delete();
         Mcp::where('id', $id)->delete();
+
         Session::flash('sukses', 'Data berhasil dihapus');
         return redirect('/mcp');
     }
@@ -211,7 +233,21 @@ class McpController extends Controller
         //     }
         // }
 
-        return view('marker.mcpd_index2')->with(compact('mcp'))->with(compact('mcp_wsheet'))->with(compact('mcp_wsheet_m'))->with(compact('mcp_type'))->with(compact('mcp_detail'));
+        return view('marker.mcpd_index')->with(compact('mcp'))->with(compact('mcp_wsheet'))->with(compact('mcp_wsheet_m'))->with(compact('mcp_type'))->with(compact('mcp_detail'));
+    }
+
+    public function detail_getsize(Request $request)
+    {
+        $id_mcpwsm = $request->get('mcpwsmid');
+        $hasil = Mcp_wsheet::select('size', 'qty_tot')->where('mcp_wsheet_m', $id_mcpwsm)->get();
+        return response()->json($hasil);
+    }
+
+    public function edit_getsize(Request $request)
+    {
+        $id_mcpd = $request->get('mcpd_id');
+        $hasil = Mcp_assort::select('id', 'size', 'qty_ws', 'scale')->where('id_mcpd', $id_mcpd)->get();
+        return response()->json($hasil);
     }
 
     public function createws()
@@ -274,59 +310,70 @@ class McpController extends Controller
         $combo = strtoupper(Requests::input('color'));
         $total_qty = Requests::input('ws_qty_tot');
 
-        // Mcp_wsheet_main::where('id', $id_mcpwsm)->update([
-        //     'mcp' => $mcp,
-        //     'no_urut' => $no_urut,
-        //     'combo' => $combo,
-        //     'total_qty' => $total_qty
-        // ]);
-
         $size_ar = Requests::input('input_size');
         $ws_qty_ar = Requests::input('input_ws_qty');
         $tolerance_ar = Requests::input('input_tolerance');
         $qty_tot_ar = Requests::input('input_qty_tot');
 
+        // Update Wsheet
         $c = count(Requests::input('input_size'));
-        $ws_object = Mcp_wsheet::where('mcp_wsheet_m', $id_mcpwsm)->get();
 
-        $i = 0;
-        foreach ($ws_object as $wso) {
-            if ($i < $c) {
-                // echo $wso['id'];
-                // echo '<br>';
-                // echo $i++;
-                // echo '<br>';
-                Mcp_wsheet::where('id', $wso['id'])->update([
-                    'mcp'           =>  strtoupper($mcp),
-                    'mcp_wsheet_m'  =>  $id_mcpwsm,
-                    'no_urut'       =>  $no_urut,
-                    'combo'         =>  $combo,
-                    'size'          =>  strtoupper($size_ar[$i]),
-                    'ws_qty'        =>  $ws_qty_ar[$i],
-                    'tolerance'     =>  $tolerance_ar[$i],
-                    'qty_tot'       =>  $qty_tot_ar[$i]
+        Mcp_wsheet::where('mcp_wsheet_m', $id_mcpwsm)->delete();
+        for ($i = 0; $i < $c; $i++) {
+            Mcp_wsheet::create([
+                'mcp'           => $mcp,
+                'mcp_wsheet_m'  => $id_mcpwsm,
+                'no_urut'       =>  $no_urut,
+                'combo'         =>  $combo,
+                'size'          =>  strtoupper($size_ar[$i]),
+                'ws_qty'        =>  $ws_qty_ar[$i],
+                'tolerance'     =>  $tolerance_ar[$i],
+                'qty_tot'       =>  $qty_tot_ar[$i]
+            ]);
+        }
+
+        // Update Assort
+        $mcpt = Mcp_type::where('id_wsheet', $id_mcpwsm)->first();
+        $mcpd = Mcp_detail::where('id_type', $mcpt['id'])->get();
+        foreach ($mcpd as $d) {
+            Mcp_assort::where('id_mcpd', $d['id'])->delete();
+
+            for ($i = 0; $i < $c; $i++) {
+                Mcp_assort::create([
+                    'id_mcpd'   => $d['id'],
+                    'size'      => strtoupper($size_ar[$i]),
+                    'qty_ws'    => $ws_qty_ar[$i],
+                    'scale'     => 0
                 ]);
             }
-            $i++;
         }
-        // die;
 
-        // for ($i = 0; $i < $c; $i++) {
-        //     Mcp_wsheet::where('mcp_wsheet_m', $id_mcpwsm)->update([
-        //         'mcp'           =>  strtoupper($mcp),
-        //         'mcp_wsheet_m'  =>  $id_mcpwsm,
-        //         'no_urut'       =>  $no_urut,
-        //         'combo'         =>  $combo,
-        //         'size'          =>  strtoupper($size_ar[$i]),
-        //         'ws_qty'        =>  $ws_qty_ar[$i],
-        //         'tolerance'     =>  $tolerance_ar[$i],
-        //         'qty_tot'       =>  $qty_tot_ar[$i]
-        //     ]);
-        // }
+
 
         $id_mcp = Mcp::where('number', $mcp)->first();
-        // Session::flash('sukses', 'Data Worksheet Berhasil Di simpan');
+        Session::flash('sukses', 'Data Worksheet Berhasil Di simpan');
         return redirect('/mcp/detail/' . $id_mcp->id);
+    }
+
+    public function deletews($id)
+    {
+        $mcpwsm = Mcp_wsheet_main::where('id', $id)->first();
+        $mcp = Mcp::where('number', $mcpwsm->mcp)->first();
+        $mcpt = Mcp_type::where('id_wsheet', $id)->get();
+
+        foreach ($mcpt as $type) {
+            $mcpd = Mcp_detail::where('id_type', $type['id'])->get();
+            foreach ($mcpd as $d) {
+                Mcp_assort::where('id_mcpd', $d['id'])->delete();
+            }
+            Mcp_detail::where('id_type', $type['id'])->delete();
+        }
+        Mcp_type::where('id_wsheet', $id)->delete();
+        Mcp_wsheet::where('mcp_wsheet_m', $id)->delete();
+        Mcp_wsheet_main::where('id', $id)->delete();
+
+        Session::flash('sukses', 'Data berhasil dihapus');
+        return redirect('/mcp/detail/' . $mcp->id);
     }
 
     public function createtype()
@@ -423,8 +470,25 @@ class McpController extends Controller
         return redirect('/mcp/detail/' . $id_mcp->id);
     }
 
+    public function deletemcpt($id)
+    {
+        $mcpt = Mcp_type::where('id', $id)->first();
+        $id_mcp = Mcp::where('number', $mcpt->mcp)->first();
+        $mcpd = Mcp_detail::where('id_type', $id)->get();
+        foreach ($mcpd as $d) {
+            Mcp_assort::where('id_mcpd', $d['id'])->delete();
+        }
+
+        Mcp_detail::where('id_type', $id)->delete();
+        Mcp_type::where('id', $id)->delete();
+        Session::flash('sukses', 'Data berhasil dihapus');
+        return redirect('/mcp/detail/' . $id_mcp->id);
+    }
+
     public function createdetail(Request $request)
     {
+
+        // === input for detail===
         $mcp = strtoupper(Requests::input('mcp'));
         $id_type = Requests::input('id_type');
         $urutan = Requests::input('urutan');
@@ -443,7 +507,25 @@ class McpController extends Controller
         $total_skala = Requests::input('total_skala');
         $jml_marker = Requests::input('jml_marker');
         $jml_ampar = Requests::input('jml_ampar');
-        $pdf_marker = '-';
+
+        // menyimpan data file yang diupload ke variabel $file
+        $file = $request->file('pdf_marker');
+        if ($file) {
+            // validasi
+            $this->validate($request, [
+                'pdf_marker' => 'required|file|mimes:pdf|max:4096',
+            ]);
+
+            $nama_file =  time() . "_" . $file->getClientOriginalName();
+
+            // isi dengan nama folder tempat kemana file diupload
+            $tujuan_upload = 'mcp_files/';
+            $file->move($tujuan_upload, $nama_file);
+        } else {
+            $nama_file = "-";
+        }
+        // END of upload pdf
+
         $komponen = strtoupper(Requests::input('komponen'));
         $revisi = Requests::input('revisi');
         $revisi_remark = strtoupper(Requests::input('revisi_remark'));
@@ -467,35 +549,81 @@ class McpController extends Controller
             'total_skala' => $total_skala,
             'jml_marker' => $jml_marker,
             'jml_ampar' => $jml_ampar,
-            'pdf_marker' => $pdf_marker,
+            'pdf_marker' => $nama_file,
             'komponen' => $komponen,
             'revisi' => $revisi,
             'revisi_remark' => $revisi_remark
         ]);
 
+        // === input for assortment ===
+        $c = count(Requests::input('input_det_size'));
+        $as_mcpd = Mcp_detail::where('mcp', $mcp)->first();
+
+        $as_size = Requests::input('input_det_size');
+        $as_qty = Requests::input('input_det_qty');
+        $as_scale = Requests::input('input_det_scale');
+
+        for ($i = 0; $i < $c; $i++) {
+            Mcp_assort::create([
+                "id_mcpd" => $as_mcpd['id'],
+                "size" => strtoupper($as_size[$i]),
+                "qty_ws" => $as_qty[$i],
+                "scale" => $as_scale[$i]
+            ]);
+        }
+
         $id_mcp = Mcp::where('number', $mcp)->first();
-        // Session::flash('sukses', 'Data Type Berhasil Di simpan');
+        Session::flash('sukses', 'Data Type Berhasil Di simpan');
         return redirect('/mcp/detail/' . $id_mcp->id);
     }
 
-    public function showdetail($id_mcpd, $id_mcp, $qty_d, $size_d)
+    public function showdetail($id_mcpd, $id_mcp, $id_mcpwsm)
     {
+        $mcpwsm_id = $id_mcpwsm;
         $mcpd = Mcp_detail::where('id', $id_mcpd)->first();
+        $mcpa = Mcp_assort::where('id_mcpd', $id_mcpd)->orderBy('id', 'DESC')->get();
         $mcp = $id_mcp;
-        return view('marker.mcpd_show')->with(compact('mcpd'))->with(compact('mcp'))->with(compact('qty_d'))->with(compact('size_d'));
+        return view('marker.mcpd_show')->with(compact('mcpwsm_id'))->with(compact('mcpd'))->with(compact('mcp'))->with(compact('mcpa'));
+        // return view('marker.mcpd_show')->with(compact('mcpd'))->with(compact('mcp'))->with(compact('qty_d'))->with(compact('size_d'));
     }
 
-    public function editmcpd($id_mcpd, $id_mcp, $qty_d, $size_d)
+    public function editmcpd($id_mcpd, $id_mcp, $id_mcpwsm)
     {
+        $mcpwsm_id = $id_mcpwsm;
         $mcpd = Mcp_detail::where('id', $id_mcpd)->first();
+        $mcpa = Mcp_assort::where('id_mcpd', $id_mcpd)->orderBy('id', 'DESC')->get();
         $mcp = $id_mcp;
-        return view('marker.mcpd_edit')->with(compact('mcpd'))->with(compact('mcp'))->with(compact('qty_d'))->with(compact('size_d'));
+        return view('marker.mcpd_edit')->with(compact('mcpwsm_id'))->with(compact('mcpd'))->with(compact('mcp'))->with(compact('mcpa'));
     }
 
+    // public function editmcpd($id_mcpd, $id_mcp, $qty_d, $size_d)
+    // {
+    //     $mcpd = Mcp_detail::where('id', $id_mcpd)->first();
+    //     $mcpa = Mcp_assort::where('id_mcpd', $id_mcpd)->orderBy('id', 'DESC')->get();
+    //     $mcp = $id_mcp;
+    //     return view('marker.mcpd_edit_new')->with(compact('mcpd'))->with(compact('mcp'))->with(compact('qty_d'))->with(compact('size_d'))->with(compact('mcpa'));
+    // }
 
-    public function updatemcpd()
+
+    public function updatemcpd(Request $request)
     {
         $id = Requests::input('id');
+
+        // update assortment
+        $c = count(Requests::input('input_det_size'));
+
+        $id_mcpa = Requests::input('input_id_mcpa');
+        $as_qty = Requests::input('input_det_qty');
+        $as_scale = Requests::input('input_det_scale');
+
+        for ($i = 0; $i < $c; $i++) {
+            Mcp_assort::where('id', $id_mcpa[$i])->update([
+                "qty_ws" => $as_qty[$i],
+                "scale" => $as_scale[$i]
+            ]);
+        }
+
+        // preparation update detail
         $mcp = strtoupper(Requests::input('mcp'));
         $id_type = Requests::input('id_type');
         $urutan = Requests::input('urutan');
@@ -514,10 +642,26 @@ class McpController extends Controller
         $total_skala = Requests::input('total_skala');
         $jml_marker = Requests::input('jml_marker');
         $jml_ampar = Requests::input('jml_ampar');
-        $pdf_marker = Requests::input('pdf_marker');
-        if ($pdf_marker == '') {
-            $pdf_marker = '-';
+        $nama_file = Requests::input('pdf_marker_name');
+
+        // menyimpan data file yang diupload ke variabel $file
+        $file = $request->file('pdf_marker');
+        if ($file) {
+            // validasi
+            $this->validate($request, [
+                'pdf_marker' => 'required|file|mimes:pdf|max:4096',
+            ]);
+
+            $nama_file =  time() . "_" . $file->getClientOriginalName();
+            // hapus file
+            $old_file = Mcp_detail::where('id', $id)->first();
+            File::delete('mcp_files/' . $old_file->pdf_marker);
+            // isi dengan nama folder tempat kemana file diupload
+            $tujuan_upload = 'mcp_files/';
+            $file->move($tujuan_upload, $nama_file);
         }
+        // END of upload pdf
+
         $komponen = strtoupper(Requests::input('komponen'));
         $revisi = Requests::input('revisi');
         $revisi_remark = strtoupper(Requests::input('revisi_remark'));
@@ -541,14 +685,25 @@ class McpController extends Controller
             'total_skala' => $total_skala,
             'jml_marker' => $jml_marker,
             'jml_ampar' => $jml_ampar,
-            'pdf_marker' => $pdf_marker,
+            'pdf_marker' => $nama_file,
             'komponen' => $komponen,
             'revisi' => $revisi,
             'revisi_remark' => $revisi_remark
         ]);
 
         $id_mcp = Mcp::where('number', $mcp)->first();
-        // Session::flash('sukses', 'Data Type Berhasil Di simpan');
+        Session::flash('sukses', 'Data Type Berhasil Di simpan');
+        return redirect('/mcp/detail/' . $id_mcp->id);
+    }
+
+    public function deletemcpd($id)
+    {
+        $mcpd = Mcp_detail::where('id', $id)->first();
+        $id_mcp = Mcp::where('number', $mcpd->mcp)->first();
+
+        Mcp_assort::where('id_mcpd', $id)->delete();
+        Mcp_detail::where('id', $id)->delete();
+        Session::flash('sukses', 'Data berhasil dihapus');
         return redirect('/mcp/detail/' . $id_mcp->id);
     }
 
@@ -595,7 +750,8 @@ class McpController extends Controller
         $mcpws = Mcp_wsheet::where('mcp_wsheet_m', $id_mcpwsm)->get();
         $mcpt = Mcp_type::where('id', $id_mcpt)->first();
         $mcpd = Mcp_detail::where('id', $id_mcpd)->first();
+        $mcpa = Mcp_assort::where('id_mcpd', $id_mcpd)->get();
 
-        return view('marker.print_ws')->with(compact('mcp'))->with(compact('mcpwsm'))->with(compact('mcpws'))->with(compact('mcpws'))->with(compact('mcpt'))->with(compact('mcpd'));
+        return view('marker.print_ws')->with(compact('mcp'))->with(compact('mcpwsm'))->with(compact('mcpws'))->with(compact('mcpws'))->with(compact('mcpt'))->with(compact('mcpd'))->with(compact('mcpa'));
     }
 }
