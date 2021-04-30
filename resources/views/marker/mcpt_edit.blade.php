@@ -9,6 +9,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ url('/home') }}">Dashboard</a></li>
         <li class="breadcrumb-item"><a href="{{url('/salesorders')}}">Marker Check Production</a></li>
+        <li class="breadcrumb-item"><a href="/mcp/detail/{{$mcp}}">Marker</a></li>
         <li class="breadcrumb-item active">Edit MCP</li>
     </ol>
 
