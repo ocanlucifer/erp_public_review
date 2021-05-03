@@ -215,13 +215,13 @@ foreach ($mcpd as $detail) {
                     <td>{{number_format($kons_kg,2)}}
                     </td>
                     <td>{{number_format($qty_kg,2)}}</td>
-                    <td>Act KG</td>
+                    <td>{{ $act_kg = number_format($detail->efisiensi * $qty_kg / 100,2)}}</td>
                     <td>{{number_format($kons_yd,2)}}</td>
                     <td>{{number_format($qty_yd,2)}}</td>
-                    <td>Act Yd</td>
+                    <td>{{ $act_yd = number_format($detail->efisiensi * $qty_yd / 100,2)}}</td>
                     <td>{{number_format($kons_mtr,2)}}</td>
                     <td>{{number_format($qty_mtr,2)}}</td>
-                    <td>Act Mtr</td>
+                    <td>{{ $act_mtr = number_format($detail->efisiensi * $qty_mtr / 100,2)}}</td>
                 </tr>
 
                 <?php
@@ -229,13 +229,13 @@ foreach ($mcpd as $detail) {
                 $tot_qtypcs += $detail->total_skala * $detail->jml_ampar;
                 $tot_konskg += $kons_kg;
                 $tot_qtykg += $qty_kg;
-                $tot_actkg += 0;
+                $tot_actkg += $act_kg;
                 $tot_konsyd += $kons_yd;
                 $tot_qtyyd += $qty_yd;
-                $tot_actyd += 0;
+                $tot_actyd += $act_yd;
                 $tot_konsmtr += $kons_mtr;
                 $tot_qtymtr += $qty_mtr;
-                $tot_actmtr += 0;
+                $tot_actmtr += $act_mtr;
                 ?>
 
                 @endif

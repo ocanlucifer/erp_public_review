@@ -109,7 +109,7 @@
             </div>
             <div class="row">
                 <div class="col-md-1">Tanggal</div>
-                <div class="col-md-3">: {{date("d-m-Y", time())}}</div>
+                <div class="col-md-3">: {{date("d-m-Y", strtotime($mcpd->marker_date))}}</div>
                 <div class="col-md-1">Style </div>
                 <div class="col-md-3">: {{$mcp->style}}</div>
             </div>
@@ -132,8 +132,8 @@
                     <table class="table table-bordered ">
                         <thead class="text-center">
                             <th>Size</th>
-                            @foreach ($mcpws as $ws)
-                            <th>{{$ws->size}}</th>
+                            @foreach ($mcpa as $ass)
+                            <th>{{$ass->size}}</th>
                             @endforeach
                             <th>Marker</th>
                             <th>Ampar</th>
@@ -142,17 +142,19 @@
                         <tbody>
                             <tr class="text-center">
                                 <td><b>Qty Ws</b></td>
-                                @foreach ($mcpws as $ws)
-                                <td>{{$ws->qty_tot}}</td>
+                                <?php $qtyws = 0; ?>
+                                @foreach ($mcpa as $ass)
+                                <td>{{$ass->qty_ws}}</td>
+                                <?php $qtyws += $ass->qty_ws; ?>
                                 @endforeach
                                 <td></td>
                                 <td></td>
-                                <td>{{$mcpwsm->total_qty}}</td>
+                                <td>{{$qtyws}}</td>
                             </tr>
                             <tr class="text-center">
                                 <td><b>M {{$mcpt->no_urut}}</b></td>
-                                @foreach ($mcpws as $ws)
-                                <td>{{$mcpd->total_skala}}</td>
+                                @foreach ($mcpa as $ass)
+                                <td>{{$ass->scale}}</td>
                                 @endforeach
                                 <td>{{$mcpd->jml_marker}}</td>
                                 <td>{{$mcpd->jml_ampar}}</td>
@@ -161,8 +163,8 @@
                             <tr class="text-center">
                                 <td><b>Qty MP</b></td>
                                 <?php $qtymp_t = 0; ?>
-                                @foreach ($mcpws as $ws)
-                                <?php $qtymp = $mcpd->total_skala * $mcpd->jml_marker * $mcpd->jml_ampar ?>
+                                @foreach ($mcpa as $ass)
+                                <?php $qtymp = $ass->scale * $mcpd->jml_ampar;?>
                                 <td>{{$qtymp}}</td>
                                 <?php $qtymp_t += $qtymp; ?>
                                 @endforeach
@@ -172,9 +174,8 @@
                             </tr>
                             <tr class="text-center">
                                 <td><b>Turun Size</b></td>
-                                @foreach ($mcpws as $ws)
-                                <?php $qtymp = $mcpd->total_skala * $mcpd->jml_marker * $mcpd->jml_ampar ?>
-                                <td>{{$qtymp - $ws->qty_tot}}</td>
+                                @foreach ($mcpa as $ass)
+                                <td>{{$turun = ($ass->scale * $mcpd->jml_ampar) - $ass->qty_ws}}</td>
                                 @endforeach
                                 <td></td>
                                 <td></td>
@@ -194,8 +195,8 @@
                     <table class="table table-bordered ">
                         <thead class="text-center">
                             <th>Size</th>
-                            @foreach ($mcpws as $ws)
-                            <th>{{$ws->size}}</th>
+                            @foreach ($mcpa as $ass)
+                            <th>{{$ass->size}}</th>
                             @endforeach
                             <th>Marker</th>
                             <th>Ampar</th>
@@ -204,8 +205,10 @@
                         <tbody>
                             <tr class="text-center">
                                 <td><b>Assort</b></td>
-                                @foreach ($mcpws as $ws)
-                                <td>{{$mcpd->total_skala}}</td>
+                                <?php $scale_t = 0; ?>
+                                @foreach ($mcpa as $ass)
+                                <td>{{$ass->scale}}</td>
+                                <?php $scale_t += $ass->scale; ?>
                                 @endforeach
                                 <td>{{$mcpd->jml_marker}}</td>
                                 <td>{{$mcpd->jml_ampar}}</td>
@@ -214,8 +217,8 @@
                             <tr class="text-center">
                                 <td><b>Hasil</b></td>
                                 <?php $qtymp_t = 0; ?>
-                                @foreach ($mcpws as $ws)
-                                <?php $qtymp = $mcpd->total_skala * $mcpd->jml_marker * $mcpd->jml_ampar ?>
+                                @foreach ($mcpa as $ass)
+                                <?php $qtymp = $ass->scale * $mcpd->jml_ampar;?>
                                 <td>{{$qtymp}}</td>
                                 <?php $qtymp_t += $qtymp; ?>
                                 @endforeach
@@ -235,7 +238,7 @@
             <div class="row">
                 <div class="col-sm-1"></div>
                 <div class="col-sm-3">: L = {{$mcpd->lebar_m}} m + {{$mcpd->tole_lbr_m}} m</div>
-                <div class="col-sm-3">> {{$mcpd->total_skala}} / {{$mcpd->gramasi}} x 12 PCS</div>
+                <div class="col-sm-3">> {{$scale_t}} / {{$mcpd->gramasi}} x 12 PCS</div>
                 {{-- Perhitungan Konsumsi Kg/Dz = (Panjang + toleransi) x (Lebar + toleransi) x (Gramasi / 1000) / Skala x 12 --}}
                 <div class="col-sm-2">=
                     {{$kons_kgdz = sprintf("%.2f",($mcpd->panjang_m + $mcpd->tole_pjg_m) * ($mcpd->lebar_m + $mcpd->tole_lbr_m) * ($mcpd->gramasi/1000) / $mcpd->total_skala * 12)}}
@@ -244,9 +247,9 @@
 
             <div class="row">
                 <div class="col-sm-1">Quantity</div>
-                <div class="col-sm-3">: {{$konsumsi = $mcpd->total_skala * $mcpd->jml_marker * $mcpd->jml_ampar}} x
+                <div class="col-sm-3">: {{$qtymp_t}} x
                     {{$kons_kgdz}} / 12 PCS</div>
-                <div class="col-sm-3">= {{$qty_kgdz = sprintf("%.2f",($konsumsi * $kons_kgdz/ 12))}} Kg
+                <div class="col-sm-3">= {{$qty_kgdz = sprintf("%.2f",($qtymp_t * $kons_kgdz/ 12))}} Kg
                 </div>
             </div>
 
@@ -265,15 +268,15 @@
 
             <div class="row">
                 <div class="col-sm-1">Quantity</div>
-                <div class="col-sm-3">: {{$konsumsi}} x {{$kons_mdz}} / 12</div>
-                <div class="col-sm-3">= {{$qty_mdz = sprintf("%.2f",($konsumsi * $kons_mdz / 12))}} m</div>
+                <div class="col-sm-3">: {{$qtymp_t}} x {{$kons_mdz}} / 12</div>
+                <div class="col-sm-3">= {{$qty_mdz = sprintf("%.2f",($qtymp_t * $kons_mdz / 12))}} m</div>
                 <div class="col-sm-2">= {{$qty_yddz = sprintf("%.2f",($qty_mdz * 1.094))}} Yard</div>
             </div>
 
             <hr class="mb-20">
 
             <div class="row font-weight-bold">
-                <div class="col-sm-3">Total Fabric : {{$qty_kgdz}} Kg </div>
+                <div class="col-sm-5">Total Fabric : {{$qty_kgdz}} Kg, {{$qty_mdz}} Mtr, {{$qty_yddz}} Yard </div>
                 <div class="col-sm-3">Jumlah Marker : {{$mcpd->jml_marker}}</div>
             </div>
 
@@ -301,10 +304,10 @@
                 <div class="col"></div>
             </div>
             <div class="row">
-                <div class="col border-top border-dark">Adm. Cek Produksi</div>
+                <div class="col border-top border-dark">ADM. CEK PROD</div>
                 <div class="col"></div>
                 <div class="col"></div>
-                <div class="col border-top border-dark">GARTECH</div>
+                <div class="col border-top border-dark">MGR GARTECH</div>
                 <div class="col"></div>
             </div>
         </div>
@@ -312,7 +315,7 @@
 
 
     <script>
-        window.print();
+        // window.print();
     </script>
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

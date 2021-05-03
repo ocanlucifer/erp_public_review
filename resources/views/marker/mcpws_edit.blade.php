@@ -8,7 +8,8 @@
 
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ url('/home') }}">Dashboard</a></li>
-        <li class="breadcrumb-item"><a href="{{url('/salesorders')}}">Marker Check Production</a></li>
+        <li class="breadcrumb-item active"><a href="{{url('/mcp')}}">Marker Check Production</a></li>
+        <li class="breadcrumb-item active"><a href="/mcp/detail/{{$mcp}}">Marker</a></li>
         <li class="breadcrumb-item active">Edit MCP</li>
     </ol>
 
@@ -107,6 +108,9 @@
                                                             id="input_qty_tot_<?=$count;?>" value="{{$ws->qty_tot}}"
                                                             readonly>
                                                     </td>
+                                                    <td><button class="btn btn-sm btn-danger"
+                                                            onclick="$(this).parent().parent().remove(); minCount();">X</button>
+                                                    </td>
                                                     <td></td>
                                                 </tr>
                                                 @endforeach
@@ -189,7 +193,7 @@
                 '<td>'+'<input class="form-control" type="number" name="input_ws_qty[]" id="input_ws_qty_'+count+'">'+'</td>'+
                 '<td>'+'<input class="form-control" type="number" name="input_tolerance[]" id="input_tolerance_'+count+'">'+'</td>'+
                 '<td>'+'<input class="form-control" type="number" name="input_qty_tot[]" id="input_qty_tot_'+count+'" readonly>'+'</td>'+
-                '<td>'+'<button class="btn btn-sm btn-danger" onclick="$(this).parent().parent().remove();">X</button>'+'</td>' +
+                '<td>'+'<button class="btn btn-sm btn-danger" onclick="$(this).parent().parent().remove(); minCount();">X</button>'+'</td>' +
             '</tr>'
             $('#ws_tbody').append(baris);
 
@@ -202,8 +206,8 @@
         function calculate(){
             var ws_qty_tot = 0
             var count = document.getElementById("count").value;
+            console.log(count);
             for (i=1; i<=count; i++){
-            console.log('ok');
                 var ws_qty = document.getElementById('input_ws_qty_' + i).value;
                 var tolerance = document.getElementById('input_tolerance_' + i).value;
 
@@ -218,6 +222,13 @@
                 $('#ws_qty_tot').val(ws_qty_tot);
 
             $('#submit').prop('disabled',false);
+        }
+
+        function minCount()
+        {
+            var count = document.getElementById("count").value;
+            count--;
+            document.getElementById("count").value=count;
         }
     </script>
 

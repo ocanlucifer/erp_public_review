@@ -1,0 +1,5 @@
+Technical Analisis
+
+-> Candle Stick
+- 1 Candle Stick berisi 4 informasi: High, Open/Close, Low
+- beri garis pada kenaikan yang menyebabkan penurunan, pun sebaliknya. Maka dari garis2 yang ada akan menampilkan ruas area

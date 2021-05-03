@@ -1,6 +1,0 @@
-TANYA :
-
-1. di mcp utama ada sales order number tapi gada form inputnya pas add mcp, fungsinya buat pas kapan? input sales ordernya gimana?
-2. di add detail mcp, apa bedanya marker date sama tanggal size tengah (fungsi masing2 apa).
-3. di rekap konsumsi, ada tanggal di bawah kode, itu dapet darimana?
-4. Rekap piping gimana, di staging pada kosong soalnya
