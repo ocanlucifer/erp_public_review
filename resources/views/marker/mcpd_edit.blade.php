@@ -322,13 +322,14 @@
                     console.log(data);
 
                     var i;
+                    var jml_ampar = document.getElementById("jml_ampar").value;
                     for(i=0; i<data.length; i++){
                         baris = '<tr>' +
                             '<input class="form-control form-detail" type="hidden" name="input_id_mcpa[]" id="input_id_mcpa'+i+'" value="'+data[i].id+'" readonly>'+
                             '<td>' +'<input class="form-control form-detail" type="text" name="input_det_size[]" id="input_det_size_'+i+'" value="'+data[i].size+'" readonly>'+'</td>'+
                             '<td>'+'<input class="form-control form-detail" type="number" name="input_det_qty[]" id="input_det_qty_'+i+'" value="'+data[i].qty_ws+'" readonly>'+'</td>'+
                             '<td>'+'<input class="form-control form-detail" type="number" name="input_det_scale[]" id="input_det_scale_'+i+'" value="'+data[i].scale+'">'+'</td>'+
-                            '<td>'+'<input class="form-control form-detail" type="number" name="input_det_scales[]" id="input_det_scales_'+i+'"'+' style="background-color: #FFB09F !important;"'+' value="'+data[i].qty_ws * data[i].scale+'" readonly>'+'</td>'+
+                            '<td>'+'<input class="form-control form-detail" type="number" name="input_det_scales[]" id="input_det_scales_'+i+'"'+' style="background-color: #FFB09F !important;"'+' value="'+jml_ampar * data[i].scale+'" readonly>'+'</td>'+
                             '</tr>'
                         $('#detail-ass-tbody').append(baris);
                     }
@@ -418,11 +419,11 @@
             // mendapatkan total skala secara otomatis
             var index_assort = document.getElementById('index_assort').value;
             var tot_ass_scale = 0;
+            var jml_ampar = document.getElementById("jml_ampar").value;
 
             for(i = 0; i < index_assort; i++){
-                var ass_qtyws = document.getElementById("input_det_qty_"+i).value;
                 var ass_scale = document.getElementById("input_det_scale_"+i).value;
-                var ass_scales = ass_qtyws * ass_scale;
+                var ass_scales = jml_ampar * ass_scale;
                 document.getElementById("input_det_scales_"+i).value=ass_scales;
                 tot_ass_scale += parseInt(ass_scale);
             }

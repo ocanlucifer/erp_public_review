@@ -16,6 +16,7 @@ use Session;
 use Auth;
 use PDFDOM;
 use PDFniklas;
+use Mpdf\Mpdf;
 
 class McpController extends Controller
 {
@@ -164,7 +165,7 @@ class McpController extends Controller
         } else {
             $revisi_remark      = strtoupper(Requests::input('revisi_remark'));
         }
-        $state                  = strtoupper(Requests::input('state'));
+        // $state                  = strtoupper(Requests::input('state'));
 
         Mcp::where('id', $id)->update([
             'number'            =>  $number,
@@ -177,7 +178,7 @@ class McpController extends Controller
             'delivery_date'     =>  $delivery_date,
             'revision_count'    =>  $revision_count,
             'revisi_remark'     =>  $revisi_remark,
-            'state'             =>  $state,
+            // 'state'             =>  $state,
             'updated_by'        =>  Auth::user()->name
         ]);
 
@@ -305,6 +306,7 @@ class McpController extends Controller
     public function updatews()
     {
         $id_mcpwsm = Requests::input('id');
+
         $mcp = strtoupper(Requests::input('mcp'));
         $no_urut = Requests::input('no_urut');
         $combo = strtoupper(Requests::input('color'));
@@ -314,6 +316,13 @@ class McpController extends Controller
         $ws_qty_ar = Requests::input('input_ws_qty');
         $tolerance_ar = Requests::input('input_tolerance');
         $qty_tot_ar = Requests::input('input_qty_tot');
+
+        // update Wsheet main
+        Mcp_wsheet_main::where('id', $id_mcpwsm)->update([
+            'no_urut'       => $no_urut,
+            'combo'         => $combo,
+            'total_qty'     => $total_qty
+        ]);
 
         // Update Wsheet
         $c = count(Requests::input('input_size'));
@@ -340,6 +349,7 @@ class McpController extends Controller
 
             for ($i = 0; $i < $c; $i++) {
                 Mcp_assort::create([
+                    'mcp'       => $mcp,
                     'id_mcpd'   => $d['id'],
                     'size'      => strtoupper($size_ar[$i]),
                     'qty_ws'    => $ws_qty_ar[$i],
@@ -565,6 +575,7 @@ class McpController extends Controller
 
         for ($i = 0; $i < $c; $i++) {
             Mcp_assort::create([
+                "mcp" => $mcp,
                 "id_mcpd" => $as_mcpd['id'],
                 "size" => strtoupper($as_size[$i]),
                 "qty_ws" => $as_qty[$i],
@@ -595,15 +606,6 @@ class McpController extends Controller
         $mcp = $id_mcp;
         return view('marker.mcpd_edit')->with(compact('mcpwsm_id'))->with(compact('mcpd'))->with(compact('mcp'))->with(compact('mcpa'));
     }
-
-    // public function editmcpd($id_mcpd, $id_mcp, $qty_d, $size_d)
-    // {
-    //     $mcpd = Mcp_detail::where('id', $id_mcpd)->first();
-    //     $mcpa = Mcp_assort::where('id_mcpd', $id_mcpd)->orderBy('id', 'DESC')->get();
-    //     $mcp = $id_mcp;
-    //     return view('marker.mcpd_edit_new')->with(compact('mcpd'))->with(compact('mcp'))->with(compact('qty_d'))->with(compact('size_d'))->with(compact('mcpa'));
-    // }
-
 
     public function updatemcpd(Request $request)
     {
@@ -707,26 +709,6 @@ class McpController extends Controller
         return redirect('/mcp/detail/' . $id_mcp->id);
     }
 
-    // public function print_rekkonsdom($id_mcp)
-    // {
-    //     $mcp = Mcp::where('id', $id_mcp)->first();
-    //     $number = $mcp['number'];
-
-    //     $mcpwsm = Mcp_wsheet_main::where('mcp', $number)->get();
-    //     $mcpws = Mcp_wsheet::where('mcp', $number)->get();
-    //     $mcpt = Mcp_type::where('mcp', $number)->get();
-    //     $mcpd = Mcp_detail::where('mcp', $number)->get();
-
-    //     $pdf = PDFDOM::loadview('marker.print_rekkonsdom', [
-    //         'mcp' => $mcp,
-    //         'mcpwsm' => $mcpwsm,
-    //         'mcpws' => $mcpws,
-    //         'mcpt' => $mcpt,
-    //         'mcpd' => $mcpd
-    //     ]);
-    //     return $pdf->download('rekap-konsumsi-pdf');
-    // }
-
     public function print_rekkons($id_mcp)
     {
 
@@ -738,9 +720,10 @@ class McpController extends Controller
         $mcpws = Mcp_wsheet::where('mcp', $number)->get();
         $mcpt = Mcp_type::where('mcp', $number)->get();
         $mcpd = Mcp_detail::where('mcp', $number)->get();
+        $mcpa = Mcp_assort::where('mcp', $number)->get();
 
 
-        return view('marker.print_rekkons')->with(compact('mcp'))->with(compact('mcpwsm'))->with(compact('mcpws'))->with(compact('mcpws'))->with(compact('mcpt'))->with(compact('mcpd'));
+        return view('marker.print_rekkons')->with(compact('mcp'))->with(compact('mcpwsm'))->with(compact('mcpws'))->with(compact('mcpws'))->with(compact('mcpt'))->with(compact('mcpd'))->with(compact('mcpa'));
     }
 
     public function print_ws($id_mcp, $id_mcpwsm, $id_mcpt, $id_mcpd)
@@ -753,5 +736,38 @@ class McpController extends Controller
         $mcpa = Mcp_assort::where('id_mcpd', $id_mcpd)->get();
 
         return view('marker.print_ws')->with(compact('mcp'))->with(compact('mcpwsm'))->with(compact('mcpws'))->with(compact('mcpws'))->with(compact('mcpt'))->with(compact('mcpd'))->with(compact('mcpa'));
+    }
+
+    public function tes()
+    {
+        $query = Mcp::all();
+        $table = '';
+        $no = 1;
+        foreach ($query as $row) {
+            $table .= '<tr>
+                                <td>' . $no++ . '</td>
+                                <td>' . $row->number . '</td>
+                                <td>' . $row->order_name . '</td>
+                                <td>' . $row->style . '</td>
+                                <td>' . $row->style_desc . '</td>
+                            </tr>';
+        }
+        $mpdf = new Mpdf(['debug' => FALSE, 'mode' => 'utf-8', 'orientation' => 'P']);
+        $mpdf->WriteHTML('<table border="1" id="datatable" class="table table-striped table-bordered" style="border-collapse: collapse;">
+                    <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Number</th>
+                        <th>Pemesan</th>
+                        <th>Style</th>
+                        <th>Deskripsi Style</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    ' . $table . '
+                    </tbody>
+                </table>');
+        $mpdf->Output('Teodore_Laporan_data_mcp.pdf', 'I');
+        exit;
     }
 }

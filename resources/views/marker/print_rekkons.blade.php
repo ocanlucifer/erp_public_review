@@ -204,13 +204,15 @@ foreach ($mcpd as $detail) {
                 <tr class="text-right">
                     <td></td>
                     <td>{{number_format($detail->lebar_m * 39.37, 2)}}</td>
-                    {{-- @foreach ($mcpwsm as $main)
-                    @if ($main->id == $type->id_wsheet)
-                    <td>{{$main->total_qty}}</td>
-                    <?php $tot_qtypcs += $main->total_qty; ?>
+
+                    <?php $qty_d = 0; ?>
+                    @foreach ($mcpa as $a)
+                    @if ($a->id_mcpd == $detail->id)
+                    <?php $qty_d += $a->qty_ws ;?>
                     @endif
-                    @endforeach --}}
-                    <td>{{$detail->total_skala * $detail->jml_ampar}}</td>
+                    @endforeach
+
+                    <td>{{$qty_d}}</td>
                     <td>{{$detail->efisiensi}} %</td>
                     <td>{{number_format($kons_kg,2)}}
                     </td>
@@ -226,7 +228,7 @@ foreach ($mcpd as $detail) {
 
                 <?php
                 $tot_eff += $detail->efisiensi;
-                $tot_qtypcs += $detail->total_skala * $detail->jml_ampar;
+                $tot_qtypcs += $qty_d;
                 $tot_konskg += $kons_kg;
                 $tot_qtykg += $qty_kg;
                 $tot_actkg += $act_kg;

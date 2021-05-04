@@ -6,11 +6,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class AddRateToPpnTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::table('ppn', function (Blueprint $table) {
@@ -18,11 +13,6 @@ class AddRateToPpnTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::table('ppn', function (Blueprint $table) {
