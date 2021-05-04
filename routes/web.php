@@ -170,6 +170,7 @@ Route::get('/mcp/show_detail/{id_mcpd}/{id_mcp}/{id_mcpwsm}', 'McpController@sho
 Route::get('/mcp/print_rekkons/{mcp_id}', 'McpController@print_rekkons');
 Route::get('/mcp/print_ws/{mcp_id}/{mcpwsm_id}/{mcpt_id}/{mcpd_id}', 'McpController@print_ws');
 // Route::get('/mcp/print_ws/{mcp_id}/{mcpwsm_id}/{mcpt_id}/{mcpd_id}', 'McpController@print_ws')->name('mcp.print_ws');
+Route::get('/tes_mpdf', 'McpController@tes');
 
 Route::post('/mcp/geteditsize', 'McpController@edit_getsize');
 Route::post('/mcp/getsize', 'McpController@detail_getsize');
