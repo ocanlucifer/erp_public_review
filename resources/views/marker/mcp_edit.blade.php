@@ -156,44 +156,44 @@
                                                     class="form-control">{{$result->revisi_remark}}</textarea>
                                             </div>
                                         </div>
-                                        <div class="form-group">
+                                        {{-- <div class="form-group">
                                             <div class="input-group">
                                                 <label for="state">State</label>
                                                 <select class="form-control" name="state" id="state" required>
                                                     <option value="pending" @if ($result->state == "pending")
                                                         {{ 'selected' }}
-                                                        @endif>Pending</option>
-                                                    <option value="unconfirmed" @if ($result->state == "unconfirmed")
-                                                        {{ 'selected' }}
-                                                        @endif>Unconfirmed</option>
-                                                    <option value="confirmed" @if ($result->state == "confirmed")
-                                                        {{ 'selected' }}
-                                                        @endif>Confirmed</option>
-                                                </select>
-                                            </div>
-                                        </div>
+                                        @endif>Pending</option>
+                                        <option value="unconfirmed" @if ($result->state == "unconfirmed")
+                                            {{ 'selected' }}
+                                            @endif>Unconfirmed</option>
+                                        <option value="confirmed" @if ($result->state == "confirmed")
+                                            {{ 'selected' }}
+                                            @endif>Confirmed</option>
+                                        </select>
                                     </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <a href="{{url('/mcp/detail/'.$result->id)}}" type="button" class="btn btn-default"
-                                        data-dismiss="modal">Close</a>
-                                    <button type="submit" class="btn btn-warning">Submit</button>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
-                    </form>
-
+                        <div class="modal-footer">
+                            <a href="{{url('/mcp/detail/'.$result->id)}}" type="button" class="btn btn-default"
+                                data-dismiss="modal">Close</a>
+                            <button type="submit" class="btn btn-warning">Submit</button>
+                        </div>
                 </div>
-
             </div>
+            </form>
+
         </div>
+
     </div>
+</div>
+</div>
 
-    @endsection
+@endsection
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function(){
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
         $('#fabricconst').keyup(function(){
         var query = $(this).val();
         if(query != '')
@@ -288,15 +288,15 @@
         $('#stylelist').fadeOut();
         }
 
-    </script>
+</script>
 
 
-    <script type="text/javascript">
-        $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
-    </script>
+<script type="text/javascript">
+    $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
+</script>
 
-    <script type="text/javascript">
-        $(window).on('hashchange', function() {
+<script type="text/javascript">
+    $(window).on('hashchange', function() {
 		if (window.location.hash) {
 			var page = window.location.hash.replace('#', '');
 			if (page == Number.NaN || page <= 0) {
@@ -333,4 +333,4 @@
 		});
 	}
 
-    </script>
+</script>
