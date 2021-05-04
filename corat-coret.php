@@ -9,6 +9,7 @@ foreach ($mcpt as $type) {
     }
 }
 ?>
+
 <tr class="font-weight-bold">
     <td></td>
     <td>Jenis Kain</td>
