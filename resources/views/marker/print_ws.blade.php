@@ -18,13 +18,12 @@
             body {
                 size: 29.7cm 21cm;
                 margin-top: 30mm;
+                height: 21cm;
             }
 
-            body {
-                width: 29.7cm;
-                height: 21cm;
-                /* -webkit-transform: rotate(-90deg) scale(.68, .68);
-                -moz-transform: rotate(-90deg) scale(.58, .58) */
+            .page-break {
+                display: block;
+                page-break-before: always;
             }
 
             .logo-teo {
@@ -35,6 +34,10 @@
 
             .name-teo {
                 padding-left: 0em;
+            }
+
+            .container {
+                font-size: 12px;
             }
         }
     </style>
@@ -263,14 +266,16 @@
                     {{$kons_mdz = sprintf("%.2f",(($mcpd->panjang_m + $mcpd->tole_pjg_m)/$mcpd->total_skala*12))}}
                     Mtr/Dz
                 </div>
-                <div class="col-sm-2">= {{sprintf("%.2f",$kons_mdz * 1.094)}} Yard/Dz</div>
+                <div class="col-sm-2">=
+                    {{$kons_yddz = sprintf("%.2f", ($mcpd->panjang_m + $mcpd->tole_pjg_m)/0.914/$mcpd->total_skala*12)}}
+                    Yard/Dz</div>
             </div>
 
             <div class="row">
                 <div class="col-sm-1">Quantity</div>
                 <div class="col-sm-3">: {{$qtymp_t}} x {{$kons_mdz}} / 12</div>
                 <div class="col-sm-3">= {{$qty_mdz = sprintf("%.2f",($qtymp_t * $kons_mdz / 12))}} m</div>
-                <div class="col-sm-2">= {{$qty_yddz = sprintf("%.2f",($qty_mdz * 1.094))}} Yard</div>
+                <div class="col-sm-2">= {{$qty_yddz = sprintf("%.2f",($qtymp_t * $kons_yddz / 12))}} Yard</div>
             </div>
 
             <hr class="mb-20">
@@ -313,9 +318,8 @@
         </div>
     </div>
 
-
     <script>
-        // window.print();
+        window.print();
     </script>
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

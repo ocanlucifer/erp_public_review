@@ -24,6 +24,12 @@
     </div>
     @endif
 
+    @if (session('alert'))
+    <div class="alert alert-success">
+        {{ session('alert') }}
+    </div>
+    @endif
+
     <div class="card">
         <div class="card-header">
             Marker Check Production
@@ -122,8 +128,8 @@
 
                 @endif
 
-                <a href="/mcp/print_rekkons/{{$mcp->id}}" target="_blank" class="btn btn-info btn-sm">Rekap Konsumsi</a>
-                <a href="#" class="btn btn-info btn-sm">Rekap Piping</a>
+                <a href="/mcp/print_mcp/{{$mcp->id}}" target="_blank" class="btn btn-info btn-sm">Rekap Konsumsi</a>
+                <a href="/mcp/print_rekpiping/{{$mcp->id}}" target="_blank" class="btn btn-info btn-sm">Rekap Piping</a>
             </div>
             <br>
         </div>
@@ -148,6 +154,7 @@
                     <tbody id="view">
                         <?php $qty_for_detail = 0; ?>
                         @foreach ($mcp_wsheet_m as $mcpwsm)
+
                         <tr style="background-color: #d3d3d3;">
                             <td class="text-center">{{$mcpwsm->no_urut}}</td>
                             <td colspan="3">{{$mcpwsm->combo}}</td>
@@ -161,8 +168,9 @@
                                         Action
                                     </button>
                                     <div class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="/mcp/print_ws/{{$mcp->id}}/{{$mcpwsm->id}}">Print
-                                            All</a>
+                                        <a class="dropdown-item" href="/mcp/print_wsm/{{$mcp->id}}/{{$mcpwsm->id}}"
+                                            target="_blank">
+                                            Print All</a>
 
                                         @if ($mcp->state == "UNCONFIRMED" || $mcp->state == "PENDING")
                                         <a class="dropdown-item"
@@ -227,7 +235,7 @@
                             <td>{{$mcpt->tujuan}}</td>
                             <td colspan="2" class="text-center">
                                 <div class="dropdown">
-                                    <button class="btn btn-info btn-sm dropdown-toggle" type="button"
+                                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
                                         id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false">
                                     </button>
@@ -237,14 +245,22 @@
                                         @if ($mcp->state == "UNCONFIRMED" || $mcp->state == "PENDING")
                                         <a class="dropdown-item"
                                             href="/mcp/edit_mcpt/{{$mcpt->id}}/{{$mcp->id}}">Edit</a>
+                                        <a href="/mcp/print_ws/{{$mcp->id}}/{{$mcpwsm_print}}/{{$mcpt->id}}"
+                                            target="_blank" class="dropdown-item">Print Rekap
+                                            Hitung</a>
                                         <a class="dropdown-item click_newdetail" href="#" data-toggle="modal"
                                             data-target="#form-detail" data-mcptid="{{$mcpt->id}}"
-                                            data-mcpwsmid="{{$mcpwsm['id']}}" id="click_newpiping">New Detail
+                                            data-mcpwsmid="{{$mcpwsm['id']}}" id="click_newdetail">New Detail
                                         </a>
                                         <hr>
                                         <a class="dropdown-item" href="/mcp/delete_mcpt/{{$mcpt->id}}"
                                             onclick="return confirm('Lanjutkan untuk hapus?')">Destroy</a>
+                                        @elseif ($mcp->state == "CONFIRMED")
+                                        <a href="/mcp/print_ws/{{$mcp->id}}/{{$mcpwsm_print}}/{{$mcpt->id}}"
+                                            target="_blank" class="dropdown-item">Print Rekap
+                                            Hitung</a>
                                         @endif
+
 
                                     </div>
                                 </div>
@@ -279,14 +295,12 @@
                                         aria-expanded="false">
                                     </button>
                                     <div class="dropdown-menu text" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="#">Print Detail</a>
+                                        <a class="dropdown-item" href="/mcp/print_detail/{{$mcpd->pdf_marker}}"
+                                            target="_blank">Print Detail</a>
 
                                         @if ($mcp->state == "UNCONFIRMED" || $mcp->state == "PENDING")
                                         <a class="dropdown-item"
                                             href="/mcp/edit_mcpd/{{$mcpd->id}}/{{$mcp->id}}/{{$mcpwsm->id}}">Edit</a>
-                                        {{-- <a class="dropdown-item"
-                                            href="/mcp/edit_mcpd/{{$mcpd->id}}/{{$mcp->id}}/{{$qty_for_detail}}/{{$size_for_detail}}">Edit</a>
-                                        --}}
                                         <hr>
                                         <a class="dropdown-item" href="/mcp/delete_mcpd/{{$mcpd->id}}"
                                             onclick="return confirm('Lanjutkan untuk hapus?')">Destroy</a>
@@ -296,25 +310,28 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr>
-                            <td colspan="6"></td>
-                            <td colspan="2" class="text-center">
+                        {{-- <tr> --}}
+                        {{-- <td colspan="6"></td> --}}
+                        {{-- <td colspan="2" class="text-center">
                                 <a href="/mcp/print_ws/{{$mcp->id}}/{{$mcpwsm_print}}/{{$mcpt->id}}/{{$mcpd->id}}"
-                                    target="_blank" class="btn btn-primary">Print Rekap Hitung</a>
-                            </td>
-                            {{-- <td colspan="2" class="text-center"><a
+                        target="_blank" class="btn btn-primary btn-sm">Print Rekap Hitungg</a>
+                        </td> --}}
+                        {{-- <td colspan="2" class="text-center"><a
                                     href="{{ route('mcp.print_ws', ['mcp_id' => $mcp->id, '$mcpwsm_id' => $mcpwsm_print, 'mcpt_id' => $mcpt->id, 'mcpd_id' => $mcpd->id]) }}"
-                            target="_blank" class="btn btn-primary">Print Document</a></td> --}}
-                        </tr>
+                        target="_blank" class="btn btn-primary">Print Document</a></td> --}}
+                        {{-- </tr> --}}
                         <?php } ?>
                         <?php } ?>
                         <?php } ?>
+                        {{-- end if type = marker or aplikasi --}}
 
                         <?php } ?>
                         {{-- end if marker type = marker wsheet main --}}
 
+
                         @endforeach
                         {{-- end MARKER & APLIKASI foreach type --}}
+
 
                         <tr style="background-color: #696969; color: #fff">
                             <td></td>
@@ -349,126 +366,15 @@
                                         aria-expanded="false">
                                     </button>
                                     <div class="dropdown-menu text" aria-labelledby="dropdownMenuButton">
-                                        {{-- <a class="dropdown-item" href="#">Print Rekap Hitung</a> --}}
 
                                         @if ($mcp->state == "UNCONFIRMED" || $mcp->state == "PENDING")
                                         <a class="dropdown-item"
                                             href="/mcp/edit_mcpt/{{$mcpt->id}}/{{$mcp->id}}">Edit</a>
+                                        <a href="/mcp/print_ws/{{$mcp->id}}/{{$mcpwsm_print}}/{{$mcpt->id}}"
+                                            target="_blank" class="dropdown-item">Print Rekap
+                                            Hitung</a>
                                         <a class="dropdown-item click_newdetail" href="#" data-toggle="modal"
                                             data-target="#form-detail" data-mcptid="{{$mcpt->id}}"
-                                            data-mcpwsmid="{{$mcpwsm['id']}}" id="click_newdetail">New Detail
-                                        </a>
-                                        <hr>
-                                        <a class="ropdown-item" href="/mcp/delete_mcpt/{{$mcpt->id}}"
-                                            onclick="return confirm('Lanjutkan untuk hapus?')">Destroy</a>
-                                        @endif
-
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <?php foreach ($mcp_detail as $mcpd) { ?>
-                        <?php if($mcpd['id_type'] == $mcpt['id']) { ?>
-                        <tr>
-                            <td colspan="2"></td>
-                            <td><b>Marker ke</b></td>
-                            <td><b>Code</b></td>
-                            <td><b>Panjang</b></td>
-                            <td><b>Lebar</b></td>
-                            <td><b>Gramasi</b></td>
-                            <td><b>Action</b></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2"></td>
-                            <td><a href="/mcp/edit_mcpd/{{$mcpd->id}}/{{$mcp->id}}/{{$mcpwsm->id}}"
-                                    id="click_showdetail">M
-                                    {{$mcpd->urutan}}</a>
-                            </td>
-                            <td>{{$mcpd->code}}</td>
-                            <td>{{$mcpd->panjang_m}}</td>
-                            <td>{{$mcpd->lebar_m}}(m),{{number_format((float)($mcpd->lebar_m * 39.37), 2, '.', '')}}(inc)
-                            </td>
-                            <td>{{$mcpd->gramasi}}</td>
-                            <td class="text-center">
-                                <div class="dropdown">
-                                    <button class="btn btn-danger btn-sm dropdown-toggle" type="button"
-                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false">
-                                    </button>
-                                    <div class="dropdown-menu text" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="#">Print Detail</a>
-
-                                        @if ($mcp->state == "UNCONFIRMED" || $mcp->state == "PENDING")
-                                        <a class="dropdown-item"
-                                            href="/mcp/edit_mcpd/{{$mcpd->id}}/{{$mcp->id}}/{{$qty_for_detail}}/{{$size_for_detail}}">Edit</a>
-                                        <hr>
-                                        <a class="dropdown-item" href="/mcp/delete_mcpd/{{$mcpd->id}}"
-                                            onclick="return confirm('Lanjutkan untuk hapus?')">Destroy</a>
-                                        @endif
-
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="6"></td>
-                            <td colspan="2" class="text-center">
-                                <a href="/mcp/print_ws/{{$mcp->id}}/{{$mcpwsm_print}}/{{$mcpt->id}}/{{$mcpd->id}}"
-                                    target="_blank" class="btn btn-primary">Print Rekap Hitung</a>
-                            </td>
-                            {{-- <td colspan="2" class="text-center"><a
-                                    href="{{ route('mcp.print_ws', ['mcp_id' => $mcp->id, '$mcpwsm_id' => $mcpwsm_print, 'mcpt_id' => $mcpt->id, 'mcpd_id' => $mcpd->id]) }}"
-                            target="_blank" class="btn btn-primary">Print Document</a></td> --}}
-                        </tr>
-                        <?php } ?>
-                        <?php } ?>
-                        <?php } ?>
-
-                        <?php } ?>
-                        {{-- end if marker type = marker wsheet main --}}
-                        @endforeach
-                        {{-- end KAIN KERAS foreach type  --}}
-
-                        <tr style="background-color: #696969; color: #fff">
-                            <td></td>
-                            <td colspan="7"><b>PIPING</b></td>
-                        </tr>
-
-                        @foreach ($mcp_type as $mcpt)
-                        <?php if($mcpt['id_wsheet'] == $mcpwsm['id']) { ?>
-
-                        {{-- PIPING --}}
-                        <?php if ($mcpt['type'] == 'PIPING') { ?>
-                        <tr class="font-weight-bold">
-                            <td></td>
-                            <td>Jenis Kain</td>
-                            <td>Warna</td>
-                            <td>Komponen</td>
-                            <td>Type</td>
-                            <td>Destination</td>
-                            <td colspan="2" class="text-center">Action</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>{{$mcpt->no_urut}}. {{$mcpt->fabricconst}}</td>
-                            <td>{{$mcpt->warna}}</td>
-                            <td>{{$mcpt->component}}</td>
-                            <td>{{$mcpt->type}}</td>
-                            <td>{{$mcpt->tujuan}}</td>
-                            <td colspan="2" class="text-center">
-                                <div class="dropdown">
-                                    <button class="btn btn-info btn-sm dropdown-toggle" type="button"
-                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false">
-                                    </button>
-                                    <div class="dropdown-menu text" aria-labelledby="dropdownMenuButton">
-                                        {{-- <a class="dropdown-item" href="#">Print Rekap Hitung</a> --}}
-
-                                        @if ($mcp->state == "UNCONFIRMED" || $mcp->state == "PENDING")
-                                        <a class="dropdown-item"
-                                            href="/mcp/edit_mcpt/{{$mcpt->id}}/{{$mcp->id}}">Edit</a>
-                                        <a class="dropdown-item click_newdetail" href="#" data-toggle="modal"
-                                            data-target="#form-piping" data-mcptid="{{$mcpt->id}}"
                                             data-mcpwsmid="{{$mcpwsm['id']}}" id="click_newdetail">New Detail
                                         </a>
                                         <hr>
@@ -509,11 +415,12 @@
                                         aria-expanded="false">
                                     </button>
                                     <div class="dropdown-menu text" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="#">Print Detail</a>
+                                        <a class="dropdown-item" href="/mcp/print_detail/{{$mcpd->pdf_marker}}">Print
+                                            Detail</a>
 
                                         @if ($mcp->state == "UNCONFIRMED" || $mcp->state == "PENDING")
                                         <a class="dropdown-item"
-                                            href="/mcp/edit_mcpd/{{$mcpd->id}}/{{$mcp->id}}/{{$qty_for_detail}}/{{$size_for_detail}}">Edit</a>
+                                            href="/mcp/edit_mcpd/{{$mcpd->id}}/{{$mcp->id}}/{{$mcpwsm->id}}">Edit</a>
                                         <hr>
                                         <a class="dropdown-item" href="/mcp/delete_mcpd/{{$mcpd->id}}"
                                             onclick="return confirm('Lanjutkan untuk hapus?')">Destroy</a>
@@ -523,15 +430,109 @@
                                 </div>
                             </td>
                         </tr>
+                        <?php } ?>
+                        <?php } ?>
+                        <?php } ?>
+
+                        <?php } ?>
+                        {{-- end if marker type = marker wsheet main --}}
+                        @endforeach
+                        {{-- end KAIN KERAS foreach type  --}}
+
+                        {{-- PIPING --}}
+                        <tr style="background-color: #696969; color: #fff">
+                            <td></td>
+                            <td colspan="7"><b>PIPING</b></td>
+                        </tr>
+
+                        @foreach ($mcp_type as $mcpt)
+                        <?php if($mcpt['id_wsheet'] == $mcpwsm['id']) { ?>
+
+                        <?php if ($mcpt['type'] == 'PIPING') { ?>
+                        <tr class="font-weight-bold">
+                            <td></td>
+                            <td>Jenis Kain</td>
+                            <td>Warna</td>
+                            <td>Komponen</td>
+                            <td>Type</td>
+                            <td>Destination</td>
+                            <td colspan="2" class="text-center">Action</td>
+                        </tr>
                         <tr>
-                            <td colspan="6"></td>
+                            <td></td>
+                            <td>{{$mcpt->no_urut}}. {{$mcpt->fabricconst}}</td>
+                            <td>{{$mcpt->warna}}</td>
+                            <td>{{$mcpt->component}}</td>
+                            <td>{{$mcpt->type}}</td>
+                            <td>{{$mcpt->tujuan}}</td>
                             <td colspan="2" class="text-center">
-                                <a href="/mcp/print_ws/{{$mcp->id}}/{{$mcpwsm_print}}/{{$mcpt->id}}/{{$mcpd->id}}"
-                                    target="_blank" class="btn btn-primary">Print Rekap Hitung</a>
+                                <div class="dropdown">
+                                    <button class="btn btn-info btn-sm dropdown-toggle" type="button"
+                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">
+                                    </button>
+                                    <div class="dropdown-menu text" aria-labelledby="dropdownMenuButton">
+                                        {{-- <a class="dropdown-item" href="#">Print Rekap Hitung</a> --}}
+
+                                        @if ($mcp->state == "UNCONFIRMED" || $mcp->state == "PENDING")
+                                        <a class="dropdown-item"
+                                            href="/mcp/edit_mcpt/{{$mcpt->id}}/{{$mcp->id}}">Edit</a>
+                                        <a class="dropdown-item pi_click_newdetail" href="#" data-toggle="modal"
+                                            data-target="#form-piping" data-mcptid="{{$mcpt->id}}"
+                                            data-mcpwsmid="{{$mcpwsm['id']}}" id="pi_click_newdetail">New Detail
+                                        </a>
+                                        <hr>
+                                        <a class="dropdown-item" href="/mcp/delete_mcpt/{{$mcpt->id}}"
+                                            onclick="return confirm('Lanjutkan untuk hapus?')">Destroy</a>
+                                        @endif
+
+                                    </div>
+                                </div>
                             </td>
-                            {{-- <td colspan="2" class="text-center"><a
-                                                            href="{{ route('mcp.print_ws', ['mcp_id' => $mcp->id, '$mcpwsm_id' => $mcpwsm_print, 'mcpt_id' => $mcpt->id, 'mcpd_id' => $mcpd->id]) }}"
-                            target="_blank" class="btn btn-primary">Print Document</a></td> --}}
+                        </tr>
+                        <?php foreach ($mcp_detail_pi as $mcpi) { ?>
+                        <?php if($mcpi['id_type'] == $mcpt['id']) { ?>
+                        <tr>
+                            <td colspan="2"></td>
+                            <td><b>Marker ke</b></td>
+                            <td><b>Code</b></td>
+                            <td><b>Efisiensi (%)</b></td>
+                            <td><b>Perimeter</b></td>
+                            <td><b>Tolerance</b></td>
+                            <td><b>Action</b></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"></td>
+                            <td><a href="/mcp/edit_mcpi/{{$mcpi->id}}/{{$mcp->id}}/{{$mcpwsm->id}}"
+                                    id="click_showdetail">M
+                                    {{$mcpi->urutan}}</a>
+                            </td>
+                            <td>{{$mcpi->kode_marker}}</td>
+                            <td>{{$mcpi->efisiensi}}</td>
+                            <td>{{$mcpi->perimeter}}(m)</td>
+                            <td>{{$mcpi->tolerance}}</td>
+                            <td class="text-center">
+                                <div class="dropdown">
+                                    <button class="btn btn-danger btn-sm dropdown-toggle" type="button"
+                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">
+                                    </button>
+                                    <div class="dropdown-menu text" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="/mcp/print_detail/{{$mcpi->pdf_marker}}"
+                                            target="_blank">
+                                            Print Detail</a>
+
+                                        @if ($mcp->state == "UNCONFIRMED" || $mcp->state == "PENDING")
+                                        <a class="dropdown-item"
+                                            href="/mcp/edit_mcpi/{{$mcpi->id}}/{{$mcp->id}}/{{$mcpwsm->id}}">Edit</a>
+                                        <hr>
+                                        <a class="dropdown-item" href="/mcp/delete_mcpi/{{$mcpi->id}}"
+                                            onclick="return confirm('Lanjutkan untuk hapus?')">Destroy</a>
+                                        @endif
+
+                                    </div>
+                                </div>
+                            </td>
                         </tr>
                         <?php } ?>
                         <?php } ?>
@@ -640,6 +641,7 @@
                                         onclick="calculate()">Calculate</button>
                                     <button class="btn btn-sm btn-success float-right" type="button" id="ws_addrow"
                                         onclick="ms_addrow()">Add Row</button>
+                                    <input type="hidden" id="ws_count" name="ws_count" value=1>
                                 </div>
                             </div>
                         </div>
@@ -835,246 +837,207 @@
     <div class="modal fade" id="form-detail" role="dialog">
         <div class="modal-dialog modal-lg">
 
-            <form action="{{route('mcp.createdetail')}}" method="POST" enctype="multipart/form-data">
+            <form action="{{route('mcp.createdetail_ma')}}" method="POST" enctype="multipart/form-data" id="ma_form">
                 {{ csrf_field() }}
                 <div class="modal-content" id="modal-content" style="width: 120%;">
                     <div class="modal-header">
                         <h3>New Detail</h3>
+                        <span class="mr-0">
+                            <a data-dismiss="modal" onclick="batalDetail('#detail-ass-tbody')"
+                                class="btn btn-danger text-white">X</a>
+                        </span>
                     </div>
 
-                    <div class="row">
-                        <div class="col-sm-1"></div>
-                        <div class="col-sm-10">
-                            <table class="table table-condensed">
-                                <thead>
-                                    <tr>
-                                        <th>Size</th>
-                                        <th>Qty Ws</th>
-                                        <th>Scale</th>
-                                        <th>Scales</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="detail-ass-tbody">
-                                    {{-- <tr> <td><input type="text" class="form-control" name="detail_size" id="detail_size" readonly></td>
-                                    <td><input type="text" class="form-control" name="detail_qty" id="detail_qty" readonly></td>
-                                    <td><input type="text" class="form-control" name="detail_scale" id="detail_scale"></td>
-                                    <td><input type="text" class="form-control" name="detail_scales"
-                                    id="detail_scales"></td> </tr> --}}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12 text-right">
-                            <a href="#" class="btn btn-sm btn-warning mx-5" onclick="assort_cal()">Calculate</a>
-                        </div>
-                    </div>
-
-                    <hr>
-
-                    <input type="hidden" name="mcp" id="mcp" value="{{$mcp->number}}">
-                    <input type="hidden" name="id_type" id="id_type" value="">
+                    {{-- ------------------------------------------------------------- --}}
+                    <input type="hidden" name="ma_mcp" id="ma_mcp" value="{{$mcp->number}}">
+                    <input type="hidden" name="ma_id_mcpwsm" id="ma_id_mcpwsm" value="">
+                    <input type="hidden" name="ma_id_type" id="ma_id_type" value="">
                     <div class="row">
                         <div class="col-sm-4">
-                            <div class="col-sm-4 text-right"><small><b>Marker ke</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="number" id="urutan"
-                                    name="urutan" required></div>
+                            <div class="col-sm-4 text-right"><small><b>*Marker ke</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="number" id="ma_urutan"
+                                    name="ma_urutan" required></div>
                         </div>
                         <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Lebar (m)</b></small></div>
-                            <div class="col-sm-4"><input class="form-control form-detail" type="number" step="0.01"
-                                    name="lebar_m" id="lebar_m">
-                            </div>
-                            <div class="col-sm-4"><input class="form-control form-detail" type="number" step="0.01"
-                                    name="lebar_inc" id="lebar_inc" readonly
-                                    style="background-color: #FFB09F !important;">
-                            </div>
-                        </div>
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Qty (yard)</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="text" step="0.01"
-                                    name="qty_yard" id="qty_yard" readonly
-                                    style="background-color: #FFB09F !important;">
-                            </div>
-                        </div>
-
-                        <div class="col-sm-4">
-                            <div class="col-sm-4 text-right"><small><b>*Code</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="text" name="code"
-                                    id="code" required>
-                            </div>
-                        </div>
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Gramasi</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="number" step="0.01"
-                                    name="gramasi" id="gramasi">
-                            </div>
-                        </div>
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Qty (kg)</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="text" step="0.01"
-                                    name="qty_kg" id="qty_kg" readonly style="background-color: #FFB09F !important;">
-                            </div>
-                        </div>
-
-                        <div class="col-sm-4">
-                            <div class="col-sm-4 text-right"><small><b>Marker Date</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="date" name="marker_date"
-                                    id="marker_date" value="{{date('Y-m-d')}}">
+                            <div class="col-sm-4 text-right"><small><b>Panjang (m)</b></small></div>
+                            <div class="col-sm-8"><input class="form-control form-detail-ma" type="number" step="0.01"
+                                    name="ma_panjang_m" id="ma_panjang_m">
                             </div>
                         </div>
                         <div class="col-sm-4 mt-lg-1">
                             <div class="col-sm-4 text-right"><small><b>Total Skala</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="number" step="0.01"
-                                    name="total_skala" id="total_skala" readonly
+                            <div class="col-sm-8"><input class="form-control" type="number" step="0.01"
+                                    name="ma_total_skala" id="ma_total_skala" readonly
                                     style="background-color: #FFB09F !important;">
                             </div>
                         </div>
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Qty (m)</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="text" step="0.01"
-                                    name="qty_m" id="qty_m" readonly style="background-color: #FFB09F !important;">
+                        <div class="col-sm-4">
+                            <div class="col-sm-4 text-right"><small><b>*Code</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="text" name="ma_code" id="ma_code"
+                                    required>
                             </div>
                         </div>
-
                         <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Efisiensi (%)</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="number" step="0.01"
-                                    name="efisiensi" id="efisiensi">
+                            <div class="col-sm-4 text-right"><small><b>Lebar (m)</b></small></div>
+                            <div class="col-sm-4"><input class="form-control form-detail-ma" type="number" step="0.01"
+                                    name="ma_lebar_m" id="ma_lebar_m">
+                            </div>
+                            <div class="col-sm-4"><input class="form-control" type="number" step="0.01"
+                                    name="ma_lebar_inc" id="ma_lebar_inc" readonly
+                                    style="background-color: #FFB09F !important;">
                             </div>
                         </div>
                         <div class="col-sm-4 mt-lg-1">
                             <div class="col-sm-4 text-right"><small><b>Kons Kain Yd/Dz</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="number" step="0.01"
-                                    name="kons_yddz" d id="kons_yddz" readonly
+                            <div class="col-sm-8"><input class="form-control" type="number" step="0.01"
+                                    name="ma_kons_yddz" id="ma_kons_yddz" readonly
                                     style="background-color: #FFB09F !important;">
                             </div>
                         </div>
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Ujung Kain Yd</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="text" step="0.01"
-                                    name="ujungkain_yd" id="ujungkain_yd" readonly
-                                    style="background-color: #FFB09F !important;">
+                        <div class="col-sm-4">
+                            <div class="col-sm-4 text-right"><small><b>Marker Date</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="date" name="ma_marker_date"
+                                    id="ma_marker_date" value="{{date('Y-m-d')}}">
                             </div>
                         </div>
-
                         <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Perimeter</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="number" step="0.01"
-                                    name="perimeter" id="perimeter">
+                            <div class="col-sm-4 text-right"><small><b>Tole Pjg (m)</b></small></div>
+                            <div class="col-sm-8"><input class="form-control form-detail-ma" type="number" step="0.01"
+                                    name="ma_tole_pjg_m" id="ma_tole_pjg_m">
                             </div>
                         </div>
                         <div class="col-sm-4 mt-lg-1">
                             <div class="col-sm-4 text-right"><small><b>Kons Kain Kg/Dz</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="number" step="0.01"
-                                    name="kons_kgdz" d id="kons_kgdz" readonly
+                            <div class="col-sm-8"><input class="form-control" type="number" step="0.01"
+                                    name="ma_kons_kgdz" d id="ma_kons_kgdz" readonly
                                     style="background-color: #FFB09F !important;">
                             </div>
                         </div>
                         <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Ujung Kain Kg</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="text" step="0.01"
-                                    name="ujungkain_kg" id="ujungkain_kg" readonly
-                                    style="background-color: #FFB09F !important;">
+                            <div class="col-sm-4 text-right"><small><b>Efisiensi (%)</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="number" step="0.01"
+                                    name="ma_efisiensi" id="ma_efisiensi">
                             </div>
                         </div>
-
                         <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>*Designer</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" name="designer" id="designer">
+                            <div class="col-sm-4 text-right"><small><b>Tole Lbr (m)</b></small></div>
+                            <div class="col-sm-8"><input class="form-control form-detail-ma" type="number" step="0.01"
+                                    name="ma_tole_lbr_m" id="ma_tole_lbr_m">
                             </div>
                         </div>
                         <div class="col-sm-4 mt-lg-1">
                             <div class="col-sm-4 text-right"><small><b>Kons Kain m/Dz</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="number" step="0.01"
-                                    name="kons_mdz" id="kons_mdz" readonly
+                            <div class="col-sm-8"><input class="form-control" type="number" step="0.01"
+                                    name="ma_kons_mdz" id="ma_kons_mdz" readonly
                                     style="background-color: #FFB09F !important;">
                             </div>
                         </div>
                         <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Ujung Kain Mtr</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="text" step="0.01"
-                                    name="ujungkain_m" id="ujungkain_m" readonly
-                                    style="background-color: #FFB09F !important;">
-                            </div>
-                        </div>
-
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Tole Pjg (m)</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="number" step="0.01"
-                                    name="tole_pjg_m" id="tole_pjg_m">
+                            <div class="col-sm-4 text-right"><small><b>Perimeter</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="number" step="0.01"
+                                    name="ma_perimeter" id="ma_perimeter">
                             </div>
                         </div>
                         <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Jumlah Marker</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="number" step="0.01"
-                                    name="jml_marker" id="jml_marker">
+                            <div class="col-sm-4 text-right"><small><b>Gramasi</b></small></div>
+                            <div class="col-sm-8"><input class="form-control form-detail-ma" type="number" step="0.01"
+                                    name="ma_gramasi" id="ma_gramasi">
                             </div>
                         </div>
                         <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Komponen / Pcs</b></small></div>
-                            <div class="col-sm-8"><textarea class="form-control" type="text" name="komponen"
-                                    id="komponen"></textarea>
+                            <div class="col-sm-4 text-right"><small><b>Qty (yard)</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="text" step="0.01" name="ma_qty_yard"
+                                    id="ma_qty_yard" readonly style="background-color: #FFB09F !important;">
                             </div>
                         </div>
-
                         <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Tole Lbr (m)</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="number" step="0.01"
-                                    name="tole_lbr_m" id="tole_lbr_m">
+                            <div class="col-sm-4 text-right"><small><b>*Kons Sz Tgh</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="number" step="0.01"
+                                    name="ma_kons_sz_tgh" id="ma_kons_sz_tgh" required>
                             </div>
                         </div>
                         <div class="col-sm-4 mt-lg-1">
                             <div class="col-sm-4 text-right"><small><b>Jumlah Ampar</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="number" step="0.01"
-                                    name="jml_ampar" id="jml_ampar">
+                            <div class="col-sm-8"><input class="form-control form-detail-ma" type="number" step="0.01"
+                                    name="ma_jml_ampar" id="ma_jml_ampar">
                             </div>
                         </div>
                         <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Revisi</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="number" name="revisi"
-                                    id="revisi">
+                            <div class="col-sm-4 text-right"><small><b>Qty (kg)</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="text" step="0.01" name="ma_qty_kg"
+                                    id="ma_qty_kg" readonly style="background-color: #FFB09F !important;">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mt-lg-1">
+                            <div class="col-sm-4 text-right"><small><b>Tgl Sz Tgh</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="date" name="ma_tgl_sz_tgh"
+                                    id="ma_tgl_sz_tgh" value="{{date('Y-m-d')}}">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mt-lg-1">
+                            <div class="col-sm-4 text-right"><small><b>Jumlah Marker</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="number" step="0.01"
+                                    name="ma_jml_marker" id="ma_jml_marker">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mt-lg-1">
+                            <div class="col-sm-4 text-right"><small><b>Qty (m)</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="text" step="0.01" name="ma_qty_m"
+                                    id="ma_qty_m" readonly style="background-color: #FFB09F !important;">
                             </div>
                         </div>
 
-
                         <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Kons Sz Tgh</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="number" step="0.01"
-                                    name="kons_sz_tgh" id="kons_sz_tgh">
+                            <div class="col-sm-4 text-right"><small><b>Komponen / Pcs</b></small></div>
+                            <div class="col-sm-8"><textarea class="form-control" type="text" name="ma_komponen"
+                                    id="ma_komponen"></textarea>
                             </div>
                         </div>
                         <div class="col-sm-4 mt-lg-1">
                             <div class="col-sm-4 text-right"><small><b>PDF Marker</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="file" name="pdf_marker"
-                                    id="pdf_marker">
+                            <div class="col-sm-8"><input class="form-control" type="file" name="ma_pdf_marker"
+                                    id="ma_pdf_marker">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mt-lg-1">
+                            <div class="col-sm-4 text-right"><small><b>Revisi</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="number" name="ma_revisi"
+                                    id="ma_revisi">
                             </div>
                         </div>
                         <div class="col-sm-4 mt-lg-1">
                             <div class="col-sm-4 text-right"><small><b>Revisi Remark</b></small></div>
-                            <div class="col-sm-8"><textarea class="form-control" type="text" name="revisi_remark"
-                                    id="revisi_remark"></textarea>
+                            <div class="col-sm-8"><textarea class="form-control" type="text" name="ma_revisi_remark"
+                                    id="ma_revisi_remark"></textarea>
                             </div>
                         </div>
 
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Tgl Sz Tgh</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="date" name="tgl_sz_tgh"
-                                    id="tgl_sz_tgh">
+                        <div class="row">
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-10">
+                                <table class="table table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>Size</th>
+                                            <th>Qty Ws</th>
+                                            <th>Scale</th>
+                                            <th>Scales</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="detail-ass-tbody">
+                                        {{-- --------------------------isi assortment-------------------------- --}}
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Panjang (m)</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="number" step="0.01"
-                                    name="panjang_m" id="panjang_m">
-                            </div>
-                        </div>
+
                         <div class="col-sm-12 mt-lg-1 mb-10">
                             <div class="row justify-content-end">
                                 <div class="col-sm-4">
+                                    <a href="#" class="btn btn-sm btn-warning mx-5" onclick="assort_cal()">Calculate</a>
                                     <a type="button" id="batal_newdetail" data-dismiss="modal" class="mr-15"
                                         onclick="batalDetail('#detail-ass-tbody')"><u>Batal</u></a>
-                                    <input type="submit" id submit_detail" name="submit_detail"
+                                    <input type="submit" id="ma_submit_detail" name="ma_submit_detail"
                                         class="btn btn-primary ml-10">
                                     <div class="col-sm-4">
                                     </div>
@@ -1091,246 +1054,244 @@
     <div class="modal fade" id="form-piping" role="dialog">
         <div class="modal-dialog modal-lg">
 
-            <form action="{{route('mcp.createdetail')}}" method="POST" enctype="multipart/form-data">
+            <form action="{{route('mcp.createdetail_pi')}}" method="POST" enctype="multipart/form-data" id="pi_form">
                 {{ csrf_field() }}
                 <div class="modal-content" id="modal-content" style="width: 120%;">
                     <div class="modal-header">
-                        <h3>New Detail</h3>
+                        <h3>New Detail Piping</h3>
+                        <span class="mr-0">
+                            <a data-dismiss="modal" class="btn btn-danger text-white"
+                                onclick="batalDetail('#detail-ass-tbody')">X</a>
+                        </span>
                     </div>
 
-                    <div class="row">
-                        <div class="col-sm-1"></div>
-                        <div class="col-sm-10">
-                            <table class="table table-condensed">
-                                <thead>
-                                    <tr>
-                                        <th>Size</th>
-                                        <th>Qty Ws</th>
-                                        <th>Scale</th>
-                                        <th>Scales</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="detail-ass-tbody">
-                                    {{-- <tr> <td><input type="text" class="form-control" name="detail_size" id="detail_size" readonly></td>
-                                        <td><input type="text" class="form-control" name="detail_qty" id="detail_qty" readonly></td>
-                                        <td><input type="text" class="form-control" name="detail_scale" id="detail_scale"></td>
-                                        <td><input type="text" class="form-control" name="detail_scales"
-                                        id="detail_scales"></td> </tr> --}}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12 text-right">
-                            <a href="#" class="btn btn-sm btn-warning mx-5" onclick="assort_cal()">Calculate</a>
-                        </div>
-                    </div>
-
-                    <hr>
-
-                    <input type="hidden" name="mcp" id="mcp" value="{{$mcp->number}}">
-                    <input type="hidden" name="id_type" id="id_type" value="">
+                    <input type="hidden" name="pi_mcp" id="pi_mcp" value="{{$mcp->number}}">
+                    <input type="hidden" name="pi_id_mcpwsm" id="pi_id_mcpwsm" value="">
+                    <input type="hidden" name="pi_id_type" id="pi_id_type" value="">
                     <div class="row">
                         <div class="col-sm-4">
-                            <div class="col-sm-4 text-right"><small><b>Marker ke</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="number" id="urutan"
-                                    name="urutan" required></div>
-                        </div>
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Lebar (m)</b></small></div>
-                            <div class="col-sm-4"><input class="form-control form-detail" type="number" step="0.01"
-                                    name="lebar_m" id="lebar_m">
-                            </div>
-                            <div class="col-sm-4"><input class="form-control form-detail" type="number" step="0.01"
-                                    name="lebar_inc" id="lebar_inc" readonly
-                                    style="background-color: #FFB09F !important;">
-                            </div>
-                        </div>
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Qty (yard)</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="text" step="0.01"
-                                    name="qty_yard" id="qty_yard" readonly
-                                    style="background-color: #FFB09F !important;">
-                            </div>
-                        </div>
-
-                        <div class="col-sm-4">
-                            <div class="col-sm-4 text-right"><small><b>*Code</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="text" name="code"
-                                    id="code" required>
-                            </div>
-                        </div>
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Gramasi</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="number" step="0.01"
-                                    name="gramasi" id="gramasi">
-                            </div>
-                        </div>
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Qty (kg)</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="text" step="0.01"
-                                    name="qty_kg" id="qty_kg" readonly style="background-color: #FFB09F !important;">
-                            </div>
-                        </div>
-
-                        <div class="col-sm-4">
-                            <div class="col-sm-4 text-right"><small><b>Marker Date</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="date" name="marker_date"
-                                    id="marker_date" value="{{date('Y-m-d')}}">
-                            </div>
-                        </div>
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Total Skala</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="number" step="0.01"
-                                    name="total_skala" id="total_skala" readonly
-                                    style="background-color: #FFB09F !important;">
-                            </div>
-                        </div>
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Qty (m)</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="text" step="0.01"
-                                    name="qty_m" id="qty_m" readonly style="background-color: #FFB09F !important;">
-                            </div>
-                        </div>
-
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Efisiensi (%)</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="number" step="0.01"
-                                    name="efisiensi" id="efisiensi">
-                            </div>
-                        </div>
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Kons Kain Yd/Dz</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="number" step="0.01"
-                                    name="kons_yddz" d id="kons_yddz" readonly
-                                    style="background-color: #FFB09F !important;">
-                            </div>
-                        </div>
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Ujung Kain Yd</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="text" step="0.01"
-                                    name="ujungkain_yd" id="ujungkain_yd" readonly
-                                    style="background-color: #FFB09F !important;">
-                            </div>
-                        </div>
-
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Perimeter</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="number" step="0.01"
-                                    name="perimeter" id="perimeter">
-                            </div>
-                        </div>
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Kons Kain Kg/Dz</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="number" step="0.01"
-                                    name="kons_kgdz" d id="kons_kgdz" readonly
-                                    style="background-color: #FFB09F !important;">
-                            </div>
-                        </div>
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Ujung Kain Kg</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="text" step="0.01"
-                                    name="ujungkain_kg" id="ujungkain_kg" readonly
-                                    style="background-color: #FFB09F !important;">
-                            </div>
-                        </div>
-
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>*Designer</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" name="designer" id="designer">
-                            </div>
-                        </div>
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Kons Kain m/Dz</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="number" step="0.01"
-                                    name="kons_mdz" id="kons_mdz" readonly
-                                    style="background-color: #FFB09F !important;">
-                            </div>
-                        </div>
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Ujung Kain Mtr</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="text" step="0.01"
-                                    name="ujungkain_m" id="ujungkain_m" readonly
-                                    style="background-color: #FFB09F !important;">
-                            </div>
-                        </div>
-
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Tole Pjg (m)</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="number" step="0.01"
-                                    name="tole_pjg_m" id="tole_pjg_m">
-                            </div>
-                        </div>
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Jumlah Marker</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="number" step="0.01"
-                                    name="jml_marker" id="jml_marker">
-                            </div>
-                        </div>
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Komponen / Pcs</b></small></div>
-                            <div class="col-sm-8"><textarea class="form-control" type="text" name="komponen"
-                                    id="komponen"></textarea>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Tole Lbr (m)</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="number" step="0.01"
-                                    name="tole_lbr_m" id="tole_lbr_m">
-                            </div>
-                        </div>
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Jumlah Ampar</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="number" step="0.01"
-                                    name="jml_ampar" id="jml_ampar">
-                            </div>
-                        </div>
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Revisi</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="number" name="revisi"
-                                    id="revisi">
-                            </div>
-                        </div>
-
-
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Kons Sz Tgh</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="number" step="0.01"
-                                    name="kons_sz_tgh" id="kons_sz_tgh">
-                            </div>
-                        </div>
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>PDF Marker</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="file" name="pdf_marker"
-                                    id="pdf_marker">
-                            </div>
-                        </div>
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Revisi Remark</b></small></div>
-                            <div class="col-sm-8"><textarea class="form-control" type="text" name="revisi_remark"
-                                    id="revisi_remark"></textarea>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-4 mt-lg-1">
-                            <div class="col-sm-4 text-right"><small><b>Tgl Sz Tgh</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="date" name="tgl_sz_tgh"
-                                    id="tgl_sz_tgh">
+                            <div class="col-sm-4 text-right"><small><b>Piping Untuk</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="text" id="pi_untuk" name="pi_untuk">
                             </div>
                         </div>
                         <div class="col-sm-4 mt-lg-1">
                             <div class="col-sm-4 text-right"><small><b>Panjang (m)</b></small></div>
-                            <div class="col-sm-8"><input class="form-control form-detail" type="number" step="0.01"
-                                    name="panjang_m" id="panjang_m">
+                            <div class="col-sm-8"><input class="form-control form-detail-pi" type="number" step="0.01"
+                                    name="pi_panjang_m" id="pi_panjang_m">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mt-lg-1">
+                            <div class="col-sm-4 text-right"><small><b>Total WS Quantity</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="number" step="0.01"
+                                    name="pi_tot_ws_qty" id="pi_tot_ws_qty" value="{{$qty_for_detail}}"
+                                    style="background-color: #FFB09F !important;" readonly>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="col-sm-4 text-right"><small><b>Ukuran (Cm)</b></small></div>
+                            <div class="col-sm-8">
+                                <input class="form-control" type="number" step="0.01" id="pi_ukuran" name="pi_ukuran">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mt-lg-1">
+                            <div class="col-sm-4 text-right"><small><b>Lebar (m)</b></small></div>
+                            <div class="col-sm-4"><input class="form-control form-detail-pi" type="number" step="0.01"
+                                    name="pi_lebar_m" id="pi_lebar_m">
+                            </div>
+                            <div class="col-sm-4"><input class="form-control form-detail-pi" type="number" step="0.01"
+                                    name="pi_lebar_inc" id="pi_lebar_inc" readonly
+                                    style="background-color: #FFB09F !important;">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mt-lg-1">
+                            <div class="col-sm-4 text-right"><small><b>Qty Before Tole (Kg)</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="number" step="0.01"
+                                    name="pi_qty_be_kg" id="pi_qty_be_kg" style="background-color: #FFB09F !important;"
+                                    readonly>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="col-sm-4 text-right"><small><b>Arah</b></small></div>
+                            <div class="col-sm-8">
+                                <select class="form-control" name="pi_arah" id="pi_arah">
+                                    <option value="" selected disabled>Select</option>
+                                    <option value="diagonal">Diagonal</option>
+                                    <option value="horizontal">Horizontal</option>
+                                    <option value="vertikal">Vertikal</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mt-lg-1">
+                            <div class="col-sm-4 text-right"><small><b>Meter per Pcs</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="number" step="0.01" name="pi_mp_pcs"
+                                    id="pi_mp_pcs">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mt-lg-1">
+                            <div class="col-sm-4 text-right"><small><b>Qty Before Tole (Yd)</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="number" step="0.01"
+                                    name="pi_qty_be_yd" id="pi_qty_be_yd" style="background-color: #FFB09F !important;"
+                                    readonly>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="col-sm-4 text-right"><small><b>*Marker ke</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="number" id="pi_urutan"
+                                    name="pi_urutan" required></div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="col-sm-4 text-right"><small><b>Pola Asli</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="text" name="pi_pola_asli"
+                                    id="pi_pola_asli">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mt-lg-1">
+                            <div class="col-sm-4 text-right"><small><b>Qty Before Tole (Mtr)</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="number" step="0.01"
+                                    name="pi_qty_be_mtr" id="pi_qty_be_mtr"
+                                    style="background-color: #FFB09F !important;" readonly>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="col-sm-4 text-right"><small><b>*Kode Marker</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="text" name="pi_kode_marker"
+                                    id="pi_kode_marker" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mt-lg-1">
+                            <div class="col-sm-4 text-right"><small><b>Gramasi</b></small></div>
+                            <div class="col-sm-8"><input class="form-control form-detail-pi" type="number" step="0.01"
+                                    name="pi_gramasi" id="pi_gramasi">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mt-lg-1">
+                            <div class="col-sm-4 text-right"><small><b>Tolerance (%)</b></small></div>
+                            <div class="col-sm-8"><input class="form-control form-detail-pi" type="number" step="0.01"
+                                    name="pi_tolerance" id="pi_tolerance">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="col-sm-4 text-right"><small><b>*Marker Date</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="date" name="pi_marker_date"
+                                    id="pi_marker_date" value="{{date('Y-m-d')}}" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mt-lg-1">
+                            <div class="col-sm-4 text-right"><small><b>Skala</b></small></div>
+                            <div class="col-sm-8"><input class="form-control form-detail-pi" type="number" step="0.01"
+                                    name="pi_skala" id="pi_skala">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mt-lg-1">
+                            <div class="col-sm-4 text-right"><small><b>Qty After Tole (Kg)</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="number" step="0.01"
+                                    name="pi_qty_af_kg" id="pi_qty_af_kg" style="background-color: #FFB09F !important;"
+                                    readonly>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mt-lg-1">
+                            <div class="col-sm-4 text-right"><small><b>Efisiensi (%)</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="number" step="0.01"
+                                    name="pi_efisiensi" id="pi_efisiensi">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mt-lg-1">
+                            <div class="col-sm-4 text-right"><small><b>Jumlah Ampar</b></small></div>
+                            <div class="col-sm-8"><input class="form-control form-detail-pi" type="number" step="0.01"
+                                    name="pi_jml_ampar" id="pi_jml_ampar">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mt-lg-1">
+                            <div class="col-sm-4 text-right"><small><b>Qty After Tole (Yd)</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="number" step="0.01"
+                                    name="pi_qty_af_yd" id="pi_qty_af_yd" style="background-color: #FFB09F !important;"
+                                    readonly>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mt-lg-1">
+                            <div class="col-sm-4 text-right"><small><b>Perimeter (Cm)</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="number" step="0.01"
+                                    name="pi_perimeter" id="pi_perimeter">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mt-lg-1">
+                            <div class="col-sm-4 text-right"><small><b>Kons Sz Tgh</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="number" step="0.01"
+                                    name="pi_kons_sz_tgh" id="pi_kons_sz_tgh">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mt-lg-1">
+                            <div class="col-sm-4 text-right"><small><b>Qty After Tole (Mtr)</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="number" step="0.01"
+                                    name="pi_qty_af_mtr" id="pi_qty_af_mtr"
+                                    style="background-color: #FFB09F !important;" readonly>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mt-lg-1">
+                            <div class="col-sm-4 text-right"><small><b>Tole Pjg (m)</b></small></div>
+                            <div class="col-sm-8"><input class="form-control form-detail-pi" type="number" step="0.01"
+                                    name="pi_tole_pjg_m" id="pi_tole_pjg_m">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mt-lg-1">
+                            <div class="col-sm-4 text-right"><small><b>*Tgl Sz Tgh</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="date" name="pi_tgl_sz_tgh"
+                                    id="pi_tgl_sz_tgh" value="{{date('Y-m-d')}}">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mt-lg-1">
+                            <div class="col-sm-4 text-right"><small><b>Revision</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="number" name="pi_revision"
+                                    id="pi_revision">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mt-lg-1">
+                            <div class="col-sm-4 text-right"><small><b>Tole Lbr (m)</b></small></div>
+                            <div class="col-sm-8"><input class="form-control form-detail-pi" type="number" step="0.01"
+                                    name="pi_tole_lbr_m" id="pi_tole_lbr_m">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mt-lg-1">
+                            <div class="col-sm-4 text-right"><small><b>Kons (Kg/Dz)</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="number" step="0.01"
+                                    name="pi_kons_kgdz" id="pi_kons_kgdz" readonly
+                                    style="background-color: #FFB09F !important;">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mt-lg-1">
+                            <div class="col-sm-4 text-right"><small><b>Revision Remark</b></small></div>
+                            <div class="col-sm-8"><textarea class="form-control" type="text" name="pi_revision_remark"
+                                    id="pi_revision_remark"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mt-lg-1">
+                            <div class="col-sm-4 text-right"><small><b>PDF Marker</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="file" name="pi_pdf_marker"
+                                    id="pi_pdf_marker">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mt-lg-1">
+                            <div class="col-sm-4 text-right"><small><b>Kons (Yd/Dz)</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="number" step="0.01"
+                                    name="pi_kons_yddz" d id="pi_kons_yddz" readonly
+                                    style="background-color: #FFB09F !important;">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mt-lg-1"></div>
+                        <div class="col-sm-4 mt-lg-1"></div>
+                        <div class="col-sm-4 mt-lg-1">
+                            <div class="col-sm-4 text-right"><small><b>Kons (M/Dz)</b></small></div>
+                            <div class="col-sm-8"><input class="form-control" type="number" step="0.01"
+                                    name="pi_kons_mdz" id="pi_kons_mdz" readonly
+                                    style="background-color: #FFB09F !important;">
                             </div>
                         </div>
                         <div class="col-sm-12 mt-lg-1 mb-10">
                             <div class="row justify-content-end">
                                 <div class="col-sm-4">
-                                    <a type="button" id="batal_newdetail" data-dismiss="modal" class="mr-15"
+                                    <a type="button" id="pi_batal_newdetail" data-dismiss="modal" class="mr-15"
                                         onclick="batalDetail('#detail-ass-tbody')"><u>Batal</u></a>
-                                    <input type="submit" id submit_detail" name="submit_detail"
+                                    <input type="submit" id="pi_submit_detail" name="pi_submit_detail"
                                         class="btn btn-primary ml-10">
                                     <div class="col-sm-4">
                                     </div>
@@ -1482,14 +1443,29 @@
             while (parent.firstChild) {
                 parent.removeChild(parent.firstChild);
             }
-        }
 
-        // $(document).on("click", "#batal_newdetail", function(){
-        // function batalDetail(){
-            // var bataldetail = document.getElementById("#detail-ass-tbody");
-            // bataldetail.innerHTML = '';
-        // }
-        // });
+            $('#ma_form').find(':input').each(function() {
+                switch (this.type) {
+                case 'text':
+                case 'number':
+                case 'file':
+                case 'textarea':
+                $(this).val('');
+                break;
+                }
+            });
+
+            $('#pi_form').find(':input').each(function() {
+                switch (this.type) {
+                case 'text':
+                case 'number':
+                case 'file':
+                case 'textarea':
+                $(this).val('');
+                break;
+                }
+            });
+        }
 
         $(document).on("click", "#click_newtype", function(){
             var id_wsheet = $(this).data('wsheet');
@@ -1523,12 +1499,19 @@
                         }
                     });
 
+                    var id_mcpwsm = $(this).data("mcpwsmid");
                     var id_mcpt = $(this).data("mcptid");
-                    $("#id_type").val(id_mcpt);
 
-                    // $("#id_type").val(id_type);
-                    // $("#detail_size").val(size);
-                    // $("#detail_qty").val(qty);
+                    $("#ma_id_type").val(id_mcpt);
+                    $("#ma_id_mcpwsm").val(id_mcpwsm);
+                    document.getElementById("ma_submit_detail").disabled = true;
+                });
+
+                $('.pi_click_newdetail').click(function(){
+                    var id_mcpwsm = $(this).data("mcpwsmid");
+                    var id_mcpt = $(this).data("mcptid");
+                    $("#pi_id_mcpwsm").val(id_mcpwsm);
+                    $("#pi_id_type").val(id_mcpt);
                 });
             });
 </script>
@@ -1541,16 +1524,25 @@
     var count = 1;
     // MCP WORKSHEET
     function ms_addrow(){
+        count = document.getElementById("ws_count").value;
         count++;
+
         baris = '<tr>'+
         '<td>'+'<input class="form-control" type="text" name="input_size[]" id="input_size_'+count+'">'+'</td>'+
             '<td>'+'<input class="form-control" type="number" name="input_ws_qty[]" id="input_ws_qty_'+count+'">'+'</td>'+
             '<td>'+'<input class="form-control" type="number" name="input_tolerance[]" id="input_tolerance_'+count+'">'+'</td>'+
             '<td>'+'<input class="form-control" type="number" name="input_qty_tot[]" id="input_qty_tot_'+count+'" readonly>'+'</td>'+
-            '<td>'+'<button class="btn btn-sm btn-danger" onclick="$(this).parent().parent().remove();">X</button>'+'</td>' +
+            '<td>'+'<button class="btn btn-sm btn-danger" onclick="$(this).parent().parent().remove(); minCount();">X</button>'+'</td>' +
         '</tr>'
         $('#ws_tbody').append(baris);
 
+        document.getElementById("ws_count").value = count;
+    }
+
+    function minCount() {
+        var count = document.getElementById("ws_count").value;
+        count--;
+        document.getElementById("ws_count").value=count;
     }
 
     $('#click_create').click(function(){
@@ -1560,16 +1552,55 @@
     function assort_cal(){
         // mendapatkan total skala secara otomatis
         var index_assort = document.getElementById('index_assort').value;
+        var jml_ampar = document.getElementById('ma_jml_ampar').value;
+        var jml_marker = document.getElementById('ma_jml_marker').value;
         var tot_ass_scale = 0;
         var tot_ass_scales = 0;
 
-        for(i = 0; i < index_assort; i++){ var ass_qtyws=document.getElementById("input_det_qty_"+i).value; var
-            ass_scale = document.getElementById("input_det_scale_"+i).value; var ass_scales=ass_qtyws * ass_scale;
-            document.getElementById("input_det_scales_"+i).value=ass_scales;
+        for(i = 0; i < index_assort; i++){
+            // var ass_qtyws = document.getElementById("input_det_qty_"+i).value;
+            var ass_scale = document.getElementById("input_det_scale_"+i).value;
+            var ass_scales = jml_ampar * jml_marker * ass_scale;
+            document.getElementById("input_det_scales_"+i).value = ass_scales;
             tot_ass_scale += parseInt(ass_scale);
             tot_ass_scales = tot_ass_scales + ass_scales;
         }
-        document.getElementById("total_skala").value = tot_ass_scale;
+        document.getElementById("ma_total_skala").value = tot_ass_scale;
+        document.getElementById("ma_submit_detail").disabled = false;
+
+        var panjang = document.getElementById('ma_panjang_m').value;
+            var tole_panjang = document.getElementById('ma_tole_pjg_m').value;
+            var lebar = document.getElementById('ma_lebar_m').value;
+            var tole_lebar = document.getElementById('ma_tole_lbr_m').value;
+            var gramasi = document.getElementById('ma_gramasi').value;
+            var skala = document.getElementById('ma_total_skala').value;
+            var jml_ampar = document.getElementById('ma_jml_ampar').value;
+            // var detail_scale = document.getElementById('total_skala').value;
+
+            // Perhitungan Lebar (m) to (inc)
+            var lebar_inc = lebar * 39.37;
+            $("#ma_lebar_inc").val(lebar_inc.toFixed(2));
+
+            //	Perhitungan Konsumsi Kg/Dz = (Panjang + toleransi) x (Lebar + toleransi) x (Gramasi / 1000) / Skala x 12
+            var kons_kgdz = (parseFloat(panjang) + parseFloat(tole_panjang)) * (parseFloat(lebar) + parseFloat(tole_lebar)) * (gramasi/1000) / skala * 12;
+            $("#ma_kons_kgdz").val(kons_kgdz.toFixed(2));
+
+            //	Perhitungan Konsumsi Yard/Dz = (Panjang + toleransi)  / 0.914 / Skala x 12
+            var kons_yddz = (parseFloat(panjang) + parseFloat(tole_panjang)) / 0.914 / skala * 12;
+            $("#ma_kons_yddz").val(kons_yddz.toFixed(2));
+
+            //	Perhitungan Konsumsi Meter/Dz = (Panjang + toleransi) / Skala x 12
+            var kons_mdz = (parseFloat(panjang) + parseFloat(tole_panjang)) / skala * 12;
+            $("#ma_kons_mdz").val(kons_mdz.toFixed(2));
+
+            // Perhitungan Qty per Yard, Kg dan meter = Jumlah Ampar x Total Skala x Konsumsi / 12
+            var qty_yard = jml_ampar * skala * kons_yddz / 12;
+            var qty_kg = jml_ampar * skala * kons_kgdz / 12;
+            var qty_m = jml_ampar * skala * kons_mdz / 12;
+
+            $("#ma_qty_yard").val(qty_yard.toFixed(2));
+            $("#ma_qty_kg").val(qty_kg.toFixed(2));
+            $("#ma_qty_m").val(qty_m.toFixed(2));
     }
 
     function calculate(){
@@ -1591,45 +1622,103 @@
         $('#submit').prop('disabled',false);
     }
 
-    $(document).ready(function(){
-        $(".form-detail").keyup(function(){
 
-            var panjang = document.getElementById('panjang_m').value;
-            var tole_panjang = document.getElementById('tole_pjg_m').value;
-            var lebar = document.getElementById('lebar_m').value;
-            var tole_lebar = document.getElementById('tole_lbr_m').value;
-            var gramasi = document.getElementById('gramasi').value;
-            var skala = document.getElementById('total_skala').value;
-            var jml_ampar = document.getElementById('jml_ampar').value;
+    $(document).ready(function(){
+        $(".form-detail-ma").keyup(function(){
+
+            var panjang = document.getElementById('ma_panjang_m').value;
+            var tole_panjang = document.getElementById('ma_tole_pjg_m').value;
+            var lebar = document.getElementById('ma_lebar_m').value;
+            var tole_lebar = document.getElementById('ma_tole_lbr_m').value;
+            var gramasi = document.getElementById('ma_gramasi').value;
+            var skala = document.getElementById('ma_total_skala').value;
+            var jml_ampar = document.getElementById('ma_jml_ampar').value;
             // var detail_scale = document.getElementById('total_skala').value;
 
             // Perhitungan Lebar (m) to (inc)
             var lebar_inc = lebar * 39.37;
-            document.getElementById('lebar_inc').value = Math.round(lebar_inc * 100)/100;
+            $("#ma_lebar_inc").val(lebar_inc.toFixed(2));
 
             //	Perhitungan Konsumsi Kg/Dz = (Panjang + toleransi) x (Lebar + toleransi) x (Gramasi / 1000) / Skala x 12
             var kons_kgdz = (parseFloat(panjang) + parseFloat(tole_panjang)) * (parseFloat(lebar) + parseFloat(tole_lebar)) * (gramasi/1000) / skala * 12;
-            // console.log('kons_kgdz = ' + kons_kgdz);
-            document.getElementById('kons_kgdz').value = Math.round(kons_kgdz * 100)/100;
+            $("#ma_kons_kgdz").val(kons_kgdz.toFixed(2));
 
             //	Perhitungan Konsumsi Yard/Dz = (Panjang + toleransi)  / 0.914 / Skala x 12
             var kons_yddz = (parseFloat(panjang) + parseFloat(tole_panjang)) / 0.914 / skala * 12;
-            // console.log('kons_yddz = ' + kons_yddz);
-            document.getElementById('kons_yddz').value = Math.round(kons_yddz * 100)/100;
+            $("#ma_kons_yddz").val(kons_yddz.toFixed(2));
 
             //	Perhitungan Konsumsi Meter/Dz = (Panjang + toleransi) / Skala x 12
             var kons_mdz = (parseFloat(panjang) + parseFloat(tole_panjang)) / skala * 12;
-            // console.log('kons_mdz = ' + kons_mdz);
-            document.getElementById('kons_mdz').value = Math.round(kons_mdz * 100)/100;
+            $("#ma_kons_mdz").val(kons_mdz.toFixed(2));
 
             // Perhitungan Qty per Yard, Kg dan meter = Jumlah Ampar x Total Skala x Konsumsi / 12
             var qty_yard = jml_ampar * skala * kons_yddz / 12;
             var qty_kg = jml_ampar * skala * kons_kgdz / 12;
             var qty_m = jml_ampar * skala * kons_mdz / 12;
 
-            document.getElementById('qty_yard').value = Math.round(qty_yard * 100)/100;
-            document.getElementById('qty_kg').value = Math.round(qty_kg * 100)/100;
-            document.getElementById('qty_m').value = Math.round(qty_m * 100)/100;
+            $("#ma_qty_yard").val(qty_yard.toFixed(2));
+            $("#ma_qty_kg").val(qty_kg.toFixed(2));
+            $("#ma_qty_m").val(qty_m.toFixed(2));
+        });
+
+        $(".form-detail-pi").keyup(function(){
+            // Perhitungan Lebar (m) to (inc)
+            var lebar = document.getElementById('pi_lebar_m').value;
+            var lebar_inc = lebar * 39.37;
+            document.getElementById('pi_lebar_inc').value = Math.round(lebar_inc * 100)/100;
+
+            // Perhitungan Quantity
+            val_fabric_yard = 0;
+            val_fabric_kg = 0;
+            val_fabric_meter = 0;
+            val_before_tolerance_kg = 0;
+            val_before_tolerance_yard = 0;
+            val_before_tolerance_meter = 0;
+
+            val_length = parseFloat($("#pi_panjang_m").val());
+            val_width = parseFloat($("#pi_lebar_m").val());
+            val_length_tole = parseFloat($("#pi_tole_pjg_m").val());
+            val_width_tole = parseFloat($("#pi_tole_lbr_m").val());
+            val_gramasi = parseFloat($("#pi_gramasi").val());
+            val_scale = parseFloat($("#pi_skala").val());
+            val_ws_quantity = parseFloat($("#pi_tot_ws_qty").val());
+            val_tolerance = parseFloat($("#pi_tolerance").val());
+
+            // Consumption before tolerance
+            val_fabric_kg = ((((val_length + val_length_tole) * (val_width + val_width_tole) * val_gramasi) / val_scale) * 12) /1000;
+            val_fabric_yard = (((val_length + val_length_tole) / val_scale ) / 0.914) * 12;
+            val_fabric_meter = ((val_length + val_length_tole) / val_scale) * 12
+
+            if (isNaN(val_fabric_kg) == true || val_scale == 0)
+            val_fabric_kg = 0;
+
+            if (isNaN(val_fabric_yard) == true || val_scale == 0)
+            val_fabric_yard = 0;
+
+            if (isNaN(val_fabric_meter) == true || val_scale == 0)
+            val_fabric_meter = 0;
+
+            $("#pi_kons_kgdz").val(val_fabric_kg.toFixed(2));
+            $("#pi_kons_yddz").val(val_fabric_yard.toFixed(2));
+            $("#pi_kons_mdz").val(val_fabric_meter.toFixed(2));
+
+            // Quantity before Tolerance
+            val_before_tolerance_kg = (val_fabric_kg.toFixed(2) * val_ws_quantity) / 12;
+            val_before_tolerance_yard = (val_fabric_yard.toFixed(2) * val_ws_quantity) / 12;
+            val_before_tolerance_meter = (val_fabric_meter.toFixed(2) * val_ws_quantity) / 12;
+
+            $("#pi_qty_be_kg").val(val_before_tolerance_kg.toFixed(2));
+            $("#pi_qty_be_yd").val(val_before_tolerance_yard.toFixed(2));
+            $("#pi_qty_be_mtr").val(val_before_tolerance_meter.toFixed(2));
+
+            // Quantity after Tolerance
+            val_after_tolerance_kg = val_before_tolerance_kg + (val_before_tolerance_kg * val_tolerance / 100);
+            val_after_tolerance_yard = val_before_tolerance_yard + (val_before_tolerance_yard * val_tolerance / 100);
+            val_after_tolerance_meter = val_before_tolerance_meter + (val_before_tolerance_meter * val_tolerance / 100);
+
+            $("#pi_qty_af_kg").val(val_after_tolerance_kg.toFixed(2));
+            $("#pi_qty_af_yd").val(val_after_tolerance_yard.toFixed(2));
+            $("#pi_qty_af_mtr").val(val_after_tolerance_meter.toFixed(2));
         });
     });
 

@@ -1,3 +1,52 @@
+TO DO LIST
+
+finished :
+- Field desainer pada mcp_detail tidak perlu.
+- Pada rekapitulasi perhitungan kain, perhitungan konsumsi masih terdapat kesalahan. hasil akhirnya selalu dua kali dari hasil yang benar.
+- File::delete('mcp_files/' . $mcpd->pdf_marker);
+- perhitngan qty before dan after kayanya ga sama sama perhitung qty marker & app
+- perbaiki perhitungan mcpd dari program yang ruby
+- print detail (layout cek konsumsi)
+- print detail piping
+- print rekap piping
+- print rekapitulasi perhitungan kain (mpcwsm)
+- print rekap konsumsi (all)
+
+not :
+-> print reakp konsumsi (type)
+- merge file dengan file pdf detail
+
+
+
+
+foreach type :
+    foreach detail :
+        if(detail->id == type->id) :
+            foreach assort :
+                foreach mcpws :
+                    if(assort->id_ws == ws->id) && (assort->id_mcpd == detail->id) :
+
+                    endif;
+                endforeach;
+            endforeach;
+        endif;
+    endforeach;
+endforeach;
+
+
+
+=======================================================================================
+
+MASUKAN dan REVISI
+
+•	Rumus perhitungan quantity di marker worksheet adalah Worksheet Qty + tolerance(dalam bentuk %)
+•	Perhitungan Konsumsi Kg/Dz = (Panjang + toleransi) x (Lebar + toleransi) x Gramasi / 1000 / Skala x 12
+•	Perhitungan Konsumsi Yard/Dz = (Panjang + toleransi)  / 0.914 / Skala x 12
+•	Perhitungan Konsumsi Meter/Dz = (Panjang + toleransi) / Skala x 12
+•	Perhitungan Qty per Yard, Kg dan meter = Jumlah Ampar x Total Skala x Konsumsi / 12
+•	Perhitungan untuk “ujung kain” di skip dulu
+•	Perhitungan untuk costing di marker calculation details tidak perlu di bagi 12 karena value yang di butuhkan adalah per sdsxcpcs
+
 * Sales Order
 -	di buatkan fitur sycn tolerance agar user tidak harus berulang kali mengisi value tolerance yang sama.
 -   material requirement bisa di input jika quantitiy breakdown dan budget telah di input (budget yang diinput adalah budget internal (-5%))
@@ -12,18 +61,3 @@
 
 * Marker Check Production
 -	breakdown di link sama “SO – assortment” sehingga tidak usah input ulang, dan nanti di beri pilihan untuk quantity nya apakah sama atau mau di tambah (value penambahnya dalam bentuk %).
-
-=======================================================================================
-Fahmi :
-- buat alur program piping
-- buat database piping
-- Bikin laporan di pdf
-
-
-•	Rumus perhitungan quantity di marker worksheet adalah Worksheet Qty + tolerance(dalam bentuk %)
-•	Perhitungan Konsumsi Kg/Dz = (Panjang + toleransi) x (Lebar + toleransi) x (Gramasi / 1000) / Skala x 12
-•	Perhitungan Konsumsi Yard/Dz = (Panjang + toleransi)  / 0.914 / Skala x 12
-•	Perhitungan Konsumsi Meter/Dz = (Panjang + toleransi) / Skala x 12
-•	Perhitungan Qty per Yard, Kg dan meter = Jumlah Ampar x Total Skala x Konsumsi / 12
-•	Perhitungan untuk “ujung kain” di skip dulu
-•	Perhitungan untuk costing di marker calculation details tidak perlu di bagi 12 karena value yang di butuhkan adalah per sdsxcpcs
