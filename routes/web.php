@@ -159,18 +159,23 @@ Route::get('/mcp/edit/{id}', 'McpController@edit');
 Route::get('/mcp/edit_ws/{id_mcpwsm}/{id_mcp}', 'McpController@editws');
 Route::get('/mcp/edit_mcpt/{id_mcpt}/{id_mcp}', 'McpController@editmcpt');
 Route::get('/mcp/edit_mcpd/{id_mcpd}/{id_mcp}/{id_mcpwsm}', 'McpController@editmcpd');
+Route::get('/mcp/edit_mcpi/{id_mcpi}/{id_mcp}/{id_mcpwsm}', 'McpController@editmcpi');
 Route::get('/mcp/delete/{id}', 'McpController@delete');
 Route::get('/mcp/delete_ws/{id}', 'McpController@deletews');
 Route::get('/mcp/delete_mcpt/{id}', 'McpController@deletemcpt');
 Route::get('/mcp/delete_mcpd/{id}', 'McpController@deletemcpd');
+Route::get('/mcp/delete_mcpi/{id}', 'McpController@deletemcpi');
 Route::get('/mcp/detail/{id}', 'McpController@detail');
 Route::get('/mcp/show_detail/{id_mcpd}/{id_mcp}/{id_mcpwsm}', 'McpController@showdetail');
 
 // Route::get('/mcp/print_rekkonsdom/{mcp_id}', 'McpController@print_rekkonsdom');
-Route::get('/mcp/print_rekkons/{mcp_id}', 'McpController@print_rekkons');
-Route::get('/mcp/print_ws/{mcp_id}/{mcpwsm_id}/{mcpt_id}/{mcpd_id}', 'McpController@print_ws');
-// Route::get('/mcp/print_ws/{mcp_id}/{mcpwsm_id}/{mcpt_id}/{mcpd_id}', 'McpController@print_ws')->name('mcp.print_ws');
+Route::get('/mcp/print_mcp/{mcp_id}', 'McpController@print_mcp');
+Route::get('/mcp/print_wsm/{mcp_id}/{mcpwsm_id}', 'McpController@print_wsm');
+Route::get('/mcp/print_ws/{mcp_id}/{mcpwsm_id}/{mcpt_id}', 'McpController@print_ws');
+Route::get('/mcp/print_rekpiping/{mcp_id}', 'McpController@print_rekpiping');
+Route::get('/mcp/print_detail/{filename}', 'McpController@print_detmcp');
 Route::get('/tes_mpdf', 'McpController@tes');
+// Route::get('/tes_mpdf', 'McpController@tes');
 
 Route::post('/mcp/geteditsize', 'McpController@edit_getsize');
 Route::post('/mcp/getsize', 'McpController@detail_getsize');
@@ -178,11 +183,12 @@ Route::post('/mcp/create', 'McpController@create');
 Route::post('/mcp/update', 'McpController@update');
 Route::post('/mcp/create_ws', 'McpController@createws');
 Route::post('/mcp/create_type', 'McpController@createtype');
-Route::post('/mcp/create_detail', 'McpController@createdetail')->name('mcp.createdetail');
+Route::post('/mcp/create_detail', 'McpController@createdetail_ma')->name('mcp.createdetail_ma');
+Route::post('/mcp/create_detail_pi', 'McpController@createdetail_pi')->name('mcp.createdetail_pi');
 Route::post('/mcp/update_ws', 'McpController@updatews');
 Route::post('/mcp/update_mcpt', 'McpController@updatemcpt');
-Route::post('/mcp/update_mcpd', 'McpController@updatemcpd')->name('mcp.updatedetail');
-
+Route::post('/mcp/update_mcpd', 'McpController@updatemcpd_ma')->name('mcp.updatedetail_ma');
+Route::post('/mcp/update_mcpi', 'McpController@updatemcpd_pi')->name('mcp.updatedetail_pi');
 
 Route::get('/marker', 'MarkerController@index');
 Route::get('/marker/delete/{id}', 'MarkerController@delete');
