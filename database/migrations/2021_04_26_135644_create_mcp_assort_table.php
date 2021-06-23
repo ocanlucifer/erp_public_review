@@ -10,6 +10,9 @@ class CreateMcpAssortTable extends Migration
     {
         Schema::create('mcp_assort', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('mcp');
+            $table->integer('id_ws');
+            $table->integer('id_mcpt');
             $table->integer('id_mcpd');
             $table->string('size');
             $table->integer('qty_ws');

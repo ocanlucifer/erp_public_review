@@ -1,0 +1,46 @@
+ /* @media print { */
+
+ body {
+     size: 29.7cm 21cm;
+     margin-top: 10mm;
+     height: 21cm;
+     font-size: small;
+     font-weight: bold;
+ }
+
+ .page-break {
+     display: block;
+     page-break-before: always;
+ }
+
+ .logo-teo {
+     max-width: 75%;
+     max-height: auto;
+     vertical-align: middle;
+ }
+
+ .name-teo {
+     padding-left: 0em;
+ }
+
+ table {
+     border-collapse: collapse;
+ }
+
+ table,
+ td,
+ th {
+     border: 0.5px solid black;
+     border-width: thin;
+     padding: 0px 10px 0px 10px;
+     text-align: center;
+ }
+
+ .detail-marker {
+     page-break-inside: avoid;
+     page-break-after: auto;
+     position: relative;
+     display: block;
+ }
+
+ /* } */

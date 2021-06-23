@@ -184,23 +184,22 @@ foreach ($mcpd as $detail) {
                 $tot_actmtr = 0;
                 ?>
 
-                <?php $iteration = 0; ?>
+                <?php $iteration = 1; ?>
                 @foreach ($mcpd as $detail)
                 @if ($detail->id_type == $type->id)
                 <?php
                 $iteration++;
 
-                $kons_kg = ($detail->panjang_m + $detail->tole_pjg_m)*($detail->lebar_m + $detail->tole_lbr_m)*($detail->gramasi/1000)/$detail->total_skala*12;
-                $qty_kg = $detail->jml_ampar * $detail->total_skala * $kons_kg/12;
+                $kons_kg = sprintf("%.2f", (($detail->panjang_m + $detail->tole_pjg_m)*($detail->lebar_m + $detail->tole_lbr_m)*$detail->gramasi/1000/$detail->total_skala*12));
+                $qty_kg = sprintf("%.2f", ($detail->jml_ampar * $detail->total_skala * $kons_kg/12));
 
-                $kons_yd = ($detail->panjang_m + $detail->tole_pjg_m) / 0.914 / $detail->total_skala * 12;
-                $qty_yd = $detail->jml_ampar * $detail->total_skala * $kons_yd/12;
+                $kons_yd = sprintf("%.2f", (($detail->panjang_m + $detail->tole_pjg_m) / 0.914 / $detail->total_skala * 12));
+                $qty_yd = sprintf("%.2f", ($detail->jml_ampar * $detail->total_skala * $kons_yd/12));
 
-                $kons_mtr = ($detail->panjang_m + $detail->tole_pjg_m) / $detail->total_skala * 12;
-                $qty_mtr = $detail->jml_ampar * $detail->total_skala * $kons_mtr/12;
+                $kons_mtr = sprintf("%.2f", (($detail->panjang_m + $detail->tole_pjg_m) / $detail->total_skala * 12));
+                $qty_mtr = sprintf("%.2f", ($detail->jml_ampar * $detail->total_skala * $kons_mtr/12));
 
                 ?>
-
                 <tr class="text-right">
                     <td></td>
                     <td>{{number_format($detail->lebar_m * 39.37, 2)}}</td>
@@ -214,16 +213,16 @@ foreach ($mcpd as $detail) {
 
                     <td>{{$qty_d}}</td>
                     <td>{{$detail->efisiensi}} %</td>
-                    <td>{{number_format($kons_kg,2)}}
+                    <td>{{$kons_kg}}
                     </td>
-                    <td>{{number_format($qty_kg,2)}}</td>
-                    <td>{{ $act_kg = number_format($detail->efisiensi * $qty_kg / 100,2)}}</td>
-                    <td>{{number_format($kons_yd,2)}}</td>
-                    <td>{{number_format($qty_yd,2)}}</td>
-                    <td>{{ $act_yd = number_format($detail->efisiensi * $qty_yd / 100,2)}}</td>
-                    <td>{{number_format($kons_mtr,2)}}</td>
-                    <td>{{number_format($qty_mtr,2)}}</td>
-                    <td>{{ $act_mtr = number_format($detail->efisiensi * $qty_mtr / 100,2)}}</td>
+                    <td>{{$qty_kg}}</td>
+                    <td>{{ $act_kg = sprintf("%.2f", ($detail->efisiensi * $qty_kg / 100))}}</td>
+                    <td>{{$kons_yd}}</td>
+                    <td>{{$qty_yd}}</td>
+                    <td>{{ $act_yd = sprintf("%.2f", ($detail->efisiensi * $qty_yd / 100))}}</td>
+                    <td>{{$kons_mtr}}</td>
+                    <td>{{$qty_mtr}}</td>
+                    <td>{{ $act_mtr = sprintf("%.2f", ($detail->efisiensi * $qty_mtr / 100))}}</td>
                 </tr>
 
                 <?php
