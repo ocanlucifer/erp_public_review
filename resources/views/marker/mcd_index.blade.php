@@ -104,9 +104,8 @@
                 <div class="col-sm-12">
                     <a href="#modal_detail_add" data-toggle="modal" class="btn btn-primary btn-sm"><i
                             class="icon-pencil"></i><small>New Detail</small></a>
-                    <a href="/markercal/print/{{$mc->id}}" class="btn btn-success btn-sm"><i
-                            class="icon-printer"></i><small>Print
-                            Calculations</small></a>
+                    <a href="/markercal/print/{{$mc->id}}" target="_blank" class="btn btn-success btn-sm"><i
+                            class="icon-printer"></i><small>Print Calculations</small></a>
                 </div>
             </div>
 
