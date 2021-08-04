@@ -41,6 +41,12 @@ Route::post('/autocomplete/style', 'AutocompleteController@style')->name('autoco
 Route::post('/autocomplete/buyer', 'AutocompleteController@buyer')->name('autocomplete.buyer');
 Route::post('/autocomplete/fabricconst', 'AutocompleteController@fabricconst')->name('autocomplete.fabricconst');
 Route::post('/autocomplete/fabriccomp', 'AutocompleteController@fabriccomp')->name('autocomplete.fabriccomp');
+Route::post('/autocomplete/fabricconst_edit', 'AutocompleteController@fabricconst_edit')->name('autocomplete.fabricconst_edit');
+Route::post('/autocomplete/fabriccomp_edit', 'AutocompleteController@fabriccomp_edit')->name('autocomplete.fabriccomp_edit');
+Route::post('/autocomplete/d_fabricconst', 'AutocompleteController@d_fabricconst')->name('autocomplete.d_fabricconst');
+Route::post('/autocomplete/d_fabriccomp', 'AutocompleteController@d_fabriccomp')->name('autocomplete.d_fabriccomp');
+Route::post('/autocomplete/ed_fabricconst', 'AutocompleteController@ed_fabricconst')->name('autocomplete.ed_fabricconst');
+Route::post('/autocomplete/ed_fabriccomp', 'AutocompleteController@ed_fabriccomp')->name('autocomplete.ed_fabriccomp');
 Route::post('/autocomplete/mcp', 'AutocompleteController@mcp')->name('autocomplete.mcp');
 
 
@@ -189,6 +195,29 @@ Route::post('/mcp/update_ws', 'McpController@updatews');
 Route::post('/mcp/update_mcpt', 'McpController@updatemcpt');
 Route::post('/mcp/update_mcpd', 'McpController@updatemcpd_ma')->name('mcp.updatedetail_ma');
 Route::post('/mcp/update_mcpi', 'McpController@updatemcpd_pi')->name('mcp.updatedetail_pi');
+
+Route::get('/markercal', 'MarkercalController@index');
+Route::post('/markercal/create', 'MarkercalController@create');
+Route::post('/markercal/edit/{id}', 'MarkercalController@edit');
+Route::post('/markercal/update', 'MarkercalController@update');
+Route::get('/markercal/delete/{id}', 'MarkercalController@delete');
+Route::post('/markercal/confirm/{id}', 'MarkercalController@confirm');
+Route::post('/markercal/unconfirm/{id}', 'MarkercalController@unconfirm');
+Route::get('/markercal/print/{id}', 'MarkercalController@print');
+Route::get('/mcd/{id}', 'MarkercalController@mcd');
+Route::post('/mcd/create', 'MarkercalController@mcd_create');
+Route::post('/mcd/edit/{id}', 'MarkercalController@mcd_edit');
+Route::post('/mcd/update', 'MarkercalController@mcd_update');
+Route::get('/mcd/delete/{id}', 'MarkercalController@mcd_delete');
+Route::get('/mcd/confirm/{id}', 'MarkercalController@mcd_confirm');
+Route::get('/mcd/unconfirm/{id}', 'MarkercalController@mcd_unconfirm');
+Route::post('/mcd/get_markercal_g', 'MarkercalController@get_mcg');
+Route::get('/mcd/print/{id}', 'MarkercalController@mcd_print');
+Route::post('/mcg/create', 'MarkercalController@createG');
+Route::post('/mcg/edit', 'MarkercalController@editG');
+Route::post('/mcg/update', 'MarkercalController@updateG');
+Route::get('/mcg/delete/{id}', 'MarkercalController@deleteG');
+
 
 Route::get('/marker', 'MarkerController@index');
 Route::get('/marker/delete/{id}', 'MarkerController@delete');
