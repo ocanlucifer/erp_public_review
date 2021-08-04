@@ -12,12 +12,12 @@
     <td class="td-input">{{ $q->state }}</td>
     <td class="td-input">
         <center>
-            <a href="/mcp/delete/{{ $q->id }}"
+            <a href="/mcp/delete/{{$q->id}}"
                 onclick="return confirm('Hapus MCP Dengan Nomor {{ $q->number }}, Lanjutkan?');"
                 class="btn btn-danger btn-xs tooltips" data-popup="tooltip" data-original-title="Delete"
                 data-placement="top"><i class="icon-x"></i></a> &nbsp
-            <a href="/mcp/edit/{{$q->id}}" class="btn btn-primary btn-xs tooltips" data-popup="tooltip"
-                data-original-title="Edit" data-placement="top"><i class="icon-pencil"></i></a>
+            <a href="/mcp/edit/{{$q->id}}" class="btn btn-primary btn-xs tooltips" data-id="{{$q->id}}"
+                data-popup="tooltip" data-original-title="Edit" data-placement="top"><i class="icon-pencil"></i></a>
         </center>
     </td>
 </tr>

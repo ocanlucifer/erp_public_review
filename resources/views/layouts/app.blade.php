@@ -374,7 +374,8 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
                             <li class="">
-                                <a href="{{ url('/') }}"><i class="icon-calculator3"></i>Marker Calculations</a>
+                                <a href="{{ url('/markercal') }}"><i class="icon-calculator3"></i>Marker
+                                    Calculations</a>
                             </li>
                             <li class="">
                                 <a href="{{ url('/mcp') }}"><i class="icon-stack-check"></i>Marker Check Productions</a>

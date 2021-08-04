@@ -58,6 +58,7 @@ class McpController extends Controller
 
     public function create()
     {
+        // generate mcp number
         $no = Mcp::max('number');
         $number_set = ((int)substr($no, 7));
         $number_set += 1;
@@ -168,7 +169,6 @@ class McpController extends Controller
             $revisi_remark      = strtoupper(Requests::input('revisi_remark'));
         }
         // $state                  = strtoupper(Requests::input('state'));
-
         Mcp::where('id', $id)->update([
             'number'            =>  $number,
             'order_name'        =>  $order_name,

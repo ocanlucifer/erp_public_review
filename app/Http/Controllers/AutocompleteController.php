@@ -460,4 +460,160 @@ class AutocompleteController extends Controller
             echo $output;
         }
     }
+
+    function fabricconst_edit(Request $request)
+    {
+        if ($request->get('query')) {
+            $query = strtoupper($request->get('query'));
+            $data = Fabricconst::where(DB::raw('upper(name)'), 'LIKE', "%{$query}%")
+                ->get();
+            if (count($data) > 0) {
+
+                $no = 0;
+                $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
+                foreach ($data as $row) {
+                    $no++;
+                    $output .= '
+        			<li hidden id="id_fabricconst_edit' . $no . '"><a href="#" class="dropdown-item" onclick="pilihFabricconstructedit(' . $no . ');">' . strtoupper($row->id) . '</a></li>
+        			<li id="fabricconst_edit' . $no . '"><a href="#" class="dropdown-item" onclick="pilihFabricconstructedit(' . $no . ');">' . strtoupper($row->name) . '</a></li>
+        			';
+                }
+                $output .= '</ul>';
+            } else {
+                $output = '';
+            }
+            echo $output;
+        }
+    }
+
+    function fabriccomp_edit(Request $request)
+    {
+
+        if ($request->get('query')) {
+            $query = strtoupper($request->get('query'));
+            $data = Fabriccomp::where(DB::raw('upper(name)'), 'LIKE', "%{$query}%")
+                ->where('fabricconstruct_id', $request->get('id_fabricconst_edit'))
+                ->get();
+            if (count($data) > 0) {
+
+                $no = 0;
+                $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
+                foreach ($data as $row) {
+                    $no++;
+                    $output .= '
+        			<li hidden id="id_fabriccomp_edit' . $no . '"><a href="#" class="dropdown-item" onclick="pilihFabriccompostedit(' . $no . ');">' . strtoupper($row->id) . '</a></li>
+        			<li id="fabriccomp_edit' . $no . '"><a href="#" class="dropdown-item" onclick="pilihFabriccompostedit(' . $no . ');">' . strtoupper($row->name) . '</a></li>
+        			';
+                }
+                $output .= '</ul>';
+            } else {
+                $output = '';
+            }
+            echo $output;
+        }
+    }
+
+    function d_fabricconst(Request $request)
+    {
+        if ($request->get('query')) {
+            $query = strtoupper($request->get('query'));
+            $data = Fabricconst::where(DB::raw('upper(name)'), 'LIKE', "%{$query}%")
+                ->get();
+            if (count($data) > 0) {
+
+                $no = 0;
+                $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
+                foreach ($data as $row) {
+                    $no++;
+                    $output .= '
+        			<li hidden id="d_id_fabricconst' . $no . '"><a href="#" class="dropdown-item" onclick="d_pilihFabricconstruct(' . $no . ');">' . strtoupper($row->id) . '</a></li>
+        			<li id="d_fabricconst' . $no . '"><a href="#" class="dropdown-item" onclick="d_pilihFabricconstruct(' . $no . ');">' . strtoupper($row->name) . '</a></li>
+        			';
+                }
+                $output .= '</ul>';
+            } else {
+                $output = '';
+            }
+            echo $output;
+        }
+    }
+
+    function d_fabriccomp(Request $request)
+    {
+
+        if ($request->get('query')) {
+            $query = strtoupper($request->get('query'));
+            $data = Fabriccomp::where(DB::raw('upper(name)'), 'LIKE', "%{$query}%")
+                ->where('fabricconstruct_id', $request->get('d_id_fabricconst'))
+                ->get();
+            if (count($data) > 0) {
+
+                $no = 0;
+                $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
+                foreach ($data as $row) {
+                    $no++;
+                    $output .= '
+        			<li hidden id="d_id_fabriccomp' . $no . '"><a href="#" class="dropdown-item" onclick="d_pilihFabriccompost(' . $no . ');">' . strtoupper($row->id) . '</a></li>
+        			<li id="d_fabriccomp' . $no . '"><a href="#" class="dropdown-item" onclick="d_pilihFabriccompost(' . $no . ');">' . strtoupper($row->name) . '</a></li>
+        			';
+                }
+                $output .= '</ul>';
+            } else {
+                $output = '';
+            }
+            echo $output;
+        }
+    }
+
+    function ed_fabricconst(Request $request)
+    {
+        if ($request->get('query')) {
+            $query = strtoupper($request->get('query'));
+            $data = Fabricconst::where(DB::raw('upper(name)'), 'LIKE', "%{$query}%")
+                ->get();
+            if (count($data) > 0) {
+
+                $no = 0;
+                $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
+                foreach ($data as $row) {
+                    $no++;
+                    $output .= '
+        			<li hidden id="ed_id_fabricconst' . $no . '"><a href="#" class="dropdown-item" onclick="ed_pilihFabricconstruct(' . $no . ');">' . strtoupper($row->id) . '</a></li>
+        			<li id="ed_fabricconst' . $no . '"><a href="#" class="dropdown-item" onclick="ed_pilihFabricconstruct(' . $no . ');">' . strtoupper($row->name) . '</a></li>
+        			';
+                }
+                $output .= '</ul>';
+            } else {
+                $output = '';
+            }
+            echo $output;
+        }
+    }
+
+    function ed_fabriccomp(Request $request)
+    {
+
+        if ($request->get('query')) {
+            $query = strtoupper($request->get('query'));
+            $data = Fabriccomp::where(DB::raw('upper(name)'), 'LIKE', "%{$query}%")
+                ->where('fabricconstruct_id', $request->get('ed_id_fabricconst'))
+                ->get();
+            if (count($data) > 0) {
+
+                $no = 0;
+                $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
+                foreach ($data as $row) {
+                    $no++;
+                    $output .= '
+        			<li hidden id="ed_id_fabriccomp' . $no . '"><a href="#" class="dropdown-item" onclick="ed_pilihFabriccompost(' . $no . ');">' . strtoupper($row->id) . '</a></li>
+        			<li id="ed_fabriccomp' . $no . '"><a href="#" class="dropdown-item" onclick="ed_pilihFabriccompost(' . $no . ');">' . strtoupper($row->name) . '</a></li>
+        			';
+                }
+                $output .= '</ul>';
+            } else {
+                $output = '';
+            }
+            echo $output;
+        }
+    }
 }
