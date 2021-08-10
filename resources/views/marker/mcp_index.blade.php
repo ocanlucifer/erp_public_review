@@ -35,7 +35,7 @@
             </div>
             <br>
 
-            <div class="table-responsivee">
+            <div class="table table-responsive">
                 <table class="table table-bordered table-striped table-hover">
 
                     <thead>
@@ -54,8 +54,7 @@
                             <td colspan="2">
                                 {{-- <input type="hidden" name="search_number" id="search_number"> --}}
                                 <input type="text" class="form-control" onkeyup="getDatas('')" name="keyword"
-                                    id="keyword" !important;" placeholder="RKK Number/Customer Name/Style Name"
-                                    autocomplete="off">
+                                    id="keyword" placeholder="RKK Number/Customer Name/Style Name" autocomplete="off">
                             </td>
                             {{-- <td>
                                 <input type="text" class="form-control" onkeyup="getDatas('')" name="search_name"
@@ -186,13 +185,6 @@
                                                 class="form-control" placeholder="" value="" required>
                                         </div>
                                     </div>
-                                    {{-- <div class="form-group">
-                                        <div class="input-group">
-                                            <label for="revision_count">Revision Count</label>
-                                            <input type="number" step="0.1" name="revision_count" class="form-control"
-                                                placeholder="0.0" value="" required>
-                                        </div>
-                                    </div> --}}
                                     <div class="form-group">
                                         <div class="input-group">
                                             <label for="revisi_remark">Revisi Remark (opt)</label>
@@ -383,8 +375,6 @@
         function getDatas(page)
         {
             keyword = $('#keyword').val();
-            // name = $('#search_name').val();
-            // style = $('#search_style').val();
             var _token = $('input[name="_token"]').val();
 
             $.ajax({

@@ -24,7 +24,8 @@
         "maatwebsite/excel": "^3.1",
         "mpdf/mpdf": "^8.0",
         "niklasravnsborg/laravel-pdf": "^4.0",
-        "ramsey/uuid": "^4.0"
+        "ramsey/uuid": "^4.0",
+        "spatie/pdf-to-image": "^2.1"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
