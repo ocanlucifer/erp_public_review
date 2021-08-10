@@ -1,40 +1,8 @@
-TO DO LIST
-
-finished :
-- Field desainer pada mcp_detail tidak perlu.
-- Pada rekapitulasi perhitungan kain, perhitungan konsumsi masih terdapat kesalahan. hasil akhirnya selalu dua kali dari hasil yang benar.
-- File::delete('mcp_files/' . $mcpd->pdf_marker);
-- perhitngan qty before dan after kayanya ga sama sama perhitung qty marker & app
-- perbaiki perhitungan mcpd dari program yang ruby
-- print detail (layout cek konsumsi)
-- print detail piping
-- print rekap piping
-- print rekapitulasi perhitungan kain (mpcwsm)
-- print rekap konsumsi (all)
-
-not :
--> print reakp konsumsi (type)
-- merge file dengan file pdf detail
-
-
-
-
-foreach type :
-    foreach detail :
-        if(detail->id == type->id) :
-            foreach assort :
-                foreach mcpws :
-                    if(assort->id_ws == ws->id) && (assort->id_mcpd == detail->id) :
-
-                    endif;
-                endforeach;
-            endforeach;
-        endif;
-    endforeach;
-endforeach;
-
-
-
+- action tabel markercal_d
+doing : print detail
+=======================================================================================
+MC (detail) -> pdf to image then input to the new document
+MCP -> pdf to image then input to the new document
 =======================================================================================
 
 MASUKAN dan REVISI
