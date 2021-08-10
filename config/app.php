@@ -239,6 +239,7 @@ return [
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'PDFniklas' => niklasravnsborg\LaravelPdf\Facades\Pdf::class,
         'PDFDOM' => Barryvdh\DomPDF\Facade::class,
+        'PdfMerger' => LynX39\LaraPdfMerger\Facades\PdfMerger::class,
         // 'Flash' => StanDaniels\Flash\FlashServiceProvider::class,
 
     ],

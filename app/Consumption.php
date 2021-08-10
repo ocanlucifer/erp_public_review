@@ -20,7 +20,7 @@ class Consumption extends Model
         return $this->belongsTo(Customer::class, 'customer', 'nama')->withDefault();
     }
 
-    public function style()
+    public function styles()
     {
         return $this->belongsTo(Style::class, 'customer_style', 'name')->withDefault();
     }

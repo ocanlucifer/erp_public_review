@@ -17,7 +17,7 @@ class CreateMcpDetailTable extends Migration
             $table->date('marker_date');
             $table->float('efisiensi');
             $table->float('perimeter');
-            $table->string('designer');
+            $table->string('designer')->nullable();
             $table->float('tole_pjg_m');
             $table->float('tole_lbr_m');
             $table->float('kons_sz_tgh');
