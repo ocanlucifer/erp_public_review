@@ -3,6 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Consumption;
+use App\ConsumptionDetail;
+use App\ConsumptionDetailSupplier;
+use App\ConsumptionDetailFabricItem;
+use App\ConsumptionDetailCollarCuffItem;
+use App\ConsumptionDetailCollarCuffItemSize
+;
 use Illuminate\Http\Request;
 
 use Requests;
@@ -53,7 +59,7 @@ class ConsumptionController extends Controller
         Session::flash('sukses', 'Data consumption berhasil dihapus');
         return redirect('/consumption');
     }
-
+ 
     public function create()
     {
         $no = Consumption::max('code');
@@ -130,4 +136,14 @@ class ConsumptionController extends Controller
         Session::flash('sukses', 'Data Consumption Berhasil Di Update');
         return redirect('/consumption');
     }
+
+    public function view($id)
+    {
+        $cons = Consumption::where('id', $id)->first();
+        $cons_fab = ConsumptionDetail::where('id_consumption', $id)->where('jenis','FABRIC')->get();
+        $cons_collar = ConsumptionDetail::where('id_consumption', $id)->where('jenis','COLLAR')->get();
+        $cons_cuff = ConsumptionDetail::where('id_consumption', $id)->where('jenis','CUFF')->get();
+
+        return view('consumption.view',['cons'=>$cons,'cons_fab'=>$cons_fab,'cons_collar'=>$cons_collar,'cons_cuff'=>$cons_cuff]);
+    } 
 }
