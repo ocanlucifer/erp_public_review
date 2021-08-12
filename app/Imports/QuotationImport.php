@@ -302,7 +302,7 @@ class QuotationImport implements WithMappedCells, WithMultipleSheets, SkipsUnkno
         $lastCode = Quotation::orderBy('code', 'desc')->first();
 
         // Get last 3 digits of last order code
-        if ($lastCode['code']=='') {
+        if (!$lastCode) {
          $lastNumber = 'Q' . date('Y') .'-'. str_pad(0, 5, 0, STR_PAD_LEFT);
         } else {
          $lastNumber = $lastCode['code'];
