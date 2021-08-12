@@ -387,7 +387,7 @@
                                 <a href="{{ url('/marker') }}"><i class="icon-stack-empty"></i>Markers</a>
                             </li>
                             <li class="">
-                                <a href="{{ url('/promark') }}"><i class="icon-stack-empty"></i>Production Markers</a>
+                                <a href="{{ url('/mp') }}"><i class="icon-stack-empty"></i>Production Markers</a>
                             </li>
                             <li>
                                 <hr>

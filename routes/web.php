@@ -39,6 +39,7 @@ Route::post('/autocomplete/color_form', 'AutocompleteController@color_form')->na
 Route::post('/autocomplete/size', 'AutocompleteController@size')->name('autocomplete.size');
 Route::post('/autocomplete/style', 'AutocompleteController@style')->name('autocomplete.style');
 Route::post('/autocomplete/buyer', 'AutocompleteController@buyer')->name('autocomplete.buyer');
+Route::post('/autocomplete/so_number', 'AutocompleteController@so_number')->name('autocomplete.so_number');
 Route::post('/autocomplete/fabricconst', 'AutocompleteController@fabricconst')->name('autocomplete.fabricconst');
 Route::post('/autocomplete/fabriccomp', 'AutocompleteController@fabriccomp')->name('autocomplete.fabriccomp');
 Route::post('/autocomplete/fabricconst_edit', 'AutocompleteController@fabricconst_edit')->name('autocomplete.fabricconst_edit');
@@ -160,7 +161,9 @@ Route::post('/fabric_comp/update', 'fabriccompController@update');
 Route::post('/fabric_comp/new', 'fabriccompController@new');
 
 Route::get('/mcp', 'McpController@index');
-Route::get('/mcp/confirm/{id}/{state}', 'McpController@confirm');
+// Route::get('/mcp/confirm/{id}/{state}', 'McpController@confirm');
+Route::post('/mcp/confirm', 'McpController@confirm');
+Route::get('/mcp/unconfirm/{id}', 'McpController@unconfirm');
 Route::get('/mcp/edit/{id}', 'McpController@edit');
 Route::get('/mcp/edit_ws/{id_mcpwsm}/{id_mcp}', 'McpController@editws');
 Route::get('/mcp/edit_mcpt/{id_mcpt}/{id_mcp}', 'McpController@editmcpt');
@@ -180,6 +183,7 @@ Route::get('/mcp/print_wsm/{mcp_id}/{mcpwsm_id}', 'McpController@print_wsm');
 Route::get('/mcp/print_ws/{mcp_id}/{mcpwsm_id}/{mcpt_id}', 'McpController@print_ws');
 Route::get('/mcp/print_rekpiping/{mcp_id}', 'McpController@print_rekpiping');
 Route::get('/mcp/print_detail/{filename}', 'McpController@print_detmcp');
+Route::get('/mcp/export/{id}', 'McpController@exportMcp');
 Route::get('/tes_mpdf', 'McpController@tes');
 // Route::get('/tes_mpdf', 'McpController@tes');
 
@@ -218,6 +222,36 @@ Route::post('/mcg/edit', 'MarkercalController@editG');
 Route::post('/mcg/update', 'MarkercalController@updateG');
 Route::get('/mcg/delete/{id}', 'MarkercalController@deleteG');
 
+// Production Markers
+Route::get('/mp', 'MarkerproController@index');
+Route::get('/mp/detail/{id}', 'MarkerproController@detail');
+Route::get('/mp/edit/{id}', 'MarkerproController@edit');
+Route::post('/mp/update', 'MarkerproController@update');
+Route::get('/mp/delete_ws/{id}', 'MarkerproController@deletews');
+
+Route::get('/mp/edit_ws/{id_mpwsm}/{id_mp}', 'MarkerproController@editws');
+Route::post('/mp/update_ws', 'MarkerproController@updatews');
+Route::post('/mp/create_type', 'MarkerproController@createtype');
+Route::get('/mp/print_wsm/{mp_id}/{mpwsm_id}', 'MarkerproController@print_wsm');
+Route::get('/mp/edit_mpt/{id_mpt}/{id_mp}', 'MarkerproController@editmpt');
+Route::get('/mp/delete_mpt/{id}', 'MarkerproController@deletempt');
+Route::post('/mp/update_mpt', 'MarkerproController@updatempt');
+Route::get('/mp/print_ws/{mp_id}/{mpwsm_id}/{mpt_id}', 'MarkerproController@print_ws');
+Route::post('/mp/create_detail', 'MarkerproController@createdetail_ma')->name('mp.createdetail_ma');
+Route::post('/mp/create_detail_pi', 'MarkerproController@createdetail_pi')->name('mp.createdetail_pi');
+Route::post('/mp/geteditsize', 'MarkerproController@edit_getsize');
+Route::post('/mp/getsize', 'MarkerproController@detail_getsize');
+
+Route::post('/mp/create_detail', 'MarkerproController@createdetail_ma')->name('mp.createdetail_ma');
+Route::post('/mp/create_detail_pi', 'MarkerproController@createdetail_pi')->name('mp.createdetail_pi');
+Route::get('/mp/edit_mpd/{id_mpd}/{id_mp}/{id_mpwsm}', 'MarkerproController@editmpd');
+Route::get('/mp/edit_mpi/{id_mpi}/{id_mp}/{id_mpwsm}', 'MarkerproController@editmpi');
+Route::post('/mp/update_mpd', 'MarkerproController@updatempd_ma')->name('mp.updatedetail_ma');
+Route::post('/mp/update_mpi', 'MarkerproController@updatempd_pi')->name('mp.updatedetail_pi');
+Route::get('/mp/print_detail/{filename}', 'MarkerproController@print_detmp');
+Route::get('/mp/delete_mpd/{id}', 'MarkerproController@deletempd');
+Route::get('/mp/delete_mpi/{id}', 'MarkerproController@deletempi');
+// Production Markers =====
 
 Route::get('/marker', 'MarkerController@index');
 Route::get('/marker/delete/{id}', 'MarkerController@delete');
