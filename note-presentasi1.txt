@@ -1,8 +1,11 @@
-- action tabel markercal_d
-doing : print detail
-=======================================================================================
-MC (detail) -> pdf to image then input to the new document
-MCP -> pdf to image then input to the new document
+=== Sales Order ===
+
+
+=== Marker calculation ====
+=> (print) pdf to image then input to the new document
+
+=== Marker Check Production ===
+=> (print) pdf to image then input to the new document
 =======================================================================================
 
 MASUKAN dan REVISI
@@ -16,9 +19,9 @@ MASUKAN dan REVISI
 •	Perhitungan untuk costing di marker calculation details tidak perlu di bagi 12 karena value yang di butuhkan adalah per sdsxcpcs
 
 * Sales Order
+-	material requirement di pisah antara kain dan accessories, di buatkan button terpisah
 -	di buatkan fitur sycn tolerance agar user tidak harus berulang kali mengisi value tolerance yang sama.
 -   material requirement bisa di input jika quantitiy breakdown dan budget telah di input (budget yang diinput adalah budget internal (-5%))
--	material requirement di pisah antara kain dan accessories, di buatkan button terpisah
 -	Material Requirements ngelink dari RKK, tidak perlu input ulang lagi. Hanya input code RKK saja
 -	Untuk validasi, budget kain ada di RKK. Sedangkan untuk Accs ada di PO.
 -	Muncul warning jika budget di PO lebih besar dari budget costsheet.

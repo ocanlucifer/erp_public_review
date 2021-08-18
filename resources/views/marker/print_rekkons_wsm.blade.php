@@ -35,6 +35,7 @@
 
     @endif
     <div class="container page-break">
+        {{-- header --}}
         <div class="row">
             <div class="col col-md-2"><img src="{{ asset('assets/images/logo-teodore.png')}}" class="logo-teo" alt="">
             </div>
@@ -79,7 +80,9 @@
             <h4>Rekapitulasi Perhitungan Kain (Summary Of Fabric Calculation)</h4>
             @endif
         </div>
+        {{-- end of header --}}
 
+        {{-- header content --}}
         <div class="row mt-3">
             <div class="col-md-1">Kode</div>
             <div class="col-md-4">: {{$mcp->number}}</div>
@@ -105,7 +108,7 @@
             <div class="col-md-4">: {{$mcpwsm->combo}}</div>
             <div class="col-md-1">{{$t->component}}</div>
         </div>
-
+        {{-- end of header content --}}
 
         {{-- TABEL TURUN SIZE --}}
         <div class="row mt-5">
@@ -179,14 +182,13 @@
 
                     <tr>
                         <td>Qty MP</td>
-
                         <?php
                         $totqtymp = 0;
                         for ($j=0; $j < $sbx ; $j++) {
                         ?>
-
                         <td>{{$qtymp[$j]}}</td>
-                        <?php $totqtymp += $qtymp[$j]; } ?>
+                        <?php $totqtymp += $qtymp[$j]; ?>
+                        <?php } ?>
 
                         <?php
                         $j = 0;
@@ -200,7 +202,6 @@
                         <td></td>
                         <td>{{$totqtymp}}</td>
                     </tr>
-
                     <tr>
                         <td>Turun Size</td>
                         <?php for ($i=0; $i < $j; $i++) { ?>
@@ -222,6 +223,7 @@
         $fabtot_mtr = 0;
         $fabtot_yd = 0;
         ?>
+
         @foreach ($mcpd as $d)
         @if ($d->id_type == $t->id)
 
@@ -330,50 +332,49 @@
             </div>
 
         </div>
-
         @endif
         @endforeach
         {{-- END OFTABEL MARKER DESC --}}
+
         <hr style="border: 1px solid black; border-width: thin;" class="mt-4">
         <div class="container">
-            <div class="row">
-                <div class="col-sm-6">Total fabric : {{sprintf("%.2f",$fabtot_kg)}} Kg,
-                    {{sprintf("%.2f",$fabtot_mtr)}} Mtr,
-                    {{sprintf("%.2f",$fabtot_yd)}} Yard</div>
-                <div class="col-sm-6">Jumlah Marker : {{$sby}}</div>
-            </div>
-            <br>
-            <br>
-            <div class="row mt-3">
-                <div class="col">Tanggal : .............................</div>
-                <div class="col"></div>
-                <div class="col"></div>
-                <div class="col">Tanggal : .............................</div>
-                <div class="col"></div>
-            </div>
-            <div class="row">
-                <div class="col">Disusun Oleh</div>
-                <div class="col"></div>
-                <div class="col"></div>
-                <div class="col">Diperiksa Oleh</div>
-                <div class="col"></div>
-            </div>
-            <div class="row" style="min-height: 100px;">
-                <div class="col"></div>
-                <div class="col"></div>
-                <div class="col"></div>
-                <div class="col"></div>
-                <div class="col"></div>
-            </div>
-            <div class="row">
-                <div class="col border-top border-dark">ADM. CEK PROD</div>
-                <div class="col"></div>
-                <div class="col"></div>
-                <div class="col border-top border-dark">MGR GARTECH</div>
-                <div class="col"></div>
-            </div>
         </div>
-
+        <div class="row">
+            <div class="col-sm-6">Total fabric : {{sprintf("%.2f",$fabtot_kg)}} Kg,
+                {{sprintf("%.2f",$fabtot_mtr)}} Mtr,
+                {{sprintf("%.2f",$fabtot_yd)}} Yard</div>
+            <div class="col-sm-6">Jumlah Marker : {{$sby}}</div>
+        </div>
+        <br>
+        <br>
+        <div class="row mt-3">
+            <div class="col">Tanggal : .............................</div>
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col">Tanggal : .............................</div>
+            <div class="col"></div>
+        </div>
+        <div class="row">
+            <div class="col">Disusun Oleh</div>
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col">Diperiksa Oleh</div>
+            <div class="col"></div>
+        </div>
+        <div class="row" style="min-height: 100px;">
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col"></div>
+        </div>
+        <div class="row">
+            <div class="col border-top border-dark">ADM. CEK PROD</div>
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col border-top border-dark">MGR GARTECH</div>
+            <div class="col"></div>
+        </div>
 
     </div>
     @endforeach

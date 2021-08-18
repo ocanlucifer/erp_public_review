@@ -29,8 +29,8 @@
 </head>
 
 <body>
+
     <div class="container">
-        {{-- header --}}
         <div class="row">
             <div class="col col-md-2"><img src="{{ asset('assets/images/logo-teodore.png')}}" class="logo-teo" alt="">
             </div>
@@ -57,7 +57,7 @@
                     <tr>
                         <td>Revisi</td>
                         <td>:</td>
-                        <td>{{$mcp->revision_count}}</td>
+                        <td>{{$mp->revision_count}}</td>
                     </tr>
                     <tr>
                         <td>Halaman</td>
@@ -71,43 +71,39 @@
         <div class="row mt-3 justify-content-center">
             <h4>Rekapitulasi Perhitungan Kain (Summary Of Fabric Calculation)</h4>
         </div>
-        {{-- end of header --}}
 
-        {{-- header content --}}
         <div class="row mt-3">
             <div class="col-md-1">Kode</div>
-            <div class="col-md-3">: {{$mcp->number}}</div>
+            <div class="col-md-3">: {{$mp->number}}</div>
             <div class="col-md-1">Order </div>
-            <div class="col-md-3">: {{$mcp->order_name}}</div>
+            <div class="col-md-3">: {{$mp->order_name}}</div>
         </div>
         <div class="row">
             <div class="col-md-1">Tanggal</div>
-            <div class="col-md-3">: {{date("d-m-Y", strtotime($mcp->delivery_date))}}</div>
+            <div class="col-md-3">: {{date("d-m-Y", strtotime($mp->delivery_date))}}</div>
             <div class="col-md-1">Style </div>
-            <div class="col-md-3">: {{$mcp->style}}</div>
+            <div class="col-md-3">: {{$mp->style}}</div>
         </div>
         <div class="row">
             <div class="col-md-1">Kain</div>
-            <div class="col-md-3">: {{$mcp->fabric_const}}</div>
+            <div class="col-md-3">: {{$mp->fabric_const}}</div>
             <div class="col-md-1">Warna </div>
-            <div class="col-md-3">: {{$mcpt->warna}}</div>
+            <div class="col-md-3">: {{$mpt->warna}}</div>
         </div>
         <div class="row">
             <div class="col-md-1"></div>
             <div class="col-md-3"></div>
             <div class="col-md-1">Combo </div>
-            <div class="col-md-3">: {{$mcpwsm->combo}}</div>
-            <div class="col-md-3">{{$mcpt->component}}</div>
+            <div class="col-md-3">: {{$mpwsm->combo}}</div>
+            <div class="col-md-3">{{$mpt->component}}</div>
         </div>
-        {{-- end of header content --}}
 
-        {{-- body content --}}
         <div class="row mt-5">
             <div class="col-sm-12">
                 <table>
                     <tr>
                         <td>Size</td>
-                        @foreach ($mcpws as $ws)
+                        @foreach ($mpws as $ws)
                         <td>{{$ws->size}}</td>
                         @endforeach
                         <td>Marker</td>
@@ -117,7 +113,7 @@
                     <tr>
                         <td>Qty WS</td>
                         <?php $qty_ws_tot = 0; ?>
-                        @foreach ($mcpws as $ws)
+                        @foreach ($mpws as $ws)
                         <?php $qty_ws_tot += $ws->ws_qty; ?>
                         <td>{{$ws->ws_qty}}</td>
                         @endforeach
@@ -127,14 +123,15 @@
                     </tr>
 
                     <?php $sby = 0;?>
-                    @foreach ($mcpd as $d)
+                    @foreach ($mpd as $d)
+
                     <tr>
                         <td>M {{$d->urutan}}</td>
 
                         <?php $sbx = 0;?>
-                        @foreach ($mcpa as $a)
-                        @foreach ($mcpws as $ws)
-                        @if (($a['id_ws'] == $ws['id']) && ($a['id_mcpd'] == $d['id']))
+                        @foreach ($mpa as $a)
+                        @foreach ($mpws as $ws)
+                        @if (($a['id_ws'] == $ws['id']) && ($a['id_mpd'] == $d['id']))
                         <?php $qtyws[$sby][$sbx] = $a->qty_ws * $d->jml_marker * $d->jml_ampar; ?>
                         <td>{{$a->qty_ws}}</td>
 
@@ -182,7 +179,7 @@
 
                         <?php
                             $j = 0;
-                            foreach ($mcpws as $ws) {
+                            foreach ($mpws as $ws) {
                                 $wsfor_turunsize[$j] = $ws->ws_qty;
                                 $j++;
                             }
@@ -205,19 +202,17 @@
                 </table>
             </div>
         </div>
-        {{-- end of body content --}}
 
-        {{-- body content 2 --}}
         <div class="row mt-3 detail-marker">
             <?php $sby = 0;?>
             <?php $fabtot_kg = 0; $fabtot_mtr = 0; $fabtot_yd = 0;?>
-            @foreach ($mcpd as $d)
+            @foreach ($mpd as $d)
             <div class="col-sm-12 mt-3 mb-2">MARKER KE-{{$d->urutan}}</div>
             <div class="col-sm-12">
                 <table>
                     <tr>
                         <td>Size</td>
-                        @foreach ($mcpws as $ws)
+                        @foreach ($mpws as $ws)
                         <td>{{$ws->size}}</td>
                         @endforeach
                         <td>Marker</td>
@@ -229,9 +224,9 @@
                         <td>Assort</td>
 
                         <?php $sbx = 0;?>
-                        @foreach ($mcpa as $a)
-                        @foreach ($mcpws as $ws)
-                        @if (($a['id_ws'] == $ws['id']) && ($a['id_mcpd'] == $d['id']))
+                        @foreach ($mpa as $a)
+                        @foreach ($mpws as $ws)
+                        @if (($a['id_ws'] == $ws['id']) && ($a['id_mpd'] == $d['id']))
                         <?php $qtyws[$sby][$sbx] = $a->qty_ws * $d->jml_marker * $d->jml_ampar; ?>
                         <td>{{$a->qty_ws}}</td>
 
@@ -249,16 +244,16 @@
                         <td>Hasil</td>
                         <?php $sbx = 0;?>
                         <?php $totws_hasil = 0; ?>
-                        @foreach ($mcpa as $a)
-                        @foreach ($mcpws as $ws)
-                        @if (($a['id_ws'] == $ws['id']) && ($a['id_mcpd'] == $d['id']))
+                        @foreach ($mpa as $a)
+                        @foreach ($mpws as $ws)
+                        @if (($a['id_ws'] == $ws['id']) && ($a['id_mpd'] == $d['id']))
 
                         <td>{{$qtyws[$sby][$sbx]}}</td>
 
                         <?php
-                                $totws_hasil += $qtyws[$sby][$sbx];
-                                $sbx++;
-                                ?>
+                        $totws_hasil += $qtyws[$sby][$sbx];
+                        $sbx++;
+                        ?>
 
                         @endif
                         @endforeach
@@ -316,10 +311,9 @@
 
             @endforeach
         </div>
-        {{-- end of body content 2 --}}
     </div>
 
-    <hr style="border: 0.5px solid black; border-width: thin;" class="mt-4">
+    <hr style="border: 1px solid black; border-width: thin;" class="mt-4">
 
     <div class="container">
         <div class="row">

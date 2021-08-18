@@ -21,6 +21,7 @@ use App\Fabricconst;
 use App\Fabriccomp;
 use App\Sizes;
 use App\Mcp;
+use App\Salesorder;
 use App\Supplier;
 use Intervention\Image\Size;
 
@@ -566,6 +567,32 @@ class AutocompleteController extends Controller
         }
     }
 
+    function so_number(Request $request)
+    {
+
+        if ($request->get('query')) {
+            $query = strtoupper($request->get('query'));
+            $data = Salesorder::where(DB::raw('upper(number)'), 'LIKE', "%{$query}%")
+                ->get();
+            if (count($data) > 0) {
+
+                $no = 0;
+                $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
+                foreach ($data as $row) {
+                    $no++;
+                    $output .= '
+        			<li hidden id="id_so_number' . $no . '"><a href="#" class="dropdown-item" onclick="pilih_so_number(' . $no . ');">' . strtoupper($row->id) . '</a></li>
+        			<li id="so_number' . $no . '"><a href="#" class="dropdown-item" onclick="pilih_so_number(' . $no . ');">' . $row->number . '</a></li>
+        			';
+                }
+                $output .= '</ul>';
+            } else {
+                $output = '';
+            }
+            echo $output;
+        }
+    }
+  
     function sizeInTable(Request $request)
     {
 
