@@ -1,0 +1,9 @@
+garment_nett_price = quotation.totalcost_handling_margin
+total_qty = forecast qty (quotation)
+nett_sales = (total_qty * garment_nett_price) - quotation.sales_fee_value
+budget = quotation.total_fabric_value
+
+#nama field di form:
+quotation.sales_fee_value = h_sales_fee
+quotation.totalcost_handling_margin = tc_handling_margin
+quotation.total_fabric_value =total_f

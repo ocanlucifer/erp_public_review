@@ -275,7 +275,7 @@
                             </td>
                             <td colspan="11" align="right"><b>Total Fabric</b></td>
                             <td class="td-input">
-                                <input type="number" id="total_f" step="0.001" class="form-control input-intable"
+                                <input type="number" id="total_f" name="total_f" step="0.001" class="form-control input-intable"
                                     readonly value="{{ round($total_f,3) }}">
                             </td>
                         </tr>

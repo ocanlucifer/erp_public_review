@@ -36,7 +36,7 @@
                 </div>
                 <div class="col-sm-4">
                     <div class="col-sm-4"><b>Garment Net Price</b></div>
-                    <div class="col-sm-8">: {{round($cons->net_price,3)}}</div>
+                    <div class="col-sm-8">: {{number_format($cons->quotation['totalcost_handling_margin'],2)}}</div>
                 </div>
                 <div class="col-sm-4">
                     <div class="col-sm-4"><b>Marker Production</b></div>
@@ -47,11 +47,11 @@
             <div class="row">
                 <div class="col-sm-4">
                     <div class="col-sm-4"><b>Sales Order Number</b></div>
-                    <div class="col-sm-8">: </div>
+                    <div class="col-sm-8">: {{$cons->salesorder->number}}</div>
                 </div>
                 <div class="col-sm-4">
                     <div class="col-sm-4"><b>Net Sales</b></div>
-                    <div class="col-sm-8">: ????</div>
+                    <div class="col-sm-8">: {{number_format($nett_sales,2)}}</div>
                 </div>
                 <div class="col-sm-4">
                     <div class="col-sm-4"><b>Size Tengah</b></div>
@@ -66,7 +66,7 @@
                 </div>
                 <div class="col-sm-4">
                     <div class="col-sm-4"><b>% PO</b></div>
-                    <div class="col-sm-8">: ???</div>
+                    <div class="col-sm-8">: {{number_format($purchasing_percentage,2)}}</div>
                 </div>
                 <div class="col-sm-4">
                     <div class="col-sm-4"><b>state</b></div>
@@ -81,12 +81,24 @@
                 </div>
                 <div class="col-sm-4">
                     <div class="col-sm-4"><b>Consumption Per Dz</b></div>
-                    <div class="col-sm-8">: ???</div>
+                    <div class="col-sm-8">: {{number_format($cons_per_dz,2)}}</div>
                 </div>
+                @if ($cons->status == 'REVIEWED')
                 <div class="col-sm-4">
-                    <div class="col-sm-4"><b>Created By</b></div>
-                    <div class="col-sm-8">: {{$cons->created_by}}</div>
+                    <div class="col-sm-4"><b>Reviewed By</b></div>
+                    <div class="col-sm-8">: {{$cons->reviewedBy['name']}} @if($cons->reviewed_by) ({{date('d-m-Y H:i:s', strtotime($cons->reviewed_at))}}) @endif</div>
                 </div>
+                @elseif ($cons->status == 'CONFIRMED')
+                <div class="col-sm-4">
+                    <div class="col-sm-4"><b>Confirmed By</b></div>
+                    <div class="col-sm-8">: {{$cons->confirmedBy['name']}} @if($cons->confirmed_by) ({{date('d-m-Y H:i:s', strtotime($cons->confirmed_at))}}) @endif</div>
+                </div>
+                @else
+                <div class="col-sm-4">
+                    <div class="col-sm-4"><b>-</b></div>
+                    <div class="col-sm-8">: -</div>
+                </div>
+                @endif
             </div>
             
             <div class="row">
@@ -96,11 +108,11 @@
                 </div>
                 <div class="col-sm-4">
                     <div class="col-sm-4"><b>Budget</b></div>
-                    <div class="col-sm-8">: ???</div>
+                    <div class="col-sm-8">: {{number_format($budget,2)}}</div>
                 </div>
                 <div class="col-sm-4">
-                    <div class="col-sm-4"><b>Updated By</b></div>
-                    <div class="col-sm-8">: {{$cons->updated_by}}</div>
+                    <div class="col-sm-4"><b>Created By</b></div>
+                    <div class="col-sm-8">: {{$cons->createdBy['name']}} @if($cons->created_by) ({{date('d-m-Y H:i:s', strtotime($cons->created_at))}}) @endif</div>
                 </div>
             </div>
 
@@ -111,41 +123,39 @@
                 </div>
                 <div class="col-sm-4">
                     <div class="col-sm-4"><b>Budget Status</b></div>
-                    <div class="col-sm-8">: not available</div>
+                    <div class="col-sm-8">: <i class="@if($budget_status=='AMAN') btn-success @else btn-danger @endif"> &nbsp {{$budget_status}} &nbsp </i></div>
                 </div>
                 <div class="col-sm-4">
-                    <div class="col-sm-4"><b>
-                            @if ($cons->state == 'PENDING' || $cons->state == 'CONFIRMED')
-                            Confirmed By
-                            @elseif ($cons->state == 'UNCONFIRMED')
-                            Unconfirmed By
-                            @endif
-                        </b>
-                    </div>
-                    <div class="col-sm-8">: {{$cons->confirmed_by}}</div>
+                    <div class="col-sm-4"><b>Updated By</b></div>
+                    <div class="col-sm-8">: {{$cons->updatedBy['name']}} @if($cons->updated_by) ({{date('d-m-Y H:i:s', strtotime($cons->updated_at))}}) @endif</div>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-sm-4">
                     <div class="col-sm-4"><b>References Date</b></div>
-                    <div class="col-sm-8">: {{$cons->references_date}}</div>
+                    <div class="col-sm-8">: {{date('d-m-Y', strtotime($cons->references_date))}}</div>
                 </div>
             </div>
 
             <div class="mt-3">
                 <a href="/consumption" class="btn btn-secondary btn-sm">Back</a>
-                @if ($cons->status == "PENDING" || $cons->status == "UNCONFIRMED")
+                @if ($cons->status == "PENDING" || $cons->status == "UNCONFIRMED" || $cons->status == "UNREVIEWED")
                 <a href="/consumption/edit/{{$cons->id}}" class="btn btn-primary btn-sm">Edit</a>
-                <a href="#" class="btn btn-warning btn-sm"
+                <a href="/consumption/update_status/{{$id}}/REVIEWED" class="btn btn-warning btn-sm"
+                    onclick="return confirm('Anda yakin untuk Review?')">Review</a>
+                @elseif ($cons->status == "REVIEWED")
+                <a href="/consumption/update_status/{{$id}}/UNREVIEWED" class="btn btn-warning btn-sm"
+                    onclick="return confirm('Anda yakin untuk Unreview?')">Unreview</a>
+                <a href="/consumption/update_status/{{$id}}/CONFIRMED" class="btn btn-success btn-sm"
                     onclick="return confirm('Anda yakin untuk konfirmasi?')">Confirm</a>
-                @else
-                <a href="#" class="btn btn-danger btn-sm"
+                @elseif ($cons->status == "CONFIRMED")
+                <a href="/consumption/update_status/{{$id}}/UNCONFIRMED" class="btn btn-danger btn-sm"
                     onclick="return confirm('Anda yakin untuk membatalkan konfirmasi?')">Unconfirm</a>
                 @endif
 
-                <a href="#" id="" class="btn btn-primary btn-sm">Print</a>
-                <a href="#" id="" class="btn btn-primary btn-sm">Purchase Request</a>
+                <a href="/consumption/print_consumption/{{$id}}" target="_blank" id="" class="btn btn-primary btn-sm">Print</a>
+                <a href="#" target="_blank" id="" class="btn btn-primary btn-sm">Purchase Request</a>
             </div>
             <br>
         </div>
@@ -153,7 +163,11 @@
 <!-- start fabric table -->
     <div class="card mt-3">
         <div class="card-header">
-           <a href="#" class="btn btn-primary btn-sm">NEW FABRIC CONSUMPTION</a>
+           @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" || $cons->status == "UNREVIEWED")
+                <a href="#" onclick="$('#jenis').val('FABRIC');$('#judul').html('NEW FABRIC CONSUMPTION');" data-toggle="modal" data-target="#modal_add_detail" class="btn btn-primary btn-sm">NEW FABRIC CONSUMPTION</a>
+            @else
+                <h7>FABRIC CONSUMPTION</h7>
+            @endif
         </div>
         <div class="card-body text-size-small">
             @foreach ($cons_fab as $consfab)
@@ -169,12 +183,11 @@
                                         {{$consfab->fabricconst['name']}} {{$consfab->fabriccomp['name']}} {{$consfab->description}}
                                     </button>
                                     <div class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="">New Item</a>
-
-                                        @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING")
+                                        @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" || $cons->status == "UNREVIEWED")
+                                        <a class="dropdown-item" href="" onclick="selectForm('fabric','{{$consfab->id}}');" data-toggle="modal" data-target="#modal_new_item">New Item</a>
                                         <a class="dropdown-item"
-                                            href="">Edit</a>
-                                        <a class="dropdown-item" href=""
+                                            href="" data-toggle="modal" data-target="#modal_edit_detail" onclick="$('#judul_edit').html('EDIT FABRIC CONSUMPTION');ModalEditDetail('{{$consfab->id}}');">Edit</a>
+                                        <a class="dropdown-item" href="/consumption/delete_detail/{{$consfab->id}}/{{$id}}"
                                             onclick="return confirm('Lanjutkan untuk hapus?')">Destroy</a>
                                         @endif
 
@@ -206,6 +219,16 @@
                         </tr>
                     </tbody>
                     <tbody>
+                        <?php 
+                            $sumtotal_qty_fab = 0;
+                            $sumkons_marker_fab = 0;
+                            $sumqty_unit_fab = 0;
+                            $sumqty_unit_tole_fab = 0;
+                            $sumqty_purch_fab = 0;
+                            $sumsupplier_price_fab = 0;
+                            $sumamount_fab = 0;
+                            $sumamount_freight_fab = 0;
+                        ?>
                         @foreach ($consfab->ConsSupplier as $consfabsup)
                         <tr>
                             <td colspan="17">
@@ -216,10 +239,9 @@
                                         {{$consfabsup->supplier['nama']}}
                                     </button>
                                     <div class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
-                                        @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING")
-                                        <a class="dropdown-item"
-                                            href="">Edit</a>
-                                        <a class="dropdown-item" href=""
+                                        @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" || $cons->status == "UNREVIEWED")
+                                        <a class="dropdown-item" href="" onclick="selectEditForm('fabric','{{$consfabsup->id}}');" data-toggle="modal" data-target="#modal_edit_supplier">Edit</a>
+                                        <a class="dropdown-item" href="/consumption/delete_supplier/{{$consfabsup->id}}/{{$id}}"
                                             onclick="return confirm('Lanjutkan untuk hapus?')">Destroy</a>
                                         @endif
                                     </div>
@@ -229,45 +251,57 @@
                         @foreach ($consfabsup->FabItem as $fabitem)
                         <tr>
                             <td>{{$fabitem->fab_color['name']}}</td>
-                            <td>{{round($fabitem->total_qty,2)}}</td>
+                            <td>{{number_format($fabitem->total_qty,2)}}</td>
                             <td>{{$fabitem->komponen}}</td>
-                            <td>{{round($fabitem->width,2)}} {{$fabitem->w_unit}}</td>
-                            <td>{{round($fabitem->kons_budget,2)}}</td>
-                            <td>{{round($fabitem->kons_marker,2)}}</td>
-                            <td>{{round($fabitem->kons_efi,2)}}</td>
-                            <td>{{round($fabitem->qty_unit,2)}}</td>
-                            <td>{{round($fabitem->tole,2)}}</td>
-                            <td>{{round($fabitem->qty_unit_tole,2)}}</td>
-                            <td>{{round($fabitem->qty_sample,2)}}</td>
-                            <td>{{round($fabitem->qty_purch,2)}}</td>
-                            <td>{{round($fabitem->budget_price,2)}}</td>
-                            <td>{{round($fabitem->supplier_price,2)}}</td>
+                            <td>{{number_format($fabitem->width,2)}} {{$fabitem->w_unit}}</td>
+                            <td>{{number_format($fabitem->kons_budget,2)}}</td>
+                            <td>{{number_format($fabitem->kons_marker,2)}}</td>
+                            <td>{{number_format($fabitem->kons_efi,2)}}</td>
+                            <td>{{number_format($fabitem->qty_unit,2)}}</td>
+                            <td>{{number_format($fabitem->tole,2)}}</td>
+                            <td>{{number_format($fabitem->qty_unit_tole,2)}}</td>
+                            <td>{{number_format($fabitem->qty_sample,2)}}</td>
+                            <td>{{number_format($fabitem->qty_purch,2)}}</td>
+                            <td>{{number_format($fabitem->budget_price,2)}}</td>
+                            <td>{{number_format($fabitem->supplier_price,2)}}</td>
                             <td>{{$fabitem->unit}}</td>
-                            <td>{{round($fabitem->amount,2)}}</td>
-                            <td>{{round($fabitem->amount_freight,2)}}</td>
+                            <td>{{number_format($fabitem->amount,2)}}</td>
+                            <td>{{number_format($fabitem->amount_freight,2)}}</td>
                         </tr>
+                        <?php 
+                            $sumtotal_qty_fab += $fabitem->total_qty;
+                            $sumkons_marker_fab += $fabitem->kons_marker;
+                            $sumqty_unit_fab += $fabitem->qty_unit;
+                            $sumqty_unit_tole_fab += $fabitem->qty_unit_tole;
+                            $sumqty_purch_fab += $fabitem->qty_purch;
+                            $sumsupplier_price_fab += $fabitem->supplier_price;
+                            $sumamount_fab += $fabitem->amount;
+                            $sumamount_freight_fab += $fabitem->amount_freight;
+                        ?>
                         @endforeach
-                        <tr style="background-color: #a2b8a6; ">
-                            <td></td>
-                            <td><b>{{round($consfabsup->FabItem->sum('total_qty'),2)}}</b></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td><b>{{round($consfabsup->FabItem->sum('kons_marker'),2)}}</b></td>
-                            <td></td>
-                            <td><b>{{round($consfabsup->FabItem->sum('qty_unit'),2)}}</b></td>
-                            <td></td>
-                            <td><b>{{round($consfabsup->FabItem->sum('qty_unit_tole'),2)}}</b></td>
-                            <td></td>
-                            <td><b>{{round($consfabsup->FabItem->sum('qty_purch'),2)}}</b></td>
-                            <td></td>
-                            <td>{{round($consfabsup->FabItem->sum('supplier_price'),2)}}</td></td>
-                            <td></td>
-                            <td><b>{{round($consfabsup->FabItem->sum('amount'),2)}}</b></td>
-                            <td><b>{{round($consfabsup->FabItem->sum('amount_freight'),2)}}</b></td>
-                        </tr>
                     </tbody>
                     @endforeach
+                    <tfoot>
+                        <tr style="background-color: #a2b8a6; ">
+                            <td><b>TOTAL</b></td>
+                            <td><b>{{number_format($sumtotal_qty_fab,2)}}</b></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><b>{{number_format($sumkons_marker_fab,2)}}</b></td>
+                            <td></td>
+                            <td><b>{{number_format($sumqty_unit_fab,2)}}</b></td>
+                            <td></td>
+                            <td><b>{{number_format($sumqty_unit_tole_fab,2)}}</b></td>
+                            <td></td>
+                            <td><b>{{number_format($sumqty_purch_fab,2)}}</b></td>
+                            <td></td>
+                            <td>{{number_format($sumsupplier_price_fab,2)}}</td></td>
+                            <td></td>
+                            <td><b>{{number_format($sumamount_fab,2)}}</b></td>
+                            <td><b>{{number_format($sumamount_freight_fab,2)}}</b></td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
             @endforeach
@@ -278,7 +312,11 @@
 <!-- start collar table -->
     <div class="card mt-3">
         <div class="card-header">
-           <a href="#" class="btn btn-info btn-sm">NEW COLLAR CONSUMPTION</a>
+            @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" || $cons->status == "UNREVIEWED")
+                <a href="#" onclick="$('#jenis').val('COLLAR');$('#judul').html('NEW COLLAR CONSUMPTION');" data-toggle="modal" data-target="#modal_add_detail" class="btn btn-info btn-sm">NEW COLLAR CONSUMPTION</a>
+            @else
+                <h7>COLLAR CONSUMPTION</h7>
+            @endif
         </div>
         <div class="card-body text-size-small">
             @foreach ($cons_collar as $conscollar)
@@ -294,12 +332,12 @@
                                         {{$conscollar->fabricconst['name']}} {{$conscollar->fabriccomp['name']}} {{$conscollar->description}}
                                     </button>
                                     <div class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="">New Item</a>
+                                        @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" || $cons->status == "UNREVIEWED")
+                                        <a class="dropdown-item" href="" onclick="selectForm('collar','{{$conscollar->id}}');" data-toggle="modal" data-target="#modal_new_item">New Item</a>
 
-                                        @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING")
                                         <a class="dropdown-item"
-                                            href="">Edit</a>
-                                        <a class="dropdown-item" href=""
+                                            href="" data-toggle="modal" data-target="#modal_edit_detail" onclick="$('#judul_edit').html('EDIT COLLAR CONSUMPTION');ModalEditDetail('{{$conscollar->id}}');">Edit</a>
+                                        <a class="dropdown-item" href="/consumption/delete_detail/{{$conscollar->id}}/{{$id}}"
                                             onclick="return confirm('Lanjutkan untuk hapus?')">Destroy</a>
                                         @endif
 
@@ -314,11 +352,6 @@
                             <th></th>
                             <th>TOTAL QTY</th>
                             <th>TOL (%)</th>
-                            <th>DIMENSION</th>
-                            <th>SIZE</th>
-                            <th>TOTAL</th>
-                            <th>TOTAL TOLERANCE</th>
-                            <th>TOTAL ROUNDED</th>
                             <th>KG/PCS</th>
                             <th>TOTAL QTY UNIT</th>
                             <th>QTY UNIT</th>
@@ -327,69 +360,111 @@
                             <th>UNIT</th>
                             <th>AMOUNT</th>
                             <th>AMOUNT + FREIGHT</th>
+                            <th>DIMENSION</th>
+                            <th>SIZE</th>
+                            <th>TOTAL</th>
+                            <th>TOTAL TOLERANCE</th>
+                            <th>TOTAL ROUNDED</th>
                         </tr>
                     </tbody>
                     <tbody>
-                        @foreach ($conscollar->ConsSupplier as $conscollar)
+                        <?php 
+                            $sumtotal_qty_collar = 0;
+                            $sumtotal_qty_unit_collar = 0;
+                            $sumsupplier_price_collar = 0;
+                            $sumamount_collar = 0;
+                            $sumamount_freight_collar = 0;
+                        ?>
+                        @foreach ($conscollar->ConsSupplier as $conscollarsup)
                         <tr>
-                            <td colspan="17">
+                            <td colspan="17" bgcolor="#d6ffe8">
                                 <div class="dropdown">
                                     <button class="dropdown-toggle" type="button"
                                         id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false">
-                                        {{$conscollar->supplier['nama']}}
+                                        {{$conscollarsup->supplier['nama']}}
                                     </button>
                                     <div class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
-                                        @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING")
-                                        <a class="dropdown-item"
-                                            href="">Edit</a>
-                                        <a class="dropdown-item" href=""
+                                        @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" || $cons->status == "UNREVIEWED")
+                                        <a class="dropdown-item" href="" data-toggle="modal" data-target="#modal_collarcuff_new_item" onclick="CollarCuffGetIDsup('collar','{{$conscollarsup->id}}')">New Item</a>
+                                        <a class="dropdown-item" href="" onclick="selectEditForm('collar','{{$conscollarsup->id}}');" data-toggle="modal" data-target="#modal_edit_supplier">Edit</a>
+                                        <a class="dropdown-item" href="/consumption/delete_supplier/{{$conscollarsup->id}}/{{$id}}"
                                             onclick="return confirm('Lanjutkan untuk hapus?')">Destroy</a>
                                         @endif
                                     </div>
                                 </div>
                             </td>
                         </tr>
-                        @foreach ($conscollar->collarcuffItem as $collaritem)
+                        @foreach ($conscollarsup->collarcuffItem as $collaritem)
                         <tr>
-                            <td>{{$collaritem->fab_color['name']}}</td>
-                            <td>{{round($collaritem->total_qty,2)}}</td>
-                            <td>{{round($collaritem->tole,2)}}</td>
-                            <td>{{$collaritem->dimension}}</td>
-                            <td>{{$collaritem->size}}</td>
-                            <td>{{round($collaritem->total,2)}}</td>
-                            <td>{{round($collaritem->total_tolerance,2)}}</td>
-                            <td>{{round($collaritem->total_rounded,2)}}</td>
-                            <td>{{round($collaritem->qty_unit,2)}}</td>
-                            <td>{{round($collaritem->total_qty_unit_pcs,2)}}</td>
-                            <td>{{round($collaritem->total_qty_unit,2)}}</td>
-                            <td>{{round($collaritem->budget_price,2)}}</td>
-                            <td>{{round($collaritem->supplier_price,2)}}</td>
-                            <td>{{$collaritem->unit}}</td>
-                            <td>{{round($collaritem->amount,2)}}</td>
-                            <td>{{round($collaritem->amount_freight,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">
+                                <div class="dropdown">
+                                    <button class="dropdown-toggle" type="button"
+                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">
+                                        {{$collaritem->fab_color['name']}}
+                                    </button>
+                                    <div class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
+                                        @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" || $cons->status == "UNREVIEWED")
+                                        <a class="dropdown-item" href="" onclick="selectCollarCuffEditForm('collar','{{$collaritem->id}}');" data-toggle="modal" data-target="#modal_edit_collar_cuff">Edit</a>
+                                        <a class="dropdown-item" href="/consumption/delete_collar_cuff_item/{{$collaritem->id}}/{{$id}}"
+                                            onclick="return confirm('Lanjutkan untuk hapus?')">Destroy</a>
+                                        @endif
+                                    </div>
+                                </div>
+                            </td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->total_qty,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->tole,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->qty_unit,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->total_qty_unit_pcs,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->total_qty_unit,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->budget_price,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->supplier_price,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{$collaritem->unit}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->amount,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->amount_freight,2)}}</td>
+                            <td colspan="5">
+                                @foreach ($collaritem->collarcuffItemSize as $itemsize)
+                                <tr>
+                                    <td>{{$itemsize->dimension}}</td>
+                                    <td>{{$itemsize->itemSize['name']}}</td>
+                                    <td>{{number_format($itemsize->total,2)}}</td>
+                                    <td>{{number_format($itemsize->total_tole,2)}}</td>
+                                    <td>{{number_format($itemsize->total_rounded,2)}}</td>
+                                </tr>
+                                @endforeach
+                            </td>
                         </tr>
+                        <?php 
+                            $sumtotal_qty_collar += $collaritem->total_qty;
+                            $sumtotal_qty_unit_collar += $collaritem->total_qty_unit_pcs;
+                            $sumsupplier_price_collar += $collaritem->supplier_price;
+                            $sumamount_collar += $collaritem->amount;
+                            $sumamount_freight_collar += $collaritem->amount_freight;
+                        ?>
                         @endforeach
-                        <tr style="background-color: #a2b8a6; ">
-                            <td></td>
-                            <td><b>{{round($conscollar->collarcuffItem->sum('total_qty'),2)}}</b></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td><b>{{round($conscollar->collarcuffItem->sum('total_qty_unit_pcs'),2)}}</b></td>
-                            <td></td>
-                            <td></td>
-                            <td>{{round($conscollar->collarcuffItem->sum('supplier_price'),2)}}</td></td>
-                            <td></td>
-                            <td><b>{{round($conscollar->collarcuffItem->sum('amount'),2)}}</b></td>
-                            <td><b>{{round($conscollar->collarcuffItem->sum('amount_freight'),2)}}</b></td>
-                        </tr>
                     </tbody>
                     @endforeach
+                    <tfoot>
+                        <tr style="background-color: #a2b8a6; ">
+                            <td></td>
+                            <td><b>{{number_format($sumtotal_qty_collar,2)}}</b></td>
+                            <td></td>
+                            <td></td>
+                            <td><b>{{number_format($sumtotal_qty_unit_collar,2)}}</b></td>
+                            <td></td>
+                            <td></td>
+                            <td>{{number_format($sumsupplier_price_collar,2)}}</td></td>
+                            <td></td>
+                            <td><b>{{number_format($sumamount_collar,2)}}</b></td>
+                            <td><b>{{number_format($sumamount_freight_collar,2)}}</b></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
             @endforeach
@@ -400,7 +475,11 @@
     <!-- start cuff table -->
     <div class="card mt-3">
         <div class="card-header">
-           <a href="#" class="btn btn-danger btn-sm">NEW CUFF CONSUMPTION</a>
+            @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" || $cons->status == "UNREVIEWED")
+                <a href="#" onclick="$('#jenis').val('CUFF');$('#judul').html('NEW CUFF CONSUMPTION');" data-toggle="modal" data-target="#modal_add_detail" class="btn btn-danger btn-sm">NEW CUFF CONSUMPTION</a>
+            @else
+                <h7>CUFF CONSUMPTION</h7>
+            @endif
         </div>
         <div class="card-body text-size-small">
             @foreach ($cons_cuff as $conscuff)
@@ -416,12 +495,12 @@
                                         {{$conscuff->fabricconst['name']}} {{$conscuff->fabriccomp['name']}} {{$conscuff->description}}
                                     </button>
                                     <div class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="">New Item</a>
+                                        @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" || $cons->status == "UNREVIEWED")
+                                        <a class="dropdown-item" href="" onclick="selectForm('cuff','{{$conscuff->id}}');" data-toggle="modal" data-target="#modal_new_item">New Item</a>
 
-                                        @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING")
                                         <a class="dropdown-item"
-                                            href="">Edit</a>
-                                        <a class="dropdown-item" href=""
+                                            href="" data-toggle="modal" data-target="#modal_edit_detail" onclick="$('#judul_edit').html('EDIT CUFF CONSUMPTION');ModalEditDetail('{{$conscuff->id}}');">Edit</a>
+                                        <a class="dropdown-item" href="/consumption/delete_detail/{{$conscuff->id}}/{{$id}}"
                                             onclick="return confirm('Lanjutkan untuk hapus?')">Destroy</a>
                                         @endif
 
@@ -436,11 +515,6 @@
                             <th></th>
                             <th>TOTAL QTY</th>
                             <th>TOL (%)</th>
-                            <th>DIMENSION</th>
-                            <th>SIZE</th>
-                            <th>TOTAL</th>
-                            <th>TOTAL TOLERANCE</th>
-                            <th>TOTAL ROUNDED</th>
                             <th>KG/PCS</th>
                             <th>TOTAL QTY UNIT</th>
                             <th>QTY UNIT</th>
@@ -449,75 +523,334 @@
                             <th>UNIT</th>
                             <th>AMOUNT</th>
                             <th>AMOUNT + FREIGHT</th>
+                            <th>DIMENSION</th>
+                            <th>SIZE</th>
+                            <th>TOTAL</th>
+                            <th>TOTAL TOLERANCE</th>
+                            <th>TOTAL ROUNDED</th>
                         </tr>
                     </tbody>
                     <tbody>
-                        @foreach ($conscuff->ConsSupplier as $conscuff)
+                        <?php 
+                            $sumtotal_qty_cuff = 0;
+                            $sumtotal_qty_unit_cuff = 0;
+                            $sumsupplier_price_cuff = 0;
+                            $sumamount_cuff = 0;
+                            $sumamount_freight_cuff = 0;
+                        ?>
+                        @foreach ($conscuff->ConsSupplier as $conscuffsup)
                         <tr>
-                            <td colspan="17">
+                            <td colspan="17" bgcolor="#d6ffe8">
                                 <div class="dropdown">
                                     <button class="dropdown-toggle" type="button"
                                         id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false">
-                                        {{$conscuff->supplier['nama']}}
+                                        {{$conscuffsup->supplier['nama']}}
                                     </button>
                                     <div class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
-                                        @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING")
-                                        <a class="dropdown-item"
-                                            href="">Edit</a>
-                                        <a class="dropdown-item" href=""
+                                        @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" || $cons->status == "UNREVIEWED")
+                                        <a class="dropdown-item" href="" data-toggle="modal" data-target="#modal_collarcuff_new_item" onclick="CollarCuffGetIDsup('cuff','{{$conscuffsup->id}}')">New Item</a>
+                                        <a class="dropdown-item" href="" onclick="selectEditForm('cuff','{{$conscuffsup->id}}');" data-toggle="modal" data-target="#modal_edit_supplier">Edit</a>
+                                        <a class="dropdown-item" href="/consumption/delete_supplier/{{$conscuffsup->id}}/{{$id}}"
                                             onclick="return confirm('Lanjutkan untuk hapus?')">Destroy</a>
                                         @endif
                                     </div>
                                 </div>
                             </td>
                         </tr>
-                        @foreach ($conscuff->collarcuffItem as $collaritem)
+                        @foreach ($conscuffsup->collarcuffItem as $collaritem)
                         <tr>
-                            <td>{{$collaritem->fab_color['name']}}</td>
-                            <td>{{round($collaritem->total_qty,2)}}</td>
-                            <td>{{round($collaritem->tole,2)}}</td>
-                            <td>{{$collaritem->dimension}}</td>
-                            <td>{{$collaritem->size}}</td>
-                            <td>{{round($collaritem->total,2)}}</td>
-                            <td>{{round($collaritem->total_tolerance,2)}}</td>
-                            <td>{{round($collaritem->total_rounded,2)}}</td>
-                            <td>{{round($collaritem->qty_unit,2)}}</td>
-                            <td>{{round($collaritem->total_qty_unit_pcs,2)}}</td>
-                            <td>{{round($collaritem->total_qty_unit,2)}}</td>
-                            <td>{{round($collaritem->budget_price,2)}}</td>
-                            <td>{{round($collaritem->supplier_price,2)}}</td>
-                            <td>{{$collaritem->unit}}</td>
-                            <td>{{round($collaritem->amount,2)}}</td>
-                            <td>{{round($collaritem->amount_freight,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">
+                                <div class="dropdown">
+                                    <button class="dropdown-toggle" type="button"
+                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">
+                                        {{$collaritem->fab_color['name']}}
+                                    </button>
+                                    <div class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
+                                        @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" || $cons->status == "UNREVIEWED")
+                                        <a class="dropdown-item" href="" onclick="selectCollarCuffEditForm('cuff','{{$collaritem->id}}');" data-toggle="modal" data-target="#modal_edit_collar_cuff">Edit</a>
+                                        <a class="dropdown-item" href="/consumption/delete_collar_cuff_item/{{$collaritem->id}}/{{$id}}"
+                                            onclick="return confirm('Lanjutkan untuk hapus?')">Destroy</a>
+                                        @endif
+                                    </div>
+                                </div>
+                            </td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->total_qty,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->tole,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->qty_unit,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->total_qty_unit_pcs,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->total_qty_unit,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->budget_price,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->supplier_price,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{$collaritem->unit}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->amount,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->amount_freight,2)}}</td>
+                            <td colspan="5">
+                                @foreach ($collaritem->collarcuffItemSize as $itemsize)
+                                <tr>
+                                    <td>{{$itemsize->dimension}}</td>
+                                    <td>{{$itemsize->itemSize['name']}}</td>
+                                    <td>{{number_format($itemsize->total,2)}}</td>
+                                    <td>{{number_format($itemsize->total_tole,2)}}</td>
+                                    <td>{{number_format($itemsize->total_rounded,2)}}</td>
+                                </tr>
+                                @endforeach
+                            </td>
                         </tr>
+                        <?php 
+                            $sumtotal_qty_cuff += $collaritem->total_qty;
+                            $sumtotal_qty_unit_cuff += $collaritem->total_qty_unit_pcs;
+                            $sumsupplier_price_cuff += $collaritem->supplier_price;
+                            $sumamount_cuff += $collaritem->amount;
+                            $sumamount_freight_cuff += $collaritem->amount_freight;
+                        ?>
                         @endforeach
-                        <tr style="background-color: #a2b8a6; ">
-                            <td></td>
-                            <td><b>{{round($conscuff->collarcuffItem->sum('total_qty'),2)}}</b></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td><b>{{round($conscuff->collarcuffItem->sum('total_qty_unit_pcs'),2)}}</b></td>
-                            <td></td>
-                            <td></td>
-                            <td>{{round($conscuff->collarcuffItem->sum('supplier_price'),2)}}</td></td>
-                            <td></td>
-                            <td><b>{{round($conscuff->collarcuffItem->sum('amount'),2)}}</b></td>
-                            <td><b>{{round($conscuff->collarcuffItem->sum('amount_freight'),2)}}</b></td>
-                        </tr>
                     </tbody>
                     @endforeach
+                    <tfoot>
+                        <tr style="background-color: #a2b8a6; ">
+                            <td></td>
+                            <td><b>{{number_format($sumtotal_qty_cuff,2)}}</b></td>
+                            <td></td>
+                            <td></td>
+                            <td><b>{{number_format($sumtotal_qty_unit_cuff,2)}}</b></td>
+                            <td></td>
+                            <td></td>
+                            <td>{{number_format($sumsupplier_price_cuff,2)}}</td></td>
+                            <td></td>
+                            <td><b>{{number_format($sumamount_cuff,2)}}</b></td>
+                            <td><b>{{number_format($sumamount_freight_cuff,2)}}</b></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
             @endforeach
         </div>
     </div>
     <!-- end cuff table -->
+
+    <!-- modal -->
+
+    <div class="row">
+        <div id="modal_add_detail" class="modal fade">
+            <div class="modal-dialog">
+                <form action="/consumption/add_detail" method="post">
+                    {{ csrf_field() }}
+                    <div class="modal-content" id="background-body2">
+                        <div class="modal-header bg-indigo-600">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h6 class="modal-title" id="judul"><strong>NEW </strong></h6>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <label for="fabric_construct">Fabric Construct</label>
+                                    <input type="hidden" id="id_fabric_construct" type="text"
+                                        class="form-control @error('id_fabric_construct') is-invalid @enderror"
+                                        name="id_fabric_construct" value="{{ old('id_fabric_construct') }}" required
+                                        autocomplete="off">
+                                    <input id="fabric_construct" type="text"
+                                        class="form-control @error('fabric_construct') is-invalid @enderror"
+                                        name="fabric_construct" value="{{ old('fabric_construct') }}" required
+                                        autocomplete="off">
+                                    <span>
+                                        <div id="id_fabric_constructlist"></div>
+                                    </span>
+
+                                    @error('id_fabric_construct')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <label for="fabric_compost">Fabric Compost</label>
+                                    <input type="hidden" id="id_fabric_compost" type="text"
+                                        class="form-control @error('id_fabric_compost') is-invalid @enderror"
+                                        name="id_fabric_compost" value="{{ old('id_fabric_compost') }}" required
+                                        autocomplete="off">
+                                    <input id="fabric_compost" type="text"
+                                        class="form-control @error('fabric_compost') is-invalid @enderror"
+                                        name="fabric_compost" value="{{ old('fabric_compost') }}" required
+                                        autocomplete="off">
+                                    <span>
+                                        <div id="id_fabric_compostlist"></div>
+                                    </span>
+
+                                    @error('id_fabric_compost')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <label for="fabric_description">Fabric Descripstion</label>
+                                    <input type="text" name="description" id="fabric_description"
+                                        class="form-control" placeholder="Fabric Description">
+                                </div>
+                            </div>
+                            <br>
+
+                            <div class="form-group">
+                                <input type="hidden" name="id_consumption" value="{{$id}}" required>
+                                <input type="hidden" name="jenis" id="jenis" value="" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div id="modal_edit_detail" class="modal fade">
+            <div class="modal-dialog">
+                <form action="/consumption/update_detail" method="post">
+                    {{ csrf_field() }}
+                    <div class="modal-content" id="background-body2">
+                        <div class="modal-header bg-indigo-600">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h6 class="modal-title" id="judul_edit"><strong>EDIT </strong></h6>
+                        </div>
+                        <div class="modal-body">
+                            <div id="isi_edit_detail"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div id="modal_new_item" class="modal fade">
+            <div class="">
+                <form action="/consumption/new_item" name="newItemForm" method="post">
+                    {{ csrf_field() }}
+                    <div class="modal-content" id="background-body2">
+                        <div class="modal-header bg-indigo-600">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h6 class="modal-title" id="judul_new_item"><strong>New ITEM </strong></h6>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <label for="supplier">Supplier</label>
+                                    <input type="hidden" id="supplier_code" type="text"
+                                        class="form-control @error('supplier_code') is-invalid @enderror"
+                                        name="supplier_code" required
+                                        autocomplete="off">
+                                    <input id="supplier" type="text"
+                                        class="form-control @error('supplier') is-invalid @enderror"
+                                        name="supplier" required
+                                        autocomplete="off">
+                                    <span>
+                                        <div id="supplier_codelist"></div>
+                                    </span>
+
+                                    @error('supplier_code')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <input type="hidden" name="supplier_id_detail" id="supplier_id_detail">
+                            <div id="new_item_fabric"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div id="modal_edit_supplier" class="modal fade">
+            <div class="">
+                <form action="" name="editItemForm" method="post">
+                    {{ csrf_field() }}
+                    <div class="modal-content" id="background-body2">
+                        <div class="modal-header bg-indigo-600">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h6 class="modal-title" id="judul_edit_item"><strong>EDIT ITEM </strong></h6>
+                        </div>
+                        <div class="modal-body">
+                            <div id="isi_edit_supplier"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div id="modal_collarcuff_new_item" class="modal fade">
+            <div class="modal-dialog  modal-lg">
+                <form action="" name="collarcuffItemForm" method="post">
+                    {{ csrf_field() }}
+                    <div class="modal-content" id="background-body2">
+                        <div class="modal-header bg-indigo-600">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h6 class="modal-title" id="judul_collarcuff_item"><strong>new ITEM </strong></h6>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" name="id_consumption" value="{{$id}}" required>
+                            <div id="isi_collarcuff_item"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div id="modal_edit_collar_cuff" class="modal fade">
+            <div class="modal-dialog  modal-lg">
+                <form action="" name="collarcuffItemFormEdit" method="post">
+                    {{ csrf_field() }}
+                    <div class="modal-content" id="background-body2">
+                        <div class="modal-header bg-indigo-600">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h6 class="modal-title" id="judul_collarcuff_item_edit"><strong>edit ITEM </strong></h6>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" name="id_consumption" value="{{$id}}" required>
+                            <div id="isi_collarcuff_item_edit"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- end modal -->
 
 
 </div>
@@ -530,29 +863,6 @@
 <script type="text/javascript">
     $(document).ready(function(){
             var count = 1;
-
-            $('#color').keyup(function(){
-                var query = $(this).val();
-                if(query != '')
-                {
-                    var _token = $('input[name="_token"]').val();
-                    $.ajax({
-                    url:"{{ route('autocomplete.color') }}",
-                    method:"POST",
-                    data:{query:query, _token:_token},
-                    success:function(data){
-                        if (data!='') {
-                            $('#colorlist').fadeIn();
-                            $('#colorlist').html(data);
-                            } else {
-                            $('#colorlist').fadeOut();
-                            $('#colorlist').empty();
-                            $('#color').val('');
-                            }
-                        }
-                    });
-                }
-            });
 
             $('#color_form').keyup(function(){
                 var query = $(this).val();
@@ -577,259 +887,242 @@
                 }
             });
 
-            $('#fabricconst').keyup(function(){
+            $('#fabric_construct').keyup(function(){
                 var query = $(this).val();
-                if(query != '') {
+                if(query != '')
+                {
                     var _token = $('input[name="_token"]').val();
                     $.ajax({
-                        url:"{{ route('autocomplete.fabricconst') }}",
-                        method:"POST",
-                        data:{query:query, _token:_token},
-                        success:function(data){
-                            if (data!='') {
-                                $('#fabricconstlist').fadeIn();
-                                $('#fabricconstlist').html(data);
+                    url:"{{ route('autocomplete.fabricconst') }}",
+                    method:"POST",
+                    data:{query:query, _token:_token},
+                    success:function(data){
+                        if (data!='') {
+                                $('#id_fabric_constructlist').fadeIn();
+                                $('#id_fabric_constructlist').html(data);
                             } else {
-                                $('#fabricconstlist').fadeOut();
-                                $('#fabricconstlist').empty();
-                                $('#id_fabricconst').val('');
-                                $('#fabricconst').val('');
+                                $('#id_fabric_constructlist').fadeOut();
+                                $('#id_fabric_constructlist').empty();
+                                $('#id_fabric_construct').val('');
+                                $('#fabric_construct').val('');
+                            }
+                        }
+                    });
+                }
+            });
+            $('#fabric_compost').keyup(function(){
+                var query = $(this).val();
+                var fabricconstruct_id = $('#id_fabric_construct').val();
+                if(query != '')
+                {
+                    var _token = $('input[name="_token"]').val();
+                    $.ajax({
+                    url:"{{ route('autocomplete.fabriccomp') }}",
+                    method:"POST",
+                    data:{query:query, id_fabricconst:fabricconstruct_id, _token:_token},
+                    success:function(data){
+                        if (data!='') {
+                            $('#id_fabric_compostlist').fadeIn();
+                            $('#id_fabric_compostlist').html(data);
+                            } else {
+                            $('#id_fabric_compostlist').fadeOut();
+                            $('#id_fabric_compostlist').empty();
+                            $('#id_fabric_compost').val('');
+                            $('#fabric_compost').val('');
                             }
                         }
                     });
                 }
             });
 
-            $('#fabriccomp').keyup(function(){
+            $('#supplier').keyup(function(){
                 var query = $(this).val();
-                if(query != ''){
-                    var id_fabricconst = $('#id_fabricconst').val();
+                if(query != '')
+                {
                     var _token = $('input[name="_token"]').val();
                     $.ajax({
-                        url:"{{ route('autocomplete.fabriccomp') }}",
-                        method:"POST",
-                        data:{query:query, _token:_token, id_fabricconst:id_fabricconst},
-                        success:function(data){
-                            if (data!='') {
-                                $('#fabriccomplist').fadeIn();
-                                $('#fabriccomplist').html(data);
+                    url:"{{ route('autocomplete.supplier') }}",
+                    method:"POST",
+                    data:{query:query, _token:_token},
+                    success:function(data){
+                        if (data!='') {
+                                $('#supplier_codelist').fadeIn();
+                                $('#supplier_codelist').html(data);
                             } else {
-                                $('#fabriccomplist').fadeOut();
-                                $('#fabriccomplist').empty();
-                                $('#id_fabriccomp').val('')
-                                $('#fabriccomp').val('');
+                                $('#supplier_codelist').fadeOut();
+                                $('#supplier_codelist').empty();
+                                $('#supplier_code').val('');
+                                $('#supplier').val('');
                             }
                         }
                     });
                 }
             });
+
+            
         });
 
-        function pilihColor($ls){
-            var ls = $ls;
-            var ls = $ls;
-            $('#color').val($('#col'+ls).text());
-            $('#colorlist').fadeOut();
+        function selectForm(action_name,id_detail){
+            if( action_name=="fabric" ) {
+                document.newItemForm.action = "/consumption/add_detail/fabric";
+                $('#judul_new_item').html('NEW FABRIC ITEM');
+                $('#supplier_id_detail').val(id_detail);
+                $('#new_item_fabric').load('{{URL::to("consumption/newItem_Fabric/")}}');
+            }
+            else if( action_name=="collar" ) {
+                document.newItemForm.action = "/consumption/add_detail/add_supplier_collar_cuff";
+                $('#judul_new_item').html('NEW SUPPLIER COLLAR ITEM');
+                $('#supplier_id_detail').val(id_detail);
+                $('#new_item_fabric').html('');
+            }
+            else if( action_name=="cuff" ) {
+                document.newItemForm.action = "/consumption/add_detail/add_supplier_collar_cuff";
+                $('#judul_new_item').html('NEW SUPPLIER CUFF ITEM');
+                $('#supplier_id_detail').val(id_detail);
+                $('#new_item_fabric').html('');
+            }
         }
+
+        function selectEditForm(action_name,id){
+            if( action_name=="fabric" ) {
+                $('#new_item_fabric').html('');
+                document.editItemForm.action = "/consumption/edit_detail/update_fabricItem";
+                $('#judul_edit_item').html('EDIT FABRIC ITEM');
+            }
+            else if( action_name=="collar" ) {
+                document.editItemForm.action = "/consumption/edit_detail/update_supplier_collar_cuff";
+                $('#judul_edit_item').html('EDIT SUPPLIER COLLAR ITEM');
+            }
+            else if( action_name=="cuff" ) {
+                document.editItemForm.action = "/consumption/edit_detail/update_supplier_collar_cuff";
+                $('#judul_edit_item').html('EDIT SUPPLIER CUFF ITEM');
+            }
+
+            $.ajax({
+                url : '{{URL::to("consumption/editDetailSupplierForm/")}}',
+                type : 'get',
+                dataType: 'json',
+                data:{'id':id,'action_name':action_name}
+            }).done(function (data) {
+                $('#isi_edit_supplier').html(data);
+            }).fail(function (msg) {
+                alert('Gagal menampilkan data, silahkan refresh halaman.');
+            });
+        }
+
+        function CollarCuffGetIDsup(action_name,id){
+            if( action_name=="collar" ) {
+                document.collarcuffItemForm.action = "/consumption/add_detail/new_collar_cuff_item";
+                $('#judul_collarcuff_item').html('NEW COLLAR ITEM');
+            }
+            else if( action_name=="cuff" ) {
+                document.collarcuffItemForm.action = "/consumption/add_detail/new_collar_cuff_item";
+                $('#judul_collarcuff_item').html('NEW CUFF ITEM');
+            }
+
+            $.ajax({
+                url : '{{URL::to("consumption/newcollarcuffItemForm/")}}',
+                type : 'get',
+                dataType: 'json',
+                data:{'id':id,'action_name':action_name}
+            }).done(function (data) {
+                $('#isi_collarcuff_item_edit').html('');
+                $('#isi_collarcuff_item').html(data);
+            }).fail(function (msg) {
+                alert('Gagal menampilkan data, silahkan refresh halaman.');
+            });
+        }
+
+        function selectCollarCuffEditForm(action_name,id) {
+            if( action_name=="collar" ) {
+                document.collarcuffItemFormEdit.action = "/consumption/edit_detail/update_collar_cuff_item";
+                $('#judul_collarcuff_item_edit').html('EDIT COLLAR ITEM');
+            }
+            else if( action_name=="cuff" ) {
+                document.collarcuffItemFormEdit.action = "/consumption/edit_detail/update_collar_cuff_item";
+                $('#judul_collarcuff_item_edit').html('EDIT CUFF ITEM');
+            }
+
+            $.ajax({
+                url : '{{URL::to("consumption/editcollarcuffItemForm/")}}',
+                type : 'get',
+                dataType: 'json',
+                data:{'id':id,'action_name':action_name}
+            }).done(function (data) {
+                $('#isi_collarcuff_item').html('');
+                $('#isi_collarcuff_item_edit').html(data);
+            }).fail(function (msg) {
+                alert('Gagal menampilkan data, silahkan refresh halaman.');
+            });
+        }
+
+        function pilihSupplier($ls){
+            var ls = $ls;
+            var ls = $ls;
+            $('#supplier_code').val($('#code'+ls).text());
+            $('#supplier').val($('#namasup'+ls).text());
+            $('#supplier_codelist').fadeOut();
+        }
+
         function pilihColor_form($ls){
             var ls = $ls;
             var ls = $ls;
             $('#color_form').val($('#col'+ls).text());
             $('#color_formlist').fadeOut();
         }
+
         function pilihFabricconstruct($ls){
-        var ls = $ls;
-        var ls = $ls;
-        $('#id_fabricconst').val($('#id_fabricconst'+ls).text());
-        $('#fabricconst').val($('#fabricconst'+ls).text());
-        $('#fabricconstlist').fadeOut();
+            var ls = $ls;
+            var ls = $ls;
+            $('#id_fabric_construct').val($('#id_fabricconst'+ls).text());
+            $('#fabric_construct').val($('#fabricconst'+ls).text());
+            $('#id_fabric_constructlist').fadeOut();
         }
+
         function pilihFabriccompost($ls){
-        var ls = $ls;
-        var ls = $ls;
-        $('#id_fabriccomp').val($('#id_fabriccomp'+ls).text());
-        $('#fabriccomp').val($('#fabriccomp'+ls).text());
-        $('#fabriccomplist').fadeOut();
+            var ls = $ls;
+            var ls = $ls;
+            $('#id_fabric_compost').val($('#id_fabriccomp'+ls).text());
+            $('#fabric_compost').val($('#fabriccomp'+ls).text());
+            $('#id_fabric_compostlist').fadeOut();
         }
 
-        function batalDetail(id) {
-            const parent = document.querySelector(id);
-
-            while (parent.firstChild) {
-                parent.removeChild(parent.firstChild);
-            }
+        function pilihFabricconstructedit($ls){
+            var ls = $ls;
+            var ls = $ls;
+            $('#id_fabric_construct_edit').val($('#id_fabricconst_edit'+ls).text());
+            $('#fabric_construct_edit').val($('#fabricconst_edit'+ls).text());
+            $('#id_fabric_constructlist_edit').fadeOut();
         }
 
-        // $(document).on("click", "#batal_newdetail", function(){
-        // function batalDetail(){
-            // var bataldetail = document.getElementById("#detail-ass-tbody");
-            // bataldetail.innerHTML = '';
-        // }
-        // });
+        function pilihFabriccompostedit($ls){
+            var ls = $ls;
+            var ls = $ls;
+            $('#id_fabric_compost_edit').val($('#id_fabriccomp_edit'+ls).text());
+            $('#fabric_compost_edit').val($('#fabriccomp_edit'+ls).text());
+            $('#id_fabric_compostlist_edit').fadeOut();
+        }
 
-        $(document).on("click", "#click_newtype", function(){
-            var id_wsheet = $(this).data('wsheet');
-            $("#id_wsheet").val(id_wsheet);
-        });
+        function ModalEditDetail(id){
 
-            $(document).ready(function(){
-                $('.click_newdetail').click(function(){
-                    var mcpwsmid = $(this).data("mcpwsmid");
-                    var _token = $('input[name="_token"]').val();
+            id=id;
 
-                    $.ajax({
-                        url:"/mcp/getsize",
-                        method:"POST",
-                        data:{mcpwsmid:mcpwsmid, _token:_token},
-                        success:function(data){
-                            console.log(data);
-
-                            var i;
-                            for(i=0; i<data.length; i++){
-                                baris = '<tr>'+
-                                    '<td>'+'<input class="form-control form-detail" type="text" name="input_det_size[]" id="input_det_size_'+i+'" value="'+data[i].size+'" readonly>'+'</td>'+
-                                    '<td>'+'<input class="form-control form-detail" type="number" name="input_det_qty[]" id="input_det_qty_'+i+'" value="'+data[i].qty_tot+'" readonly>'+'</td>'+
-                                    '<td>'+'<input class="form-control form-detail" type="number" name="input_det_scale[]" id="input_det_scale_'+i+'">'+'</td>'+
-                                    '<td>'+'<input class="form-control form-detail" type="number" name="input_det_scales[]" id="input_det_scales_'+i+'"'+'style="background-color: #FFB09F !important;"'+'readonly>'+'</td>'+
-                                '</tr>'
-                                $('#detail-ass-tbody').append(baris);
-                            }
-                            baris2 = '<input type="hidden" name="index_assort" id="index_assort" value="'+i+'">'
-                            $('#detail-ass-tbody').append(baris2);
-                        }
-                    });
-
-                    var id_mcpt = $(this).data("mcptid");
-                    $("#id_type").val(id_mcpt);
-
-                    // $("#id_type").val(id_type);
-                    // $("#detail_size").val(size);
-                    // $("#detail_qty").val(qty);
-                });
+            $.ajax({
+              url : '{{URL::to("consumption/edit_detail_form")}}',
+              type : 'get',
+              dataType: 'json',
+              data:{'id':id}
+            }).done(function (data) {
+              $('#isi_edit_detail').html(data);
+            }).fail(function (msg) {
+              alert('Gagal menampilkan data, silahkan refresh halaman.');
             });
+        }
+
+         
 </script>
 
 <script type="text/javascript">
     $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
 </script>
 
-<script type="text/javascript">
-    var count = 1;
-    // MCP WORKSHEET
-    function ms_addrow(){
-        count++;
-        baris = '<tr>'+
-        '<td>'+'<input class="form-control" type="text" name="input_size[]" id="input_size_'+count+'">'+'</td>'+
-            '<td>'+'<input class="form-control" type="number" name="input_ws_qty[]" id="input_ws_qty_'+count+'">'+'</td>'+
-            '<td>'+'<input class="form-control" type="number" name="input_tolerance[]" id="input_tolerance_'+count+'">'+'</td>'+
-            '<td>'+'<input class="form-control" type="number" name="input_qty_tot[]" id="input_qty_tot_'+count+'" readonly>'+'</td>'+
-            '<td>'+'<button class="btn btn-sm btn-danger" onclick="$(this).parent().parent().remove();">X</button>'+'</td>' +
-        '</tr>'
-        $('#ws_tbody').append(baris);
-
-    }
-
-    $('#click_create').click(function(){
-        $('#submit').prop('disabled',true);
-    });
-
-    function assort_cal(){
-        // mendapatkan total skala secara otomatis
-        var index_assort = document.getElementById('index_assort').value;
-        var tot_ass_scale = 0;
-        var tot_ass_scales = 0;
-
-        for(i = 0; i < index_assort; i++){ var ass_qtyws=document.getElementById("input_det_qty_"+i).value; var
-            ass_scale = document.getElementById("input_det_scale_"+i).value; var ass_scales=ass_qtyws * ass_scale;
-            document.getElementById("input_det_scales_"+i).value=ass_scales;
-            tot_ass_scale += parseInt(ass_scale);
-            tot_ass_scales = tot_ass_scales + ass_scales;
-        }
-        document.getElementById("total_skala").value = tot_ass_scale;
-    }
-
-    function calculate(){
-        var ws_qty_tot = 0
-        for (i=1; i<=count; i++){
-            var ws_qty = document.getElementById('input_ws_qty_' + i).value;
-            var tolerance = document.getElementById('input_tolerance_' + i).value;
-
-            var tolerance_val = ws_qty * tolerance * 0.01;
-            var tolerance_round = Math.round(tolerance_val);
-
-            var qty_tot = parseInt(ws_qty) + parseInt(tolerance_round);
-            $('#input_qty_tot_'+i).val(qty_tot);
-
-            ws_qty_tot = parseInt(ws_qty_tot) + parseInt(qty_tot);
-        }
-        $('#ws_qty_tot').val(ws_qty_tot);
-
-        $('#submit').prop('disabled',false);
-    }
-
-    $(document).ready(function(){
-        $(".form-detail").keyup(function(){
-
-            var panjang = document.getElementById('panjang_m').value;
-            var tole_panjang = document.getElementById('tole_pjg_m').value;
-            var lebar = document.getElementById('lebar_m').value;
-            var tole_lebar = document.getElementById('tole_lbr_m').value;
-            var gramasi = document.getElementById('gramasi').value;
-            var skala = document.getElementById('total_skala').value;
-            var jml_ampar = document.getElementById('jml_ampar').value;
-            // var detail_scale = document.getElementById('total_skala').value;
-
-            // Perhitungan Lebar (m) to (inc)
-            var lebar_inc = lebar * 39.37;
-            document.getElementById('lebar_inc').value = Math.round(lebar_inc * 100)/100;
-
-            //	Perhitungan Konsumsi Kg/Dz = (Panjang + toleransi) x (Lebar + toleransi) x (Gramasi / 1000) / Skala x 12
-            var kons_kgdz = (parseFloat(panjang) + parseFloat(tole_panjang)) * (parseFloat(lebar) + parseFloat(tole_lebar)) * (gramasi/1000) / skala * 12;
-            // console.log('kons_kgdz = ' + kons_kgdz);
-            document.getElementById('kons_kgdz').value = Math.round(kons_kgdz * 100)/100;
-
-            //	Perhitungan Konsumsi Yard/Dz = (Panjang + toleransi)  / 0.914 / Skala x 12
-            var kons_yddz = (parseFloat(panjang) + parseFloat(tole_panjang)) / 0.914 / skala * 12;
-            // console.log('kons_yddz = ' + kons_yddz);
-            document.getElementById('kons_yddz').value = Math.round(kons_yddz * 100)/100;
-
-            //	Perhitungan Konsumsi Meter/Dz = (Panjang + toleransi) / Skala x 12
-            var kons_mdz = (parseFloat(panjang) + parseFloat(tole_panjang)) / skala * 12;
-            // console.log('kons_mdz = ' + kons_mdz);
-            document.getElementById('kons_mdz').value = Math.round(kons_mdz * 100)/100;
-
-            // Perhitungan Qty per Yard, Kg dan meter = Jumlah Ampar x Total Skala x Konsumsi / 12
-            var qty_yard = jml_ampar * skala * kons_yddz / 12;
-            var qty_kg = jml_ampar * skala * kons_kgdz / 12;
-            var qty_m = jml_ampar * skala * kons_mdz / 12;
-
-            document.getElementById('qty_yard').value = Math.round(qty_yard * 100)/100;
-            document.getElementById('qty_kg').value = Math.round(qty_kg * 100)/100;
-            document.getElementById('qty_m').value = Math.round(qty_m * 100)/100;
-        });
-    });
-
-</script>
-
-<script type="text/javascript">
-    $(window).on('hashchange', function() {
-		    if (window.location.hash) {
-			    var page = window.location.hash.replace('#', '');
-			    if (page == Number.NaN || page <= 0) {
-    				return false;
-			    } else {
-				    getDatas(page);
-			    }
-		    }
-	    });
-
-    $(document).ready(function() {
-        $(document).on('click', '.pagination a', function (e) {
-            // $('tbody').append('<img style="position: absolute; left: 0; top: 0; z-index: 100000;" src="../public/images/loading.gif" />');
-            var url = $(this).attr('href');
-            getDatas($(this).attr('href').split('page=')[1]);
-            e.preventDefault();
-        });
-    });
-
-</script>

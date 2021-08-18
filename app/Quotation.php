@@ -15,17 +15,18 @@ class Quotation extends Model
         'destination', 'tgl_quot', 'exchange_rate',
         'gambar', 'smv', 'rate', 'basis_order',
         'handling', 'margin', 'offer_price',
-        'sales_fee', 'confirm_price', 'status', 'create_by', 'update_by', 'tgl_update'
+        'sales_fee', 'confirm_price', 'status', 'create_by', 'update_by', 'tgl_update',
+        'total_fabric_value', 'total_cost', 'totalcost_handling_margin', 'sales_fee_value',
     ];
 
     public function quot_detail()
     {
-        return $this->hasMany('App\QuotationDetail', 'id_quot_header')->withDefault();
+        return $this->hasMany('App\QuotationDetail', 'id_quot_header');
     }
 
     public function quot_gambar()
     {
-        return $this->hasMany('App\QuotationImage', 'id_quot_header')->withDefault();
+        return $this->hasMany('App\QuotationImage', 'id_quot_header');
     }
 
     public function user()

@@ -18,4 +18,9 @@ class ConsumptionDetailCollarCuffItem extends Model
     {
         return $this->belongsTo(Color::class, 'id_color', 'id')->withDefault();
     }
+
+    public function collarcuffItemSize()
+    {
+        return $this->hasMany('App\ConsumptionDetailCollarCuffItemSize','id_collar_cuff','id');
+    }
 }
