@@ -34,4 +34,20 @@ class Consumption extends Model
     {
         return $this->belongsTo(Salesorder::class, 'code_quotation', 'code_quotation')->withDefault();
     }
+
+    public function createdBy(){
+        return $this->belongsTo(User::class, 'created_by')->withDefault();
+    }
+
+    public function updatedBy(){
+        return $this->belongsTo(User::class, 'updated_by')->withDefault();
+    }
+
+    public function reviewedBy(){
+        return $this->belongsTo(User::class, 'reviewed_by')->withDefault();
+    }
+
+    public function confirmedBy(){
+        return $this->belongsTo(User::class, 'confirmed_by')->withDefault();
+    }
 }

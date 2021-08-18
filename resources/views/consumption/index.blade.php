@@ -188,8 +188,7 @@
                             <div class="form-group">
                                 <div class="input-group">
                                     <label for="net_price">Garment Nett Price</label>
-                                    <input type="number" step="0.1" name="net_price" class="form-control"
-                                        placeholder="0.0" value="" required>
+                                    <input type="number" step="0.1" name="net_price" id="net_price" class="form-control" value="" required>
                                 </div>
                             </div>
                         </div>
@@ -290,7 +289,8 @@
                     document.getElementById("customer").value = data.cust;
                     document.getElementById("customer_style").value = data.style;
                     document.getElementById("delivery_date").value = data.delivery;
-                        document.getElementById("references_date").value = data.tgl_quot;
+                    document.getElementById("references_date").value = data.tgl_quot;
+                    document.getElementById("net_price").value = data.totalcost_handling_margin;
                 }
             });
         }

@@ -129,7 +129,7 @@
                                         <div class="form-group">
                                             <div class="input-group">
                                                 <label for="delivery_date">Delivery Date <small>(auto)</small></label>
-                                                <input type="date" step="0.1" name="delivery_date" id="delivery_date"
+                                                <input type="date" step="0.01" name="delivery_date" id="delivery_date"
                                                     class="form-control" value="{{$result->delivery_date}}" required
                                                     readonly>
                                             </div>
@@ -138,7 +138,7 @@
                                             <div class="input-group">
                                                 <label for="references_date">References Date
                                                     <small>(auto)</small></label>
-                                                <input type="date" step="0.1" name="references_date"
+                                                <input type="date" step="0.01" name="references_date"
                                                     id="references_date" class="form-control"
                                                     value="{{$result->references_date}}" required readonly>
                                             </div>
@@ -146,7 +146,7 @@
                                         <div class="form-group">
                                             <div class="input-group">
                                                 <label for="net_price">Garment Nett Price</label>
-                                                <input type="number" step="0.1" name="net_price" id="net_price"
+                                                <input type="number" step="0.01" name="net_price" id="net_price"
                                                     class="form-control" value="{{$result->net_price}}" required>
                                             </div>
                                         </div>
@@ -230,6 +230,7 @@
                 document.getElementById("customer_style").value = data.style;
                 document.getElementById("delivery_date").value = data.delivery;
                 document.getElementById("references_date").value = data.tgl_quot;
+                document.getElementById("net_price").value = data.totalcost_handling_margin;
                 }
             });
         }

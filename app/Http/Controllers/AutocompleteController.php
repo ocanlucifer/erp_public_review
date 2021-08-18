@@ -21,6 +21,7 @@ use App\Fabricconst;
 use App\Fabriccomp;
 use App\Sizes;
 use App\Mcp;
+use App\Supplier;
 use Intervention\Image\Size;
 
 class AutocompleteController extends Controller
@@ -41,6 +42,56 @@ class AutocompleteController extends Controller
 					<li hidden id="kd_dvsi' . $no . '"><a href="#" class="dropdown-item" onclick="pilihDivisi(' . $no . ');">' . strtoupper($row->id) . '</a></li>
 					<li id="dvsi' . $no . '"><a href="#" class="dropdown-item" onclick="pilihDivisi(' . $no . ');">' . strtoupper($row->nama_divisi) . '</a></li>
 					';
+                }
+                $output .= '</ul>';
+            } else {
+                $output = '';
+            }
+            echo $output;
+        }
+    }
+
+    function supplier(Request $request)
+    {
+        if ($request->get('query')) {
+            $query = strtoupper($request->get('query'));
+            $data = Supplier::where(DB::raw('upper(nama)'), 'LIKE', "%{$query}%")
+                ->get();
+            if (count($data) > 0) {
+
+                $no = 0;
+                $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
+                foreach ($data as $row) {
+                    $no++;
+                    $output .= '
+                    <li hidden id="code' . $no . '"><a href="#" class="dropdown-item" onclick="pilihSupplier(' . $no . ');">' . strtoupper($row->code) . '</a></li>
+                    <li id="namasup' . $no . '"><a href="#" class="dropdown-item" onclick="pilihSupplier(' . $no . ');">' . strtoupper($row->nama) . '</a></li>
+                    ';
+                }
+                $output .= '</ul>';
+            } else {
+                $output = '';
+            }
+            echo $output;
+        }
+    }
+
+    function supplier_edit(Request $request)
+    {
+        if ($request->get('query')) {
+            $query = strtoupper($request->get('query'));
+            $data = Supplier::where(DB::raw('upper(nama)'), 'LIKE', "%{$query}%")
+                ->get();
+            if (count($data) > 0) {
+
+                $no = 0;
+                $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
+                foreach ($data as $row) {
+                    $no++;
+                    $output .= '
+                    <li hidden id="code_edit' . $no . '"><a href="#" class="dropdown-item" onclick="pilihSupplierEdit(' . $no . ');">' . strtoupper($row->code) . '</a></li>
+                    <li id="namasup_edit' . $no . '"><a href="#" class="dropdown-item" onclick="pilihSupplierEdit(' . $no . ');">' . strtoupper($row->nama) . '</a></li>
+                    ';
                 }
                 $output .= '</ul>';
             } else {
@@ -382,6 +433,113 @@ class AutocompleteController extends Controller
         }
     }
 
+    function colorInTable(Request $request)
+    {
+
+        if ($request->get('query')) {
+            $query = strtoupper($request->get('query'));
+            $index = strtoupper($request->get('index'));
+            $data = Color::where(DB::raw('upper(name)'), 'LIKE', "%{$query}%")
+                ->get();
+            if (count($data) > 0) {
+
+                $no = 0;
+                $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
+                foreach ($data as $row) {
+                    $no++;
+                    $output .= '
+                    <li hidden id="code_col' . $no . '_' . $index . '"><a href="#" class="dropdown-item" onclick="pilihColorInTable(' . $no . ',' . $index . ');">' . strtoupper($row->id) . '</a></li>
+                    <li id="col' . $no . '_' . $index . '"><a href="#" class="dropdown-item" onclick="pilihColorInTable(' . $no . ',' . $index . ');">' . strtoupper($row->name) . '</a></li>
+                    ';
+                }
+                $output .= '</ul>';
+            } else {
+                $output = '';
+            }
+            echo $output;
+        }
+    }
+
+    function unit(Request $request)
+    {
+
+        if ($request->get('query')) {
+            $query = strtoupper($request->get('query'));
+            $data = Unit::where(DB::raw('upper(name)'), 'LIKE', "%{$query}%")
+                ->get();
+            if (count($data) > 0) {
+
+                $no = 0;
+                $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
+                foreach ($data as $row) {
+                    $no++;
+                    $output .= '
+                    <li hidden id="id_unit' . $no . '"><a href="#" class="dropdown-item" onclick="pilihUnit(' . $no . ');">' . strtoupper($row->code) . '</a></li>
+                    <li id="unit_name' . $no . '"><a href="#" class="dropdown-item" onclick="pilihUnit(' . $no . ');">' . strtoupper($row->name) . '</a></li>
+                    ';
+                }
+                $output .= '</ul>';
+            } else {
+                $output = '';
+            }
+            echo $output;
+        }
+    }
+
+    function UnitInTable(Request $request)
+    {
+
+        if ($request->get('query')) {
+            $query = strtoupper($request->get('query'));
+            $index = strtoupper($request->get('index'));
+            $data = Unit::where(DB::raw('upper(name)'), 'LIKE', "%{$query}%")
+                ->get();
+            if (count($data) > 0) {
+
+                $no = 0;
+                $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
+                foreach ($data as $row) {
+                    $no++;
+                    $output .= '
+                    <li hidden id="id_unit' . $no . '_' . $index . '"><a href="#" class="dropdown-item" onclick="pilihUnitInTable(' . $no . ',' . $index . ');">' . strtoupper($row->code) . '</a></li>
+                    <li id="unit' . $no . '_' . $index . '"><a href="#" class="dropdown-item" onclick="pilihUnitInTable(' . $no . ',' . $index . ');">' . strtoupper($row->name) . '</a></li>
+                    ';
+                }
+                $output .= '</ul>';
+            } else {
+                $output = '';
+            }
+            echo $output;
+        }
+    }
+
+    function wUnitInTable(Request $request)
+    {
+
+        if ($request->get('query')) {
+            $query = strtoupper($request->get('query'));
+            $index = strtoupper($request->get('index'));
+            $data = Unit::where(DB::raw('upper(name)'), 'LIKE', "%{$query}%")
+                ->get();
+            if (count($data) > 0) {
+
+                $no = 0;
+                $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
+                foreach ($data as $row) {
+                    $no++;
+                    $output .= '
+                    <li hidden id="id_w_unit' . $no . '_' . $index . '"><a href="#" class="dropdown-item" onclick="pilihW_UnitInTable(' . $no . ',' . $index . ');">' . strtoupper($row->code) . '</a></li>
+                    <li id="w_unit' . $no . '_' . $index . '"><a href="#" class="dropdown-item" onclick="pilihW_UnitInTable(' . $no . ',' . $index . ');">' . strtoupper($row->name) . '</a></li>
+                    ';
+                }
+                $output .= '</ul>';
+            } else {
+                $output = '';
+            }
+            echo $output;
+        }
+    }
+
     function size(Request $request)
     {
 
@@ -399,6 +557,33 @@ class AutocompleteController extends Controller
         			<li hidden id="code_siz' . $no . '"><a href="#" class="dropdown-item" onclick="pilihSize(' . $no . ');">' . strtoupper($row->id) . '</a></li>
         			<li id="siz' . $no . '"><a href="#" class="dropdown-item" onclick="pilihSize(' . $no . ');">' . strtoupper($row->name) . '</a></li>
         			';
+                }
+                $output .= '</ul>';
+            } else {
+                $output = '';
+            }
+            echo $output;
+        }
+    }
+
+    function sizeInTable(Request $request)
+    {
+
+        if ($request->get('query')) {
+            $query = strtoupper($request->get('query'));
+            $index = strtoupper($request->get('index'));
+            $data = Sizes::where(DB::raw('upper(name)'), 'LIKE', "%{$query}%")
+                ->get();
+            if (count($data) > 0) {
+
+                $no = 0;
+                $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
+                foreach ($data as $row) {
+                    $no++;
+                    $output .= '
+                    <li hidden id="size_id' . $no . '_' . $index . '"><a href="#" class="dropdown-item" onclick="pilihSizeInTable(' . $no . ',' . $index . ');">' . strtoupper($row->id) . '</a></li>
+                    <li id="size_name' . $no . '_' . $index . '"><a href="#" class="dropdown-item" onclick="pilihSizeInTable(' . $no . ',' . $index . ');">' . strtoupper($row->name) . '</a></li>
+                    ';
                 }
                 $output .= '</ul>';
             } else {

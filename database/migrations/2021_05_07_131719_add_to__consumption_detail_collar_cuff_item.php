@@ -13,13 +13,13 @@ class AddToConsumptionDetailCollarCuffItem extends Migration
      */
     public function up()
     {
-        Schema::table('consumption_detail_collar_cuff_item', function (Blueprint $table) {
-            $table->string('dimension');
-            $table->string('size');
-            $table->float('total');
-            $table->float('total_tolerance');
-            $table->float('total_rounded');
-        });
+        // Schema::table('consumption_detail_collar_cuff_item', function (Blueprint $table) {
+        //     $table->string('dimension');
+        //     $table->string('size');
+        //     $table->float('total');
+        //     $table->float('total_tolerance');
+        //     $table->float('total_rounded');
+        // });
     }
 
     /**

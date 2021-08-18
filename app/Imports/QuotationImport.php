@@ -92,12 +92,16 @@ class QuotationImport implements WithMappedCells, WithMultipleSheets, SkipsUnkno
                 'smv'           => 'G9',
                 'rate'          => 'I9',
 
+                'total_cost'    => 'K215',
                 'handling'      => 'J217',
                 'margin'        => 'J221',
                 'offer_price'   => 'K225',
                 'sales_fee'     => 'J227',
                 'confirm_price' => 'K231',
                 'numSheet'      => 'I3',
+                'total_fabric_value'      => 'K31',
+                'totalcost_handling_margin'      => 'K223',
+                'sales_fee_value'      => 'K227',
             ];
         //detail fabric
         $quot += ['f_loc_allowance'             => 'H13',
@@ -330,12 +334,16 @@ class QuotationImport implements WithMappedCells, WithMultipleSheets, SkipsUnkno
 
         $header->smv           = $row['smv'];
         $header->rate          = $row['rate'];
+        $header->total_cost    = $row['total_cost'];
 
         $header->basis_order   = '';
         $header->status        = 'pending';
 
         $header->handling      = $handling;
         $header->margin        = $margin;
+        $header->sales_fee_value   = $row['sales_fee_value'];
+        $header->totalcost_handling_margin   = $row['totalcost_handling_margin'];
+        $header->total_fabric_value   = $row['total_fabric_value'];
         $header->offer_price   = $row['offer_price'];
         $header->sales_fee     = $sales_fee;
         $header->confirm_price = $row['confirm_price'];
