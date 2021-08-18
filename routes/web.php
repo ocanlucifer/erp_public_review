@@ -35,8 +35,10 @@ Route::post('/autocomplete/sample_type', 'AutocompleteController@sample_type')->
 Route::post('/autocomplete/garment_type', 'AutocompleteController@garment_type')->name('autocomplete.garment_type');
 Route::post('/autocomplete/garment_type2', 'AutocompleteController@garment_type2')->name('autocomplete.garment_type2');
 Route::post('/autocomplete/color', 'AutocompleteController@color')->name('autocomplete.color');
+Route::post('/autocomplete/colorInTable', 'AutocompleteController@colorInTable')->name('autocomplete.colorInTable');
 Route::post('/autocomplete/color_form', 'AutocompleteController@color_form')->name('autocomplete.color_form');
 Route::post('/autocomplete/size', 'AutocompleteController@size')->name('autocomplete.size');
+Route::post('/autocomplete/sizeInTable', 'AutocompleteController@sizeInTable')->name('autocomplete.sizeInTable');
 Route::post('/autocomplete/style', 'AutocompleteController@style')->name('autocomplete.style');
 Route::post('/autocomplete/buyer', 'AutocompleteController@buyer')->name('autocomplete.buyer');
 Route::post('/autocomplete/so_number', 'AutocompleteController@so_number')->name('autocomplete.so_number');
@@ -49,6 +51,12 @@ Route::post('/autocomplete/d_fabriccomp', 'AutocompleteController@d_fabriccomp')
 Route::post('/autocomplete/ed_fabricconst', 'AutocompleteController@ed_fabricconst')->name('autocomplete.ed_fabricconst');
 Route::post('/autocomplete/ed_fabriccomp', 'AutocompleteController@ed_fabriccomp')->name('autocomplete.ed_fabriccomp');
 Route::post('/autocomplete/mcp', 'AutocompleteController@mcp')->name('autocomplete.mcp');
+Route::post('/autocomplete/supplier', 'AutocompleteController@supplier')->name('autocomplete.supplier');
+Route::post('/autocomplete/supplier_edit', 'AutocompleteController@supplier_edit')->name('autocomplete.supplier_edit');
+
+Route::post('/autocomplete/wUnitInTable', 'AutocompleteController@wUnitInTable')->name('autocomplete.wUnitInTable');
+Route::post('/autocomplete/UnitInTable', 'AutocompleteController@UnitInTable')->name('autocomplete.UnitInTable');
+Route::post('/autocomplete/unit', 'AutocompleteController@unit')->name('autocomplete.unit');
 
 
 Route::get('/manage_user', 'ManageUserController@index');
@@ -387,3 +395,23 @@ Route::get('/consumption/edit/{id}', 'ConsumptionController@edit');
 Route::post('/consumption/create', 'ConsumptionController@create');
 Route::post('/consumption/update', 'ConsumptionController@update');
 Route::get('/consumption/view/{id}', 'ConsumptionController@view');
+Route::get('/consumption/update_status/{id}/{status}', 'ConsumptionController@update_status');
+Route::post('/consumption/add_detail', 'ConsumptionController@add_detail');
+Route::get('/consumption/delete_detail/{id_detail}/{id_consumption}', 'ConsumptionController@delete_detail');
+Route::get('/consumption/edit_detail_form', 'ConsumptionController@edit_detail_form');
+Route::post('/consumption/update_detail', 'ConsumptionController@update_detail');
+Route::get('/consumption/newItem_Fabric',function(){
+    return View::make('consumption.new_item_fabric')->render();
+});
+Route::post('/consumption/add_detail/fabric', 'ConsumptionController@add_fabric_item');
+Route::post('/consumption/add_detail/add_supplier_collar_cuff', 'ConsumptionController@add_supplier_collar_cuff');
+Route::get('consumption/editDetailSupplierForm/', 'ConsumptionController@editDetailSupplierForm');
+Route::post('/consumption/edit_detail/update_fabricItem', 'ConsumptionController@update_fabricItem');
+Route::get('/consumption/delete_supplier/{id}/{id_consumption}', 'ConsumptionController@delete_supplier');
+Route::get('/consumption/newcollarcuffItemForm/', 'ConsumptionController@newcollarcuffItemForm');
+Route::post('/consumption/add_detail/new_collar_cuff_item/', 'ConsumptionController@add_collar_cuff_item');
+Route::get('/consumption/editcollarcuffItemForm/', 'ConsumptionController@editcollarcuffItemForm');
+Route::post('/consumption/edit_detail/update_collar_cuff_item/', 'ConsumptionController@update_collar_cuff_item');
+
+Route::get('/consumption/delete_collar_cuff_item/{id}/{id_consumption}', 'ConsumptionController@delete_collar_cuff_item');
+Route::get('/consumption/print_consumption/{id}', 'ConsumptionController@print_consumption');
