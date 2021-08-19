@@ -1,11 +1,22 @@
-=== Sales Order ===
-
+=== PO ===
+== Main Index
+-> Show
+-> create (segala yang look up, tidak di buat dulu karena table belum ada)
+-> destroy
+-> edit
+-> filter (unconfirmed, pending, reviewed, confirmed)
+-> search
 
 === Marker calculation ====
 => (print) pdf to image then input to the new document
 
 === Marker Check Production ===
 => (print) pdf to image then input to the new document
+=> di mcp itu fabric nya sama tapi warnanya beda jadi harus input ulang banyak (detailnya ), dari create worksheet ke bawahnya sama ajaa. bedanya cuma sampe worksheetnya aja
+=> jika effisiensi body 1 tidak 85% haru ada allow dari gartech
+
+=== Production Marker ===
+
 =======================================================================================
 
 MASUKAN dan REVISI

@@ -277,7 +277,8 @@
                                 <a href="{{ url('/') }}"><i class="icon-file-text2"></i>PO Kain</a>
                             </li>
                             <li class="">
-                                <a href="{{ url('/') }}"><i class="icon-file-text2"></i>PO Akasesoris</a>
+                                <a href="{{ url('/purchasing/acc_orders') }}"><i class="icon-file-text2"></i>PO
+                                    Akasesoris</a>
                             </li>
                             <li class="">
                                 <a href="{{ url('/') }}"><i class="icon-file-text3"></i>Rekap PO Kain</a>

@@ -387,3 +387,40 @@ Route::get('/consumption/edit/{id}', 'ConsumptionController@edit');
 Route::post('/consumption/create', 'ConsumptionController@create');
 Route::post('/consumption/update', 'ConsumptionController@update');
 Route::get('/consumption/view/{id}', 'ConsumptionController@view');
+
+// PO ACC
+// Route::get('/mp', 'MarkerproController@index');
+Route::get('/purchasing/acc_orders', 'PoaccController@index');
+Route::post('/purchasing/acc_orders/create', 'PoaccController@create');
+// Route::get('/mp/detail/{id}', 'MarkerproController@detail');
+Route::post('/purchasing/acc_orders/{id}/edit', 'PoaccController@edit');
+Route::post('/purcashing/acc_orders/update', 'PoaccController@update');
+Route::get('/purchasing/acc_orders/{id}/delete', 'PoaccController@delete');
+Route::get('/purchasing/acc_orders/{filter}/filter', 'PoaccController@filter');
+Route::get('/purchasing/acc_orders/{id}', 'PoaccController@detail');
+// Route::post('/mp/update', 'MarkerproController@update');
+// Route::get('/mp/delete_ws/{id}', 'MarkerproController@deletews');
+
+// Route::get('/mp/edit_ws/{id_mpwsm}/{id_mp}', 'MarkerproController@editws');
+// Route::post('/mp/update_ws', 'MarkerproController@updatews');
+// Route::post('/mp/create_type', 'MarkerproController@createtype');
+// Route::get('/mp/print_wsm/{mp_id}/{mpwsm_id}', 'MarkerproController@print_wsm');
+// Route::get('/mp/edit_mpt/{id_mpt}/{id_mp}', 'MarkerproController@editmpt');
+// Route::get('/mp/delete_mpt/{id}', 'MarkerproController@deletempt');
+// Route::post('/mp/update_mpt', 'MarkerproController@updatempt');
+// Route::get('/mp/print_ws/{mp_id}/{mpwsm_id}/{mpt_id}', 'MarkerproController@print_ws');
+// Route::post('/mp/create_detail', 'MarkerproController@createdetail_ma')->name('mp.createdetail_ma');
+// Route::post('/mp/create_detail_pi', 'MarkerproController@createdetail_pi')->name('mp.createdetail_pi');
+// Route::post('/mp/geteditsize', 'MarkerproController@edit_getsize');
+// Route::post('/mp/getsize', 'MarkerproController@detail_getsize');
+
+// Route::post('/mp/create_detail', 'MarkerproController@createdetail_ma')->name('mp.createdetail_ma');
+// Route::post('/mp/create_detail_pi', 'MarkerproController@createdetail_pi')->name('mp.createdetail_pi');
+// Route::get('/mp/edit_mpd/{id_mpd}/{id_mp}/{id_mpwsm}', 'MarkerproController@editmpd');
+// Route::get('/mp/edit_mpi/{id_mpi}/{id_mp}/{id_mpwsm}', 'MarkerproController@editmpi');
+// Route::post('/mp/update_mpd', 'MarkerproController@updatempd_ma')->name('mp.updatedetail_ma');
+// Route::post('/mp/update_mpi', 'MarkerproController@updatempd_pi')->name('mp.updatedetail_pi');
+// Route::get('/mp/print_detail/{filename}', 'MarkerproController@print_detmp');
+// Route::get('/mp/delete_mpd/{id}', 'MarkerproController@deletempd');
+// Route::get('/mp/delete_mpi/{id}', 'MarkerproController@deletempi');
+// PO ACC =====

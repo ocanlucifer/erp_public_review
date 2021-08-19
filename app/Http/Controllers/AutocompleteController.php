@@ -22,6 +22,7 @@ use App\Fabriccomp;
 use App\Sizes;
 use App\Mcp;
 use App\Salesorder;
+use App\Supplier;
 
 use Intervention\Image\Size;
 

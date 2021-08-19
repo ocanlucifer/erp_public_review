@@ -1066,7 +1066,7 @@
                         <div class="col-sm-4 mt-lg-1">
                             <div class="col-sm-4 text-right"><small><b>Revisi</b></small></div>
                             <div class="col-sm-8"><input class="form-control" type="number" name="ma_revisi"
-                                    id="ma_revisi">
+                                    id="ma_revisi" value="0">
                             </div>
                         </div>
                         <div class="col-sm-4 mt-lg-1">
