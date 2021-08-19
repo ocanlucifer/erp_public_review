@@ -190,8 +190,12 @@ class QuotationController extends Controller
         $exchange_rate     = Requests::input('exchange_rate');
         $smv            = Requests::input('smv');
         $rate           = Requests::input('rate');
+        $total_cost           = Requests::input('total_cost');
         $handling       = Requests::input('handling');
         $margin         = Requests::input('margin');
+        $totalcost_handling_margin         = Requests::input('tc_handling_margin');
+        $sales_fee_value      = Requests::input('h_sales_fee');
+        $total_fabric_value  = Requests::input('total_f');
         $offer_price    = Requests::input('offer_price');
         $sales_fee      = Requests::input('sales_fee');
         $confirm_price  = Requests::input('confirm_price');
@@ -202,7 +206,7 @@ class QuotationController extends Controller
         $lastCode = Quotation::orderBy('code', 'desc')->first();
 
         // Get last 3 digits of last order code
-        if ($lastCode['code'] == '') {
+        if (!$lastCode) {
             $lastNumber = 'Q' . date('Y') . '-' . str_pad(0, 5, 0, STR_PAD_LEFT);
         } else {
             $lastNumber = $lastCode['code'];
@@ -228,8 +232,12 @@ class QuotationController extends Controller
             'exchange_rate'   => $exchange_rate,
             'smv'             => $smv,
             'rate'            => $rate,
+            'total_cost'            => $total_cost,
             'handling'        => $handling,
             'margin'          => $margin,
+            'totalcost_handling_margin'          => $totalcost_handling_margin ,
+            'sales_fee_value'          => $sales_fee_value,
+            'total_fabric_value'          => $total_fabric_value,
             'offer_price'     => $offer_price,
             'sales_fee'       => $sales_fee,
             'confirm_price'   => $confirm_price,
@@ -264,7 +272,7 @@ class QuotationController extends Controller
         $bulan         = date('m');
 
 
-        $files          = Input::file('gmbr');
+        $files          = Requests::file('gmbr');
         $nama_user       = strtoupper(Requests::input('create_by_name'));
 
         if ($files) {
@@ -331,8 +339,12 @@ class QuotationController extends Controller
         $exchange_rate     = Requests::input('exchange_rate');
         $smv            = Requests::input('smv');
         $rate           = Requests::input('rate');
+        $total_cost           = Requests::input('total_cost');
         $handling       = Requests::input('handling');
         $margin         = Requests::input('margin');
+        $totalcost_handling_margin         = Requests::input('tc_handling_margin');
+        $sales_fee_value      = Requests::input('h_sales_fee');
+        $total_fabric_value  = Requests::input('total_f');
         $offer_price    = Requests::input('offer_price');
         $sales_fee      = Requests::input('sales_fee');
         $confirm_price  = Requests::input('confirm_price');
@@ -354,8 +366,12 @@ class QuotationController extends Controller
             'exchange_rate'   => $exchange_rate,
             'smv'             => $smv,
             'rate'            => $rate,
+            'total_cost'            => $total_cost,
             'handling'        => $handling,
             'margin'          => $margin,
+            'totalcost_handling_margin'          => $totalcost_handling_margin ,
+            'sales_fee_value'          => $sales_fee_value,
+            'total_fabric_value'          => $total_fabric_value,
             'offer_price'     => $offer_price,
             'sales_fee'       => $sales_fee,
             'confirm_price'   => $confirm_price,
@@ -390,7 +406,7 @@ class QuotationController extends Controller
         $tahun         = date('Y');
         $bulan         = date('m');
 
-        $files          = Input::file('gmbr');
+        $files          = Requests::file('gmbr');
         $nama_user       = strtoupper(Requests::input('create_by_name'));
 
         if ($files) {
