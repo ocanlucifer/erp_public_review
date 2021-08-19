@@ -10,6 +10,7 @@ use File;
 use Session;
 use Auth;
 use App\Poacc;
+use App\Salesorder;
 
 class PoaccController extends Controller
 {
@@ -128,5 +129,11 @@ class PoaccController extends Controller
     {
         $acc = Poacc::where('id', $id)->first();
         return view('purchasing.poacc.acc_index')->with(compact('acc'));
+    }
+
+    public function getMaterial()
+    {
+        $result = Salesorder::orderby('id', 'DESC')->paginate(10);
+        return response()->json($result);
     }
 }

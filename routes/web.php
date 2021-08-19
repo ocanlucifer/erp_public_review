@@ -398,6 +398,7 @@ Route::post('/purcashing/acc_orders/update', 'PoaccController@update');
 Route::get('/purchasing/acc_orders/{id}/delete', 'PoaccController@delete');
 Route::get('/purchasing/acc_orders/{filter}/filter', 'PoaccController@filter');
 Route::get('/purchasing/acc_orders/{id}', 'PoaccController@detail');
+Route::post('purchasing/acc_orders/get_material', 'PoaccController@getMaterial');
 // Route::post('/mp/update', 'MarkerproController@update');
 // Route::get('/mp/delete_ws/{id}', 'MarkerproController@deletews');
 

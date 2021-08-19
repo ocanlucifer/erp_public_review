@@ -110,7 +110,9 @@
                 <div class="col-sm-12">
                     <a id="btn_new_material" class="btn btn-default btn-sm" href="#modal_material_new"
                         data-toggle="modal" role="button"><small>New Material</small></a>
-                    <a href="#" class="btn btn-default btn-sm"><small>Import Material</small></a>
+                    <a href="#modal_import_material" data-toggle="modal" class="btn btn-default btn-sm"
+                        id="btn_import_material"><small>Import
+                            Material</small></a>
                     <a href="#" class="btn btn-default btn-sm"><small>Sample Import Material</small></a>
                     <a href="#" class="btn btn-default btn-sm"><small>Convert Unit</small></a>
                     <a href="#" class="btn btn-default btn-sm"><small>Edit All Requirements</small></a>
@@ -467,6 +469,27 @@
 
     </div>
 
+    {{-- modal import material --}}
+    <div class="row">
+        <div id="modal_import_material" class="modal fade">
+            <div class="modal-dialog modal-lg" style="margin-left: 5%; margin-right: 5%;">
+                <div class="modal-content" id="background-body2" style="width: 150% !important;">
+                    <form action="#" method="post" enctype='multipart/form-data'>
+                        {{ csrf_field() }}
+                        <div class=" modal-header bg-indigo-600">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h6 class="modal-title"><strong>Import Material</strong></h6>
+                        </div>
+                        <div class="modal-body" id="import_material_body">
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
     @endsection
 
@@ -543,6 +566,30 @@
                         });
                     }
                 });
+
+                var importMaterial = document.getElementById('btn_import_material');
+                importMaterial.addEventListener('click', function(){
+                    var _token = $('input[name="_token"]').val();
+
+                    $.ajax({
+                        url: '/purchasing/acc_orders/get_material',
+                        type: 'POST',
+                        data: {_token: _token},
+                        dataType: 'JSON',
+                        success: function(res){
+                            baris = '<table class="table table-bordered table-hover"><thead><tr><th></th><th>Order</th><th>Quotation</th><th>Style</th><th>Fab. Construct</th><th>Fab. Compost</th><th>Fab. Description</th><th>Budget</th><th>Delivery Date</th><th>Status</th><thead></tr></thead> <tbody id="import_material_tbody"></tbody></table>';
+
+                            $('#import_material_body').html(baris);
+
+                            row = '';
+                            for(i=0; i<res.data.length; i++){
+                                row += '<tr><td></td><td>'+res.data[i].customer+'</td><td>'+res.data[i].code_quotation+'</td><td>'+res.data[i].style+'</td><td></td><td></td><td></td><td></td><td>'+res.data[i].delivery_date+'</td><td></td></tr>'
+                            }
+                            $('#import_material_tbody').html(row);
+                            console.log(res.data[0]);
+                        }
+                    });
+                }, false);
             });
 
         function pilihFabricconstruct($ls){
@@ -638,6 +685,12 @@
 
             $('#new_ma_tbody').append(baris);
             document.getElementById("ma_count").value = count;
+        }
+
+        function minCount() {
+            var count = document.getElementById("ma_count").value;
+            count--;
+            document.getElementById("ma_count").value=count;
         }
 
         $.ajaxSetup({
