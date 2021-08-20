@@ -50,4 +50,8 @@ class Consumption extends Model
     public function confirmedBy(){
         return $this->belongsTo(User::class, 'confirmed_by')->withDefault();
     }
+
+    public function unconfirmedBy(){
+        return $this->belongsTo(User::class, 'unconfirmed_by')->withDefault();
+    }
 }

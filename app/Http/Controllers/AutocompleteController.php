@@ -592,7 +592,7 @@ class AutocompleteController extends Controller
             echo $output;
         }
     }
-  
+
     function sizeInTable(Request $request)
     {
 
