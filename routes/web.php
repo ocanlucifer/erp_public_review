@@ -381,3 +381,4 @@ Route::post('/consumption/edit_detail/update_collar_cuff_item/', 'ConsumptionCon
 
 Route::get('/consumption/delete_collar_cuff_item/{id}/{id_consumption}', 'ConsumptionController@delete_collar_cuff_item');
 Route::get('/consumption/print_consumption/{id}', 'ConsumptionController@print_consumption');
+Route::get('/consumption/print_purchase_request/{id}', 'ConsumptionController@print_purchase_request');

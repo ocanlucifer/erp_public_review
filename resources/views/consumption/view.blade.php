@@ -83,22 +83,10 @@
                     <div class="col-sm-4"><b>Consumption Per Dz</b></div>
                     <div class="col-sm-8">: {{number_format($cons_per_dz,2)}}</div>
                 </div>
-                @if ($cons->status == 'REVIEWED')
                 <div class="col-sm-4">
-                    <div class="col-sm-4"><b>Reviewed By</b></div>
-                    <div class="col-sm-8">: {{$cons->reviewedBy['name']}} @if($cons->reviewed_by) ({{date('d-m-Y H:i:s', strtotime($cons->reviewed_at))}}) @endif</div>
+                    <div class="col-sm-4"><b>Created By</b></div>
+                    <div class="col-sm-8">: {{$cons->createdBy['name']}}</div>
                 </div>
-                @elseif ($cons->status == 'CONFIRMED')
-                <div class="col-sm-4">
-                    <div class="col-sm-4"><b>Confirmed By</b></div>
-                    <div class="col-sm-8">: {{$cons->confirmedBy['name']}} @if($cons->confirmed_by) ({{date('d-m-Y H:i:s', strtotime($cons->confirmed_at))}}) @endif</div>
-                </div>
-                @else
-                <div class="col-sm-4">
-                    <div class="col-sm-4"><b>-</b></div>
-                    <div class="col-sm-8">: -</div>
-                </div>
-                @endif
             </div>
             
             <div class="row">
@@ -111,8 +99,8 @@
                     <div class="col-sm-8">: {{number_format($budget,2)}}</div>
                 </div>
                 <div class="col-sm-4">
-                    <div class="col-sm-4"><b>Created By</b></div>
-                    <div class="col-sm-8">: {{$cons->createdBy['name']}} @if($cons->created_by) ({{date('d-m-Y H:i:s', strtotime($cons->created_at))}}) @endif</div>
+                    <div class="col-sm-4"><b>Updated By</b></div>
+                    <div class="col-sm-8">: {{$cons->updatedBy['name']}}</div>
                 </div>
             </div>
 
@@ -125,10 +113,22 @@
                     <div class="col-sm-4"><b>Budget Status</b></div>
                     <div class="col-sm-8">: <i class="@if($budget_status=='AMAN') btn-success @else btn-danger @endif"> &nbsp {{$budget_status}} &nbsp </i></div>
                 </div>
+                @if ($cons->status == 'REVIEWED')
                 <div class="col-sm-4">
-                    <div class="col-sm-4"><b>Updated By</b></div>
-                    <div class="col-sm-8">: {{$cons->updatedBy['name']}} @if($cons->updated_by) ({{date('d-m-Y H:i:s', strtotime($cons->updated_at))}}) @endif</div>
+                    <div class="col-sm-4"><b>Reviewed By</b></div>
+                    <div class="col-sm-8">: {{$cons->reviewedBy['name']}} @if($cons->reviewed_by) ({{date('d-m-Y H:i:s', strtotime($cons->reviewed_at))}}) @endif</div>
                 </div>
+                @elseif ($cons->status == 'CONFIRMED')
+                <div class="col-sm-4">
+                    <div class="col-sm-4"><b>Confirmed By</b></div>
+                    <div class="col-sm-8">: {{$cons->confirmedBy['name']}} @if($cons->confirmed_by) ({{date('d-m-Y H:i:s', strtotime($cons->confirmed_at))}}) @endif</div>
+                </div>
+                @elseif ($cons->status == 'UNCONFIRMED')
+                <div class="col-sm-4">
+                    <div class="col-sm-4"><b>Unconfirmed By</b></div>
+                    <div class="col-sm-8">: {{$cons->unconfirmedBy['name']}} @if($cons->unconfirmed_by) ({{date('d-m-Y H:i:s', strtotime($cons->unconfirmed_at))}}) @endif</div>
+                </div>
+                @endif
             </div>
 
             <div class="row">
@@ -153,9 +153,8 @@
                 <a href="/consumption/update_status/{{$id}}/UNCONFIRMED" class="btn btn-danger btn-sm"
                     onclick="return confirm('Anda yakin untuk membatalkan konfirmasi?')">Unconfirm</a>
                 @endif
-
                 <a href="/consumption/print_consumption/{{$id}}" target="_blank" id="" class="btn btn-primary btn-sm">Print</a>
-                <a href="#" target="_blank" id="" class="btn btn-primary btn-sm">Purchase Request</a>
+                <a href="/consumption/print_purchase_request/{{$id}}" target="_blank" id="" class="btn btn-primary btn-sm">Purchase Request</a>
             </div>
             <br>
         </div>
