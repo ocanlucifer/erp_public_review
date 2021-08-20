@@ -7,7 +7,7 @@
 
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ url('/home') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active"><a href="{{url('/mcp')}}">Marker Check Production</a></li>
+        <li class="breadcrumb-item active"><a href="{{url('/mp')}}">Production Marker</a></li>
         <li class="breadcrumb-item active">Detail</li>
     </ol>
 
@@ -32,65 +32,65 @@
 
     <div class="card">
         <div class="card-header">
-            Marker Check Production
+            Production Marker
         </div>
         <div class="card-body text-size-small">
             <div class="row">
                 <div class="col-sm-4">
                     <div class="col-sm-4"><b>Number</b></div>
-                    <div class="col-sm-8">: {{$mcp->number}}</div>
+                    <div class="col-sm-8">: {{$mp->number}}</div>
                 </div>
                 <div class="col-sm-4">
                     <div class="col-sm-4"><b>Delivery Date</b></div>
-                    <div class="col-sm-8">: {{date('d-m-Y', strtotime($mcp->delivery_date))}}</div>
+                    <div class="col-sm-8">: {{date('d-m-Y', strtotime($mp->delivery_date))}}</div>
                 </div>
                 <div class="col-sm-4">
                     <div class="col-sm-4"><b>Created By</b></div>
-                    <div class="col-sm-8">: {{$mcp->created_by}}</div>
+                    <div class="col-sm-8">: {{$mp->created_by}}</div>
                 </div>
             </div>
             <div class="row mt-2">
                 <div class="col-sm-4">
                     <div class="col-sm-4"><b>Order Name</b></div>
-                    <div class="col-sm-8">: {{$mcp->order_name}}</div>
+                    <div class="col-sm-8">: {{$mp->order_name}}</div>
                 </div>
                 <div class="col-sm-4">
                     <div class="col-sm-4"><b>Fabric Construct</b></div>
-                    <div class="col-sm-8">: {{$mcp->fabric_const}}</div>
+                    <div class="col-sm-8">: {{$mp->fabric_const}}</div>
                 </div>
                 <div class="col-sm-4">
                     <div class="col-sm-4"><b>Updated By</b></div>
-                    <div class="col-sm-8">: {{$mcp->updated_by}}</div>
+                    <div class="col-sm-8">: {{$mp->updated_by}}</div>
                 </div>
             </div>
             <div class="row mt-2">
                 <div class="col-sm-4">
                     <div class="col-sm-4"><b>Style Name</b></div>
-                    <div class="col-sm-8">: {{$mcp->style}}</div>
+                    <div class="col-sm-8">: {{$mp->style}}</div>
                 </div>
                 <div class="col-sm-4">
                     <div class="col-sm-4"><b>Fabric Compost</b></div>
-                    <div class="col-sm-8">: {{$mcp->fabric_comp}}</div>
+                    <div class="col-sm-8">: {{$mp->fabric_comp}}</div>
                 </div>
                 <div class="col-sm-4">
                     <div class="col-sm-4"><b>
-                            @if ($mcp->state == 'PENDING' || $mcp->state == 'CONFIRMED')
+                            @if ($mp->state == 'PENDING' || $mp->state == 'CONFIRMED')
                             Confirmed By
-                            @elseif ($mcp->state == 'UNCONFIRMED')
+                            @elseif ($mp->state == 'UNCONFIRMED')
                             Unconfirmed By
                             @endif
                         </b></div>
-                    <div class="col-sm-8">: {{$mcp->confirmed_by}}</div>
+                    <div class="col-sm-8">: {{$mp->confirmed_by}}</div>
                 </div>
             </div>
             <div class="row mt-2">
                 <div class="col-sm-4">
                     <div class="col-sm-4"><b>Revisi</b></div>
-                    <div class="col-sm-8">: {{$mcp->revision_count}}</div>
+                    <div class="col-sm-8">: {{$mp->revision_count}}</div>
                 </div>
                 <div class="col-sm-4">
-                    <div class="col-sm-4"><b>Sales Order Number</b></div>
-                    <div class="col-sm-8">: {{$mcp->sales_order['number']}}</div>
+                    <div class="col-sm-4"><b>State</b></div>
+                    <div class="col-sm-8">: {{$mp->state}}</div>
                 </div>
                 <div class="col-sm-4">
                     <div class="col-sm-4"><b></b></div>
@@ -100,11 +100,7 @@
             <div class="row mt-2">
                 <div class="col-sm-4">
                     <div class="col-sm-4"><b>Revisi Remark</b></div>
-                    <div class="col-sm-8">: {{$mcp->revisi_remark}}</div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="col-sm-4"><b>State</b></div>
-                    <div class="col-sm-8">: {{$mcp->state}}</div>
+                    <div class="col-sm-8">: {{$mp->revisi_remark}}</div>
                 </div>
                 <div class="col-sm-4">
                     <div class="col-sm-4"><b></b></div>
@@ -113,26 +109,8 @@
             </div>
 
             <div class="mt-3">
-                <a href="/mcp" class="btn btn-secondary btn-sm">Back</a>
-                @if ($mcp->state == "PENDING" || $mcp->state == "UNCONFIRMED")
-                <a href="/mcp/edit/{{$mcp->id}}" class="btn btn-primary btn-sm">Edit</a>
-                <a href="#" id="click_create" data-toggle="modal" data-target="#modal"
-                    class="btn btn-success btn-sm">Create Worksheet</a>
-                <a href="#" data-toggle="modal" data-target="#confirm_modal" class="btn btn-warning btn-sm">Confirm</a>
-                @else
-                @if (!empty($mp))
-                <a href="#" id="" class="btn btn-primary btn-sm" disabled>Exported</a>
-                @else
-                <a href="/mcp/export/{{$mcp->id}}" id="" class="btn btn-primary btn-sm">Export to Marker Production</a>
-                @endif
-                <a href="/mcp/unconfirm/{{$mcp->id}}" class="btn btn-danger btn-sm"
-                    onclick="return confirm('Anda yakin untuk membatalkan konfirmasi?')">Unconfirm</a>
-
-
-                @endif
-
-                <a href="/mcp/print_mcp/{{$mcp->id}}" target="_blank" class="btn btn-info btn-sm">Rekap Konsumsi</a>
-                <a href="/mcp/print_rekpiping/{{$mcp->id}}" target="_blank" class="btn btn-info btn-sm">Rekap Piping</a>
+                <a href="/mp" class="btn btn-secondary btn-sm">Back</a>
+                <a href="/mp/edit/{{$mp->id}}" class="btn btn-primary btn-sm">Edit</a>
             </div>
             <br>
         </div>
@@ -156,13 +134,13 @@
 
                     <tbody id="view">
                         <?php $qty_for_detail = 0; ?>
-                        @foreach ($mcp_wsheet_m as $mcpwsm)
+                        @foreach ($mp_wsheet_m as $mpwsm)
 
                         <tr style="background-color: #d3d3d3;">
-                            <td class="text-center">{{$mcpwsm->no_urut}}</td>
-                            <td colspan="3">{{$mcpwsm->combo}}</td>
-                            <td colspan="3">{{$mcpwsm->total_qty}}</td>
-                            <?php $qty_for_detail = $mcpwsm->total_qty; ?>
+                            <td class="text-center">{{$mpwsm->no_urut}}</td>
+                            <td colspan="3">{{$mpwsm->combo}}</td>
+                            <td colspan="3">{{$mpwsm->total_qty}}</td>
+                            <?php $qty_for_detail = $mpwsm->total_qty; ?>
                             <td class="text-center">
                                 <div class="dropdown">
                                     <button class="btn btn-light btn-sm dropdown-toggle" type="button"
@@ -171,21 +149,16 @@
                                         Action
                                     </button>
                                     <div class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="/mcp/print_wsm/{{$mcp->id}}/{{$mcpwsm->id}}"
+                                        <a class="dropdown-item" href="/mp/print_wsm/{{$mp->id}}/{{$mpwsm->id}}"
                                             target="_blank">
                                             Print All</a>
-
-                                        @if ($mcp->state == "UNCONFIRMED" || $mcp->state == "PENDING")
-                                        <a class="dropdown-item"
-                                            href="/mcp/edit_ws/{{$mcpwsm->id}}/{{$mcp->id}}">Edit</a>
+                                        <a class="dropdown-item" href="/mp/edit_ws/{{$mpwsm->id}}/{{$mp->id}}">Edit</a>
                                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#form"
-                                            data-wsheet="{{$mcpwsm->id}}" id="click_newtype">New
+                                            data-wsheet="{{$mpwsm->id}}" id="click_newtype">New
                                             Type</a>
                                         <hr>
-                                        <a class="dropdown-item" href="/mcp/delete_ws/{{$mcpwsm->id}}"
+                                        <a class="dropdown-item" href="/mp/delete_ws/{{$mpwsm->id}}"
                                             onclick="return confirm('Lanjutkan untuk hapus?')">Destroy</a>
-                                        @endif
-
                                     </div>
                                 </div>
                             </td>
@@ -194,14 +167,14 @@
                             <td></td>
                             <td colspan=" 6">
                                 {{-- membuat array disini --}}
-                                <?php $mcpwsm_print = $mcpwsm->id ; ?>
+                                <?php $mpwsm_print = $mpwsm->id ; ?>
                                 <?php $size_qty = 'Size [Quantity] = '; ?>
                                 <?php $size_for_detail = ''; ?>
 
-                                @foreach ($mcp_wsheet as $mcpws)
-                                <?php if ($mcpws['mcp_wsheet_m'] == $mcpwsm['id']) {
-                                    $size_qty = $size_qty . $mcpws['size'] . ' [' . $mcpws['qty_tot'] . ']';
-                                    $size_for_detail .= '['.$mcpws['size'].']';
+                                @foreach ($mp_wsheet as $mpws)
+                                <?php if ($mpws['mp_wsheet_m'] == $mpwsm['id']) {
+                                    $size_qty = $size_qty . $mpws['size'] . ' [' . $mpws['qty_tot'] . ']';
+                                    $size_for_detail .= '['.$mpws['size'].']';
                                 } ?>
                                 @endforeach
                                 {{-- end foreach wsheet --}}
@@ -215,11 +188,11 @@
                             <td colspan="7"><b>MARKER & APLIKASI</b></td>
                         </tr>
 
-                        @foreach ($mcp_type as $mcpt)
-                        <?php if($mcpt['id_wsheet'] == $mcpwsm['id']) { ?>
+                        @foreach ($mp_type as $mpt)
+                        <?php if($mpt['id_wsheet'] == $mpwsm['id']) { ?>
 
                         {{-- MARKER & APPLIKASI--}}
-                        <?php if ($mcpt['type'] == 'MARKER' || $mcpt['type'] == 'APLIKASI') { ?>
+                        <?php if ($mpt['type'] == 'MARKER' || $mpt['type'] == 'APLIKASI') { ?>
                         <tr class="font-weight-bold">
                             <td></td>
                             <td>Jenis Kain</td>
@@ -231,11 +204,11 @@
                         </tr>
                         <tr>
                             <td></td>
-                            <td>{{$mcpt->no_urut}}. {{$mcpt->fabricconst}}</td>
-                            <td>{{$mcpt->warna}}</td>
-                            <td>{{$mcpt->component}}</td>
-                            <td>{{$mcpt->type}}</td>
-                            <td>{{$mcpt->tujuan}}</td>
+                            <td>{{$mpt->no_urut}}. {{$mpt->fabricconst}}</td>
+                            <td>{{$mpt->warna}}</td>
+                            <td>{{$mpt->component}}</td>
+                            <td>{{$mpt->type}}</td>
+                            <td>{{$mpt->tujuan}}</td>
                             <td colspan="2" class="text-center">
                                 <div class="dropdown">
                                     <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
@@ -245,32 +218,22 @@
                                     <div class="dropdown-menu text" aria-labelledby="dropdownMenuButton">
                                         {{-- <a class="dropdown-item" href="#">Print Rekap Hitung</a> --}}
 
-                                        @if ($mcp->state == "UNCONFIRMED" || $mcp->state == "PENDING")
-                                        <a class="dropdown-item"
-                                            href="/mcp/edit_mcpt/{{$mcpt->id}}/{{$mcp->id}}">Edit</a>
-                                        <a href="/mcp/print_ws/{{$mcp->id}}/{{$mcpwsm_print}}/{{$mcpt->id}}"
-                                            target="_blank" class="dropdown-item">Print Rekap
-                                            Hitung</a>
+                                        <a class="dropdown-item" href="/mp/edit_mpt/{{$mpt->id}}/{{$mp->id}}">Edit</a>
+                                        <a href="/mp/print_ws/{{$mp->id}}/{{$mpwsm_print}}/{{$mpt->id}}" target="_blank"
+                                            class="dropdown-item">Print Rekap Hitung</a>
                                         <a class="dropdown-item click_newdetail" href="#" data-toggle="modal"
-                                            data-target="#form-detail" data-mcptid="{{$mcpt->id}}"
-                                            data-mcpwsmid="{{$mcpwsm['id']}}" id="click_newdetail">New Detail
+                                            data-target="#form-detail" data-mptid="{{$mpt->id}}"
+                                            data-mpwsmid="{{$mpwsm['id']}}" id="click_newdetail">New Detail
                                         </a>
                                         <hr>
-                                        <a class="dropdown-item" href="/mcp/delete_mcpt/{{$mcpt->id}}"
+                                        <a class="dropdown-item" href="/mp/delete_mpt/{{$mpt->id}}"
                                             onclick="return confirm('Lanjutkan untuk hapus?')">Destroy</a>
-                                        @elseif ($mcp->state == "CONFIRMED")
-                                        <a href="/mcp/print_ws/{{$mcp->id}}/{{$mcpwsm_print}}/{{$mcpt->id}}"
-                                            target="_blank" class="dropdown-item">Print Rekap
-                                            Hitung</a>
-                                        @endif
-
-
                                     </div>
                                 </div>
                             </td>
                         </tr>
-                        <?php foreach ($mcp_detail as $mcpd) { ?>
-                        <?php if($mcpd['id_type'] == $mcpt['id']) { ?>
+                        <?php foreach ($mp_detail as $mpd) { ?>
+                        <?php if($mpd['id_type'] == $mpt['id']) { ?>
                         <tr>
                             <td colspan="2"></td>
                             <td><b>Marker ke</b></td>
@@ -282,15 +245,14 @@
                         </tr>
                         <tr>
                             <td colspan="2"></td>
-                            <td><a href="/mcp/edit_mcpd/{{$mcpd->id}}/{{$mcp->id}}/{{$mcpwsm->id}}"
-                                    id="click_showdetail">M
-                                    {{$mcpd->urutan}}</a>
+                            <td><a href="/mp/edit_mpd/{{$mpd->id}}/{{$mp->id}}/{{$mpwsm->id}}" id="click_showdetail">M
+                                    {{$mpd->urutan}}</a>
                             </td>
-                            <td>{{$mcpd->code}}</td>
-                            <td>{{$mcpd->panjang_m}}</td>
-                            <td>{{$mcpd->lebar_m}}(m),{{number_format((float)($mcpd->lebar_m * 39.37), 2, '.', '')}}(inc)
+                            <td>{{$mpd->code}}</td>
+                            <td>{{$mpd->panjang_m}}</td>
+                            <td>{{$mpd->lebar_m}}(m),{{number_format((float)($mpd->lebar_m * 39.37), 2, '.', '')}}(inc)
                             </td>
-                            <td>{{$mcpd->gramasi}}</td>
+                            <td>{{$mpd->gramasi}}</td>
                             <td class="text-center">
                                 <div class="dropdown">
                                     <button class="btn btn-danger btn-sm dropdown-toggle" type="button"
@@ -298,31 +260,17 @@
                                         aria-expanded="false">
                                     </button>
                                     <div class="dropdown-menu text" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="/mcp/print_detail/{{$mcpd->pdf_marker}}"
+                                        <a class="dropdown-item" href="/mp/print_detail/{{$mpd->pdf_marker}}"
                                             target="_blank">Print Detail</a>
-
-                                        @if ($mcp->state == "UNCONFIRMED" || $mcp->state == "PENDING")
                                         <a class="dropdown-item"
-                                            href="/mcp/edit_mcpd/{{$mcpd->id}}/{{$mcp->id}}/{{$mcpwsm->id}}">Edit</a>
+                                            href="/mp/edit_mpd/{{$mpd->id}}/{{$mp->id}}/{{$mpwsm->id}}">Edit</a>
                                         <hr>
-                                        <a class="dropdown-item" href="/mcp/delete_mcpd/{{$mcpd->id}}"
+                                        <a class="dropdown-item" href="/mp/delete_mpd/{{$mpd->id}}"
                                             onclick="return confirm('Lanjutkan untuk hapus?')">Destroy</a>
-                                        @endif
-
                                     </div>
                                 </div>
                             </td>
                         </tr>
-                        {{-- <tr> --}}
-                        {{-- <td colspan="6"></td> --}}
-                        {{-- <td colspan="2" class="text-center">
-                                <a href="/mcp/print_ws/{{$mcp->id}}/{{$mcpwsm_print}}/{{$mcpt->id}}/{{$mcpd->id}}"
-                        target="_blank" class="btn btn-primary btn-sm">Print Rekap Hitungg</a>
-                        </td> --}}
-                        {{-- <td colspan="2" class="text-center"><a
-                                    href="{{ route('mcp.print_ws', ['mcp_id' => $mcp->id, '$mcpwsm_id' => $mcpwsm_print, 'mcpt_id' => $mcpt->id, 'mcpd_id' => $mcpd->id]) }}"
-                        target="_blank" class="btn btn-primary">Print Document</a></td> --}}
-                        {{-- </tr> --}}
                         <?php } ?>
                         <?php } ?>
                         <?php } ?>
@@ -341,11 +289,11 @@
                             <td colspan="7"><b>KAIN KERAS</b></td>
                         </tr>
 
-                        @foreach ($mcp_type as $mcpt)
-                        <?php if($mcpt['id_wsheet'] == $mcpwsm['id']) { ?>
+                        @foreach ($mp_type as $mpt)
+                        <?php if($mpt['id_wsheet'] == $mpwsm['id']) { ?>
 
                         {{-- KAIN KERAS --}}
-                        <?php if ($mcpt['type'] == 'KAIN KERAS') { ?>
+                        <?php if ($mpt['type'] == 'KAIN KERAS') { ?>
                         <tr class="font-weight-bold">
                             <td></td>
                             <td>Jenis Kain</td>
@@ -357,11 +305,11 @@
                         </tr>
                         <tr>
                             <td></td>
-                            <td>{{$mcpt->no_urut}}. {{$mcpt->fabricconst}}</td>
-                            <td>{{$mcpt->warna}}</td>
-                            <td>{{$mcpt->component}}</td>
-                            <td>{{$mcpt->type}}</td>
-                            <td>{{$mcpt->tujuan}}</td>
+                            <td>{{$mpt->no_urut}}. {{$mpt->fabricconst}}</td>
+                            <td>{{$mpt->warna}}</td>
+                            <td>{{$mpt->component}}</td>
+                            <td>{{$mpt->type}}</td>
+                            <td>{{$mpt->tujuan}}</td>
                             <td colspan="2" class="text-center">
                                 <div class="dropdown">
                                     <button class="btn btn-info btn-sm dropdown-toggle" type="button"
@@ -369,28 +317,23 @@
                                         aria-expanded="false">
                                     </button>
                                     <div class="dropdown-menu text" aria-labelledby="dropdownMenuButton">
-
-                                        @if ($mcp->state == "UNCONFIRMED" || $mcp->state == "PENDING")
-                                        <a class="dropdown-item"
-                                            href="/mcp/edit_mcpt/{{$mcpt->id}}/{{$mcp->id}}">Edit</a>
-                                        <a href="/mcp/print_ws/{{$mcp->id}}/{{$mcpwsm_print}}/{{$mcpt->id}}"
-                                            target="_blank" class="dropdown-item">Print Rekap
+                                        <a class="dropdown-item" href="/mp/edit_mpt/{{$mpt->id}}/{{$mp->id}}">Edit</a>
+                                        <a href="/mp/print_ws/{{$mp->id}}/{{$mpwsm_print}}/{{$mpt->id}}" target="_blank"
+                                            class="dropdown-item">Print Rekap
                                             Hitung</a>
                                         <a class="dropdown-item click_newdetail" href="#" data-toggle="modal"
-                                            data-target="#form-detail" data-mcptid="{{$mcpt->id}}"
-                                            data-mcpwsmid="{{$mcpwsm['id']}}" id="click_newdetail">New Detail
+                                            data-target="#form-detail" data-mptid="{{$mpt->id}}"
+                                            data-mpwsmid="{{$mpwsm['id']}}" id="click_newdetail">New Detail
                                         </a>
                                         <hr>
-                                        <a class="dropdown-item" href="/mcp/delete_mcpt/{{$mcpt->id}}"
+                                        <a class="dropdown-item" href="/mp/delete_mpt/{{$mpt->id}}"
                                             onclick="return confirm('Lanjutkan untuk hapus?')">Destroy</a>
-                                        @endif
-
                                     </div>
                                 </div>
                             </td>
                         </tr>
-                        <?php foreach ($mcp_detail as $mcpd) { ?>
-                        <?php if($mcpd['id_type'] == $mcpt['id']) { ?>
+                        <?php foreach ($mp_detail as $mpd) { ?>
+                        <?php if($mpd['id_type'] == $mpt['id']) { ?>
                         <tr>
                             <td colspan="2"></td>
                             <td><b>Marker ke</b></td>
@@ -402,15 +345,14 @@
                         </tr>
                         <tr>
                             <td colspan="2"></td>
-                            <td><a href="/mcp/edit_mcpd/{{$mcpd->id}}/{{$mcp->id}}/{{$mcpwsm->id}}"
-                                    id="click_showdetail">M
-                                    {{$mcpd->urutan}}</a>
+                            <td><a href="/mp/edit_mpd/{{$mpd->id}}/{{$mp->id}}/{{$mpwsm->id}}" id="click_showdetail">M
+                                    {{$mpd->urutan}}</a>
                             </td>
-                            <td>{{$mcpd->code}}</td>
-                            <td>{{$mcpd->panjang_m}}</td>
-                            <td>{{$mcpd->lebar_m}}(m),{{number_format((float)($mcpd->lebar_m * 39.37), 2, '.', '')}}(inc)
+                            <td>{{$mpd->code}}</td>
+                            <td>{{$mpd->panjang_m}}</td>
+                            <td>{{$mpd->lebar_m}}(m),{{number_format((float)($mpd->lebar_m * 39.37), 2, '.', '')}}(inc)
                             </td>
-                            <td>{{$mcpd->gramasi}}</td>
+                            <td>{{$mpd->gramasi}}</td>
                             <td class="text-center">
                                 <div class="dropdown">
                                     <button class="btn btn-danger btn-sm dropdown-toggle" type="button"
@@ -418,17 +360,13 @@
                                         aria-expanded="false">
                                     </button>
                                     <div class="dropdown-menu text" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="/mcp/print_detail/{{$mcpd->pdf_marker}}">Print
+                                        <a class="dropdown-item" href="/mp/print_detail/{{$mpd->pdf_marker}}">Print
                                             Detail</a>
-
-                                        @if ($mcp->state == "UNCONFIRMED" || $mcp->state == "PENDING")
                                         <a class="dropdown-item"
-                                            href="/mcp/edit_mcpd/{{$mcpd->id}}/{{$mcp->id}}/{{$mcpwsm->id}}">Edit</a>
+                                            href="/mp/edit_mpd/{{$mpd->id}}/{{$mp->id}}/{{$mpwsm->id}}">Edit</a>
                                         <hr>
-                                        <a class="dropdown-item" href="/mcp/delete_mcpd/{{$mcpd->id}}"
+                                        <a class="dropdown-item" href="/mp/delete_mpd/{{$mpd->id}}"
                                             onclick="return confirm('Lanjutkan untuk hapus?')">Destroy</a>
-                                        @endif
-
                                     </div>
                                 </div>
                             </td>
@@ -448,10 +386,10 @@
                             <td colspan="7"><b>PIPING</b></td>
                         </tr>
 
-                        @foreach ($mcp_type as $mcpt)
-                        <?php if($mcpt['id_wsheet'] == $mcpwsm['id']) { ?>
+                        @foreach ($mp_type as $mpt)
+                        <?php if($mpt['id_wsheet'] == $mpwsm['id']) { ?>
 
-                        <?php if ($mcpt['type'] == 'PIPING') { ?>
+                        <?php if ($mpt['type'] == 'PIPING') { ?>
                         <tr class="font-weight-bold">
                             <td></td>
                             <td>Jenis Kain</td>
@@ -463,11 +401,11 @@
                         </tr>
                         <tr>
                             <td></td>
-                            <td>{{$mcpt->no_urut}}. {{$mcpt->fabricconst}}</td>
-                            <td>{{$mcpt->warna}}</td>
-                            <td>{{$mcpt->component}}</td>
-                            <td>{{$mcpt->type}}</td>
-                            <td>{{$mcpt->tujuan}}</td>
+                            <td>{{$mpt->no_urut}}. {{$mpt->fabricconst}}</td>
+                            <td>{{$mpt->warna}}</td>
+                            <td>{{$mpt->component}}</td>
+                            <td>{{$mpt->type}}</td>
+                            <td>{{$mpt->tujuan}}</td>
                             <td colspan="2" class="text-center">
                                 <div class="dropdown">
                                     <button class="btn btn-info btn-sm dropdown-toggle" type="button"
@@ -476,25 +414,20 @@
                                     </button>
                                     <div class="dropdown-menu text" aria-labelledby="dropdownMenuButton">
                                         {{-- <a class="dropdown-item" href="#">Print Rekap Hitung</a> --}}
-
-                                        @if ($mcp->state == "UNCONFIRMED" || $mcp->state == "PENDING")
-                                        <a class="dropdown-item"
-                                            href="/mcp/edit_mcpt/{{$mcpt->id}}/{{$mcp->id}}">Edit</a>
+                                        <a class="dropdown-item" href="/mp/edit_mpt/{{$mpt->id}}/{{$mp->id}}">Edit</a>
                                         <a class="dropdown-item pi_click_newdetail" href="#" data-toggle="modal"
-                                            data-target="#form-piping" data-mcptid="{{$mcpt->id}}"
-                                            data-mcpwsmid="{{$mcpwsm['id']}}" id="pi_click_newdetail">New Detail
+                                            data-target="#form-piping" data-mptid="{{$mpt->id}}"
+                                            data-mpwsmid="{{$mpwsm['id']}}" id="pi_click_newdetail">New Detail
                                         </a>
                                         <hr>
-                                        <a class="dropdown-item" href="/mcp/delete_mcpt/{{$mcpt->id}}"
+                                        <a class="dropdown-item" href="/mp/delete_mpt/{{$mpt->id}}"
                                             onclick="return confirm('Lanjutkan untuk hapus?')">Destroy</a>
-                                        @endif
-
                                     </div>
                                 </div>
                             </td>
                         </tr>
-                        <?php foreach ($mcp_detail_pi as $mcpi) { ?>
-                        <?php if($mcpi['id_type'] == $mcpt['id']) { ?>
+                        <?php foreach ($mp_detail_pi as $mpi) { ?>
+                        <?php if($mpi['id_type'] == $mpt['id']) { ?>
                         <tr>
                             <td colspan="2"></td>
                             <td><b>Marker ke</b></td>
@@ -506,14 +439,13 @@
                         </tr>
                         <tr>
                             <td colspan="2"></td>
-                            <td><a href="/mcp/edit_mcpi/{{$mcpi->id}}/{{$mcp->id}}/{{$mcpwsm->id}}"
-                                    id="click_showdetail">M
-                                    {{$mcpi->urutan}}</a>
+                            <td><a href="/mp/edit_mpi/{{$mpi->id}}/{{$mp->id}}/{{$mpwsm->id}}" id="click_showdetail">M
+                                    {{$mpi->urutan}}</a>
                             </td>
-                            <td>{{$mcpi->kode_marker}}</td>
-                            <td>{{$mcpi->efisiensi}}</td>
-                            <td>{{$mcpi->perimeter}}(m)</td>
-                            <td>{{$mcpi->tolerance}}</td>
+                            <td>{{$mpi->kode_marker}}</td>
+                            <td>{{$mpi->efisiensi}}</td>
+                            <td>{{$mpi->perimeter}}(m)</td>
+                            <td>{{$mpi->tolerance}}</td>
                             <td class="text-center">
                                 <div class="dropdown">
                                     <button class="btn btn-danger btn-sm dropdown-toggle" type="button"
@@ -521,18 +453,13 @@
                                         aria-expanded="false">
                                     </button>
                                     <div class="dropdown-menu text" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="/mcp/print_detail/{{$mcpi->pdf_marker}}"
-                                            target="_blank">
-                                            Print Detail</a>
-
-                                        @if ($mcp->state == "UNCONFIRMED" || $mcp->state == "PENDING")
+                                        <a class="dropdown-item" href="/mp/print_detail/{{$mpi->pdf_marker}}"
+                                            target="_blank">Print Detail</a>
                                         <a class="dropdown-item"
-                                            href="/mcp/edit_mcpi/{{$mcpi->id}}/{{$mcp->id}}/{{$mcpwsm->id}}">Edit</a>
+                                            href="/mp/edit_mpi/{{$mpi->id}}/{{$mp->id}}/{{$mpwsm->id}}">Edit</a>
                                         <hr>
-                                        <a class="dropdown-item" href="/mcp/delete_mcpi/{{$mcpi->id}}"
+                                        <a class="dropdown-item" href="/mp/delete_mpi/{{$mpi->id}}"
                                             onclick="return confirm('Lanjutkan untuk hapus?')">Destroy</a>
-                                        @endif
-
                                     </div>
                                 </div>
                             </td>
@@ -559,73 +486,12 @@
         </div>
     </div>
 
-    {{-- modal confirm --}}
-    <div class="row">
-        <div class="modal fade" id="confirm_modal">
-            <div class="modal-dialog">
-                <form action="/mcp/confirm/" method="post" enctype="multipart/form-data">
-                    {{ csrf_field() }}
-                    <div class="modal-content" id="background-body2" style="width:120% !important;">
-                        <div class=" modal-header bg-indigo-600">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h6 class="modal-title"><strong>Confirm Marker Check Production</strong></h6>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="form-group">
-                                        <input type="hidden" name="id" id="id" value="{{$mcp->id}}">
-                                        <div class="input-group">
-                                            <label for="number">Number</label>
-                                            <input id="number" type="text" class="form-control bg-warning" name="number"
-                                                value="{{$mcp->number}}" readonly>
-                                        </div>
-                                        <div class="input-group">
-                                            <label for="order_name">Order Name</label>
-                                            <input id="order_name" type="text" class="form-control bg-warning"
-                                                name="order_name" value="{{$mcp->order_name}}" readonly>
-                                        </div>
-                                        <div class="input-group">
-                                            <label for="so_number">Sales Order Number</label>
-                                            <input type="hidden" id="id_so_number" type="text"
-                                                class="form-control @error('id_so_number') is-invalid @enderror"
-                                                name="id_so_number" value="{{ old('id_so_number') }}"
-                                                autocomplete="off">
-                                            <input id="so_number" type="text"
-                                                class="form-control @error('so_number') is-invalid @enderror"
-                                                name="so_number" value="{{ old('so_number') }}" autocomplete="off">
-                                            <span>
-                                                <div id="so_numberlist"></div>
-                                            </span>
-
-                                            @error('so_number')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                            @enderror
-                                        </div>
-                                        <div class="mt-2">
-                                            <button type="submit" class="btn btn-warning btn-sm"
-                                                onclick="return confirm('Anda yakin untuk konfirmasi?')">Confirm</button>
-                                            {{-- <a href="/mcp/confirm/{{$mcp->id}}/1" class="btn btn-warning btn-sm"
-                                            onclick="return confirm('Anda yakin untuk konfirmasi?')">Confirm</a> --}}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
     {{-- modal worksheet --}}
     <div class="row">
         <div id="modal" class="modal fade">
             <div class="modal-dialog modal-lg">
 
-                <form action="/mcp/create_ws" method="post" enctype='multipart/form-data'>
+                <form action="/mp/create_ws" method="post" enctype='multipart/form-data'>
                     {{ csrf_field() }}
                     <div class="modal-content" id="background-body2" style="width:120% !important;">
                         <div class=" modal-header bg-indigo-600">
@@ -636,7 +502,7 @@
                             <div class="row">
                                 <div class="col-sm-3">
                                     <div class="form-group">
-                                        <input type="hidden" name="mcp" id="mcp" value="{{$mcp->number}}">
+                                        <input type="hidden" name="mp" id="mp" value="{{$mp->number}}">
                                         <div class="input-group">
                                             <label for="no_urut">No Urut</label>
                                             <input id="no_urut" type="number"
@@ -720,13 +586,13 @@
     <div class="modal fade" id="form" role="dialog">
         <div class="modal-dialog modal-lg">
 
-            <form action="/mcp/create_type" method="POST" enctype="multipart/form-data">
+            <form action="/mp/create_type" method="POST" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <div class="modal-content" id="modal-content" style="width: 120%;">
                     <div class="modal-header">
                         <h3>New Types</h3>
                     </div>
-                    <input type="hidden" name="mcp" id="mcp" value="{{$mcp->number}}">
+                    <input type="hidden" name="mp" id="mp" value="{{$mp->number}}">
                     <input type="hidden" name="id_wsheet" id="id_wsheet">
                     <div class="row">
                         <div class="col-sm-4">
@@ -799,23 +665,6 @@
                             <div class="col-sm-4 text-right">Fab Construct</div>
                             <div class="col-sm-8">
                                 <div class="input-group">
-                                    {{-- <input type="text" id="id_fabric_construct"
-                                        class="form-control @error('id_fabric_construct') is-invalid @enderror"
-                                        name="id_fabric_construct" value="{{ old('id_fabric_construct') }}" required
-                                    autocomplete="off">
-                                    <input id="fabric_construct" type="text"
-                                        class="form-control @error('fabric_construct') is-invalid @enderror"
-                                        name="fabric_construct" value="{{ old('fabric_construct') }}" required
-                                        autocomplete="off">
-                                    <span>
-                                        <div id="fabric_constructlist"></div>
-                                    </span>
-
-                                    @error('fabric_construct')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror --}}
                                     <input type="hidden" id="id_fabricconst" type="text"
                                         class="form-control @error('id_fabricconst') is-invalid @enderror"
                                         name="id_fabricconst" value="{{ old('id_fabricconst') }}" required
@@ -850,19 +699,6 @@
                             <div class="col-sm-4 text-right">Fab Compost</div>
                             <div class="col-sm-8">
                                 <div class="input-group">
-                                    {{-- <input id="fabric_compost" type="text"
-                                        class="form-control @error('fabric_compost') is-invalid @enderror"
-                                        name="fabric_compost" value="{{ old('fabric_compost') }}" required
-                                    autocomplete="off">
-                                    <span>
-                                        <div id="fabric_compostlist"></div>
-                                    </span>
-
-                                    @error('fabric_compost')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror --}}
                                     <input type="hidden" id="id_fabriccomp" type="text"
                                         class="form-control @error('id_fabriccomp') is-invalid @enderror"
                                         name="id_fabriccomp" value="{{ old('id_fabriccomp') }}" required
@@ -901,7 +737,7 @@
     <div class="modal fade" id="form-detail" role="dialog">
         <div class="modal-dialog modal-lg">
 
-            <form action="{{route('mcp.createdetail_ma')}}" method="POST" enctype="multipart/form-data" id="ma_form">
+            <form action="{{route('mp.createdetail_ma')}}" method="POST" enctype="multipart/form-data" id="ma_form">
                 {{ csrf_field() }}
                 <div class="modal-content" id="modal-content" style="width: 120%;">
                     <div class="modal-header">
@@ -913,8 +749,8 @@
                     </div>
 
                     {{-- ------------------------------------------------------------- --}}
-                    <input type="hidden" name="ma_mcp" id="ma_mcp" value="{{$mcp->number}}">
-                    <input type="hidden" name="ma_id_mcpwsm" id="ma_id_mcpwsm" value="">
+                    <input type="hidden" name="ma_mp" id="ma_mp" value="{{$mp->number}}">
+                    <input type="hidden" name="ma_id_mpwsm" id="ma_id_mpwsm" value="">
                     <input type="hidden" name="ma_id_type" id="ma_id_type" value="">
                     <div class="row">
                         <div class="col-sm-4">
@@ -1118,7 +954,7 @@
     <div class="modal fade" id="form-piping" role="dialog">
         <div class="modal-dialog modal-lg">
 
-            <form action="{{route('mcp.createdetail_pi')}}" method="POST" enctype="multipart/form-data" id="pi_form">
+            <form action="{{route('mp.createdetail_pi')}}" method="POST" enctype="multipart/form-data" id="pi_form">
                 {{ csrf_field() }}
                 <div class="modal-content" id="modal-content" style="width: 120%;">
                     <div class="modal-header">
@@ -1129,8 +965,8 @@
                         </span>
                     </div>
 
-                    <input type="hidden" name="pi_mcp" id="pi_mcp" value="{{$mcp->number}}">
-                    <input type="hidden" name="pi_id_mcpwsm" id="pi_id_mcpwsm" value="">
+                    <input type="hidden" name="pi_mp" id="pi_mp" value="{{$mp->number}}">
+                    <input type="hidden" name="pi_id_mpwsm" id="pi_id_mpwsm" value="">
                     <input type="hidden" name="pi_id_type" id="pi_id_type" value="">
                     <div class="row">
                         <div class="col-sm-4">
@@ -1426,29 +1262,6 @@
                 }
             });
 
-            $('#so_number').keyup(function(){
-                var query = $(this).val();
-                if(query != '') {
-                    var _token = $('input[name="_token"]').val();
-                    $.ajax({
-                        url:"{{ route('autocomplete.so_number') }}",
-                        method:"POST",
-                        data:{query:query, _token:_token},
-                        success:function(data){
-                            if (data!='') {
-                                $('#so_numberlist').fadeIn();
-                                $('#so_numberlist').html(data);
-                            } else {
-                                $('#so_numberlist').fadeOut();
-                                $('#so_numberlist').empty();
-                                $('#id_so_number').val('');
-                                $('#so_number').val('');
-                            }
-                        }
-                    });
-                }
-            });
-
             $('#fabricconst').keyup(function(){
                 var query = $(this).val();
                 if(query != '') {
@@ -1509,13 +1322,6 @@
             $('#color_form').val($('#col'+ls).text());
             $('#color_formlist').fadeOut();
         }
-        function pilih_so_number($ls){
-        var ls = $ls;
-        var ls = $ls;
-        $('#id_so_number').val($('#id_so_number'+ls).text());
-        $('#so_number').val($('#so_number'+ls).text());
-        $('#so_numberlist').fadeOut();
-        }
         function pilihFabricconstruct($ls){
         var ls = $ls;
         var ls = $ls;
@@ -1568,13 +1374,13 @@
 
             $(document).ready(function(){
                 $('.click_newdetail').click(function(){
-                    var mcpwsmid = $(this).data("mcpwsmid");
+                    var mpwsmid = $(this).data("mpwsmid");
                     var _token = $('input[name="_token"]').val();
 
                     $.ajax({
-                        url:"/mcp/getsize",
+                        url:"/mp/getsize",
                         method:"POST",
-                        data:{mcpwsmid:mcpwsmid, _token:_token},
+                        data:{mpwsmid:mpwsmid, _token:_token},
                         success:function(data){
                             console.log(data);
 
@@ -1593,19 +1399,19 @@
                         }
                     });
 
-                    var id_mcpwsm = $(this).data("mcpwsmid");
-                    var id_mcpt = $(this).data("mcptid");
+                    var id_mpwsm = $(this).data("mpwsmid");
+                    var id_mpt = $(this).data("mptid");
 
-                    $("#ma_id_type").val(id_mcpt);
-                    $("#ma_id_mcpwsm").val(id_mcpwsm);
+                    $("#ma_id_type").val(id_mpt);
+                    $("#ma_id_mpwsm").val(id_mpwsm);
                     document.getElementById("ma_submit_detail").disabled = true;
                 });
 
                 $('.pi_click_newdetail').click(function(){
-                    var id_mcpwsm = $(this).data("mcpwsmid");
-                    var id_mcpt = $(this).data("mcptid");
-                    $("#pi_id_mcpwsm").val(id_mcpwsm);
-                    $("#pi_id_type").val(id_mcpt);
+                    var id_mpwsm = $(this).data("mpwsmid");
+                    var id_mpt = $(this).data("mptid");
+                    $("#pi_id_mpwsm").val(id_mpwsm);
+                    $("#pi_id_type").val(id_mpt);
                 });
             });
 </script>

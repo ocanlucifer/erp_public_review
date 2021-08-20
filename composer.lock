@@ -4,6 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
+
     "content-hash": "60e9bd9bad1f55ea0de093baed9271cd",
     "packages": [
         {
@@ -194,6 +195,7 @@
             "time": "2021-01-20T22:51:39+00:00"
         },
         {
+
             "name": "daltcore/lara-pdf-merger",
             "version": "2.0.6",
             "source": {

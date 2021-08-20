@@ -9,6 +9,13 @@ use App\Mcp_type;
 use App\Mcp_detail;
 use App\Mcp_assort;
 use App\Mcp_detail_piping;
+use App\Mp;
+use App\Mp_wsheet_main;
+use App\Mp_wsheet;
+use App\Mp_type;
+use App\Mp_detail;
+use App\Mp_assort;
+use App\Mp_detail_piping;
 use Illuminate\Http\Request;
 
 
@@ -117,21 +124,34 @@ class McpController extends Controller
         return redirect('/mcp');
     }
 
-    public function confirm($id, $state)
+    public function confirm(Request $request)
     {
-        if ($state == "1") {
-            Mcp::where('id', $id)->update([
-                'state'             =>  'CONFIRMED',
-                'confirmed_by'      =>  strtoupper(Auth::user()->name)
+        $data = Requests::input();
+        Mcp::where('id', $data['id'])->update([
+            'state'             =>  'CONFIRMED',
+            'confirmed_by'      =>  strtoupper(Auth::user()->name)
+        ]);
+        if (!empty($data['id_so_number'])) {
+            Mcp::where('id', $data['id'])->update([
+                'id_sales_order'             =>  $data['id_so_number']
             ]);
-            Session::flash('sukses', 'Data MCP Berhasil Di Konfirmasi');
         } else {
-            Mcp::where('id', $id)->update([
-                'state'             =>  'UNCONFIRMED',
-                'confirmed_by'      =>  strtoupper(Auth::user()->name)
+            Mcp::where('id', $data['id'])->update([
+                'id_sales_order'             =>  null
             ]);
-            Session::flash('sukses', 'Data MCP Berhasil Di Konfirmasi');
         }
+        Session::flash('sukses', 'Data MCP Berhasil Dikonfirmasi');
+        return redirect('/mcp/detail/' . $data['id']);
+    }
+
+    public function unconfirm($id)
+    {
+        Mcp::where('id', $id)->update([
+            'id_sales_order'    =>  null,
+            'state'             =>  'UNCONFIRMED',
+            'confirmed_by'      =>  strtoupper(Auth::user()->name)
+        ]);
+        Session::flash('sukses', 'Data MCP Tidak Dikonfirmasi');
         return redirect('/mcp/detail/' . $id);
     }
 
@@ -225,7 +245,9 @@ class McpController extends Controller
         $mcp_detail = Mcp_detail::where('mcp', $mcp['number'])->get();
         $mcp_detail_pi = Mcp_detail_piping::where('mcp', $mcp['number'])->get();
 
-        return view('marker.mcpd_index')->with(compact('mcp'))->with(compact('mcp_wsheet'))->with(compact('mcp_wsheet_m'))->with(compact('mcp_type'))->with(compact('mcp_detail'))->with(compact('mcp_detail_pi'));
+        $mp = Mp::where('id', $id)->first();
+
+        return view('marker.mcpd_index')->with(compact('mcp'))->with(compact('mcp_wsheet'))->with(compact('mcp_wsheet_m'))->with(compact('mcp_type'))->with(compact('mcp_detail'))->with(compact('mcp_detail_pi'))->with(compact('mp'));
     }
 
     public function detail_getsize(Request $request)
@@ -1008,6 +1030,159 @@ class McpController extends Controller
         $pathToFile = $file . $filename;
 
         return response()->download($pathToFile);
+    }
+
+    public function exportMcp($id)
+    {
+        $mcp = Mcp::where('id', $id)->first();
+        $number = $mcp['number'];
+
+        $mcpwsm = Mcp_wsheet_main::where('mcp', $number)->get();
+        $mcpws = Mcp_wsheet::where('mcp', $number)->get();
+        $mcpt = Mcp_type::where('mcp', $number)->get();
+        $mcpd = Mcp_detail::where('mcp', $number)->get();
+        $mcpa = Mcp_assort::where('mcp', $number)->get();
+        $mcpi = Mcp_detail_piping::where('mcp', $number)->get();
+
+        Mp::create([
+            'id' => $mcp['id'],
+            'id_sales_order' => $mcp['id_sales_order'],
+            'number' => $mcp['number'],
+            'order_name' => $mcp['order_name'],
+            'fabric_const' => $mcp['fabric_const'],
+            'fabric_comp' => $mcp['fabric_comp'],
+            'fabric_desc' => $mcp['fabric_desc'],
+            'style' => $mcp['style'],
+            'style_desc' => $mcp['style_desc'],
+            'delivery_date' => $mcp['delivery_date'],
+            'revision_count' => $mcp['revision_count'],
+            'revisi_remark' => $mcp['revisi_remark'],
+            'state' => $mcp['state'],
+            'created_by' => $mcp['created_by'],
+            'updated_by' => $mcp['updated_by'],
+            'confirmed_by' => $mcp['confirmed_by']
+        ]);
+
+        foreach ($mcpwsm as $wsm) {
+            Mp_wsheet_main::create([
+                'id' => $wsm['id'],
+                'mp' => $wsm['mcp'],
+                'no_urut' => $wsm['no_urut'],
+                'combo' => $wsm['combo'],
+                'total_qty' => $wsm['total_qty']
+            ]);
+        }
+
+        foreach ($mcpws as $ws) {
+            Mp_wsheet::create([
+                'id' => $ws['id'],
+                'mp' => $ws['mcp'],
+                'mp_wsheet_m' => $ws['mcp_wsheet_m'],
+                'no_urut' => $ws['no_urut'],
+                'combo' => $ws['combo'],
+                'size' => $ws['size'],
+                'ws_qty' => $ws['ws_qty'],
+                'tolerance' => $ws['tolerance'],
+                'qty_tot' => $ws['qty_tot'],
+            ]);
+        }
+
+        foreach ($mcpt as $t) {
+            Mp_type::create([
+                'id' => $t['id'],
+                'mp' => $t['mcp'],
+                'id_wsheet' => $t['id_wsheet'],
+                'no_urut' => $t['no_urut'],
+                'type' => $t['type'],
+                'fabricconst' => $t['fabricconst'],
+                'fabriccomp' => $t['fabriccomp'],
+                'fabricdesc' => $t['fabricdesc'],
+                'component' => $t['component'],
+                'warna' => $t['warna'],
+                'tujuan' => $t['tujuan'],
+                'remark' => $t['remark'],
+                'created_by' => $t['created_by'],
+                'updated_by' => $t['updated_by']
+            ]);
+        }
+
+        foreach ($mcpd as $d) {
+            Mp_detail::create([
+                'id' => $d['id'],
+                'mp' => $d['mcp'],
+                'id_mpwsm' => $d['id_mcpwsm'],
+                'id_type' => $d['id_type'],
+                'urutan' => $d['urutan'],
+                'code' => $d['code'],
+                'marker_date' => $d['marker_date'],
+                'efisiensi' => $d['efisiensi'],
+                'perimeter' => $d['perimeter'],
+                'tole_pjg_m' => $d['tole_pjg_m'],
+                'tole_lbr_m' => $d['tole_lbr_m'],
+                'kons_sz_tgh' => $d['kons_sz_tgh'],
+                'tgl_sz_tgh' => $d['tgl_sz_tgh'],
+                'panjang_m' => $d['panjang_m'],
+                'lebar_m' => $d['lebar_m'],
+                'gramasi' => $d['gramasi'],
+                'total_skala' => $d['total_skala'],
+                'jml_marker' => $d['jml_marker'],
+                'jml_ampar' => $d['jml_ampar'],
+                'pdf_marker' => $d['pdf_marker'],
+                'komponen' => $d['komponen'],
+                'revisi' => $d['revisi'],
+                'revisi_remark' => $d['revisi_remark']
+            ]);
+        }
+
+        foreach ($mcpa as $a) {
+            Mp_assort::create([
+                'id' => $a['id'],
+                'mp' => $a['mcp'],
+                'id_mpwsm' => $a['id_mcpwsm'],
+                'id_ws' => $a['id_ws'],
+                'id_mpt' => $a['id_mcpt'],
+                'id_mpd' => $a['id_mcpd'],
+                'size' => $a['size'],
+                'qty_ws' => $a['qty_ws'],
+                'scale' => $a['scale']
+            ]);
+        }
+
+        foreach ($mcpi as $pi) {
+            Mp_detail_piping::create([
+                'id' => $pi['id'],
+                'mp' => $pi['mcp'],
+                'id_mpwsm' => $pi['id_mcpwsm'],
+                'id_type' => $pi['id_type'],
+                'untuk' => $pi['untuk'],
+                'ukuran' => $pi['ukuran'],
+                'arah' => $pi['arah'],
+                'urutan' => $pi['urutan'],
+                'kode_marker' => $pi['kode_marker'],
+                'marker_date' => $pi['marker_date'],
+                'efisiensi' => $pi['efisiensi'],
+                'perimeter' => $pi['perimeter'],
+                'tole_pjg_m' => $pi['tole_pjg_m'],
+                'tole_lbr_m' => $pi['tole_lbr_m'],
+                'pdf_marker' => $pi['pdf_marker'],
+                'panjang_m' => $pi['panjang_m'],
+                'lebar_m' => $pi['lebar_m'],
+                'mp_pcs' => $pi['mp_pcs'],
+                'pola_asli' => $pi['pola_asli'],
+                'gramasi' => $pi['gramasi'],
+                'skala' => $pi['skala'],
+                'jml_ampar' => $pi['jml_ampar'],
+                'kons_sz_tgh' => $pi['kons_sz_tgh'],
+                'tgl_sz_tgh' => $pi['tgl_sz_tgh'],
+                'tot_ws_qty' => $pi['tot_ws_qty'],
+                'tolerance' => $pi['tolerance'],
+                'revision' => $pi['revision'],
+                'revision_remark' => $pi['revision_remark']
+            ]);
+        }
+
+        Session::flash('sukses', 'Data berhasil diexport ke marker production');
+        return redirect('/mcp/detail/' . $id);
     }
 
     public function tes()
