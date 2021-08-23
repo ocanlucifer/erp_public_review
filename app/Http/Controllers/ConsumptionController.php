@@ -685,6 +685,35 @@ class ConsumptionController extends Controller
 
         $sumamount_cuff=0;
 
+        $total_qty_fab      = 0;
+        
+        $grandtotal_fab = [
+            'total_qty'         => $gr_total_qty_fab,
+            'kons_marker'       => $gr_kons_marker_fab,
+            'qty_kg'            => $gr_qty_kg_fab,
+            'qty_kg_tole'       => $gr_qty_kg_tole_fab,
+            'qty_po'            => $gr_qty_po_fab,
+            'harga_sup'         => $gr_harga_sup_fab,
+            'amount'            => $gr_amount_fab,
+            'amount_freight'    => $gr_amount_freight_fab,
+        ];
+
+        $grandtotal_collar = [
+            'total_qty'         => $gr_total_qty_collar,
+            'total_qty_unit'    => $gr_total_qty_unit_collar,
+            'supplier_price'    => $gr_supplier_price_collar,
+            'amount'            => $gr_amount_collar,
+            'amount_freight'    => $gr_amount_freight_collar,
+        ];
+
+        $grandtotal_cuff = [
+            'total_qty'         => $gr_total_qty_cuff,
+            'total_qty_unit'    => $gr_total_qty_unit_cuff,
+            'supplier_price'    => $gr_supplier_price_cuff,
+            'amount'            => $gr_amount_cuff,
+            'amount_freight'    => $gr_amount_freight_cuff,
+        ];
+
         $garment_nett_price = $quotation->totalcost_handling_margin;
         $sales_fee          = $quotation->sales_fee_value;
         $total_qty          = $quotation->forecast_qty;
@@ -857,6 +886,36 @@ class ConsumptionController extends Controller
         $sumamount_collar=0;
 
         $sumamount_cuff=0;
+
+        $total_qty_fab      = 0;
+        
+        $grandtotal_fab = [
+            'total_qty'         => $gr_total_qty_fab,
+            'kons_marker'       => $gr_kons_marker_fab,
+            'qty_kg'            => $gr_qty_kg_fab,
+            'qty_kg_tole'       => $gr_qty_kg_tole_fab,
+            'qty_po'            => $gr_qty_po_fab,
+            'harga_sup'         => $gr_harga_sup_fab,
+            'amount'            => $gr_amount_fab,
+            'amount_freight'    => $gr_amount_freight_fab,
+        ];
+
+        $grandtotal_collar = [
+            'total_qty'         => $gr_total_qty_collar,
+            'total_qty_unit'    => $gr_total_qty_unit_collar,
+            'supplier_price'    => $gr_supplier_price_collar,
+            'amount'            => $gr_amount_collar,
+            'amount_freight'    => $gr_amount_freight_collar,
+        ];
+
+        $grandtotal_cuff = [
+            'total_qty'         => $gr_total_qty_cuff,
+            'total_qty_unit'    => $gr_total_qty_unit_cuff,
+            'supplier_price'    => $gr_supplier_price_cuff,
+            'amount'            => $gr_amount_cuff,
+            'amount_freight'    => $gr_amount_freight_cuff,
+        ];
+
 
         $garment_nett_price = $quotation->totalcost_handling_margin;
         $sales_fee          = $quotation->sales_fee_value;
