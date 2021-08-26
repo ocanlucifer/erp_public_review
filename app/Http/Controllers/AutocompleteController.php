@@ -502,7 +502,7 @@ class AutocompleteController extends Controller
                 foreach ($data as $row) {
                     $no++;
                     $output .= '
-                    <li hidden id="id_unit' . $no . '_' . $index . '"><a href="#" class="dropdown-item" onclick="pilihUnitInTable(' . $no . ',' . $index . ');">' . strtoupper($row->code) . '</a></li>
+                    <li hidden id="id_unit' . $no . '_' . $index . '"><a href="#" class="dropdown-item" onclick="pilihUnitInTable(' . $no . ',' . $index . ');">' . $row->code . '</a></li>
                     <li id="unit' . $no . '_' . $index . '"><a href="#" class="dropdown-item" onclick="pilihUnitInTable(' . $no . ',' . $index . ');">' . strtoupper($row->name) . '</a></li>
                     ';
                 }
@@ -648,7 +648,6 @@ class AutocompleteController extends Controller
 
     function fabriccomp(Request $request)
     {
-
         if ($request->get('query')) {
             $query = strtoupper($request->get('query'));
             $data = Fabriccomp::where(DB::raw('upper(name)'), 'LIKE', "%{$query}%")

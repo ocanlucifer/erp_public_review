@@ -10,7 +10,11 @@ use File;
 use Session;
 use Auth;
 use App\Poacc;
+use App\Poacc_material;
+use App\Poacc_material_br;
+use App\Poacc_convertunit;
 use App\Salesorder;
+use App\Unit;
 
 class PoaccController extends Controller
 {
@@ -128,12 +132,129 @@ class PoaccController extends Controller
     public function detail($id)
     {
         $acc = Poacc::where('id', $id)->first();
-        return view('purchasing.poacc.acc_index')->with(compact('acc'));
+        $acc_material = Poacc_material::where('id_poacc', $acc['id'])->get();
+        $unit = Unit::all();
+        $convert_unit = Poacc_convertunit::all();
+        return view('purchasing.poacc.acc_index')->with(compact('acc','acc_material','unit','convert_unit'));
     }
 
     public function getMaterial()
     {
         $result = Salesorder::orderby('id', 'DESC')->paginate(10);
         return response()->json($result);
+    }
+
+    public function createMaterial(Request $request)
+    {
+        $data = Requests::input();
+        // dd($data);
+        // die;
+
+        Poacc_material::create([
+            'id_poacc' => $data['id_poacc'],
+            'id_sales_order' => $data['id_new_ma_number'],
+            'id_fabricconst' => $data['id_fabricconst'],
+            'id_fabriccomp' => $data['id_fabriccomp'],
+            'id_style' => $data['id_new_ma_style'],
+            'fabric_desc' => strtoupper($data['new_ma_fabdesc']),
+            'shipping_date' => $data['new_ma_shipping_date'],
+            'budget' => $data['new_ma_budget'],
+            'material_type' => strtoupper($data['new_ma_material_type'])
+        ]);
+
+        $id_material = Poacc_material::orderBy('id','desc')->first();
+        for($i=0; $i<$data['ma_count']; $i++){
+            Poacc_material_br::create([
+                'id_material' =>  $id_material['id'],
+                'id_color' => $data['id_color'][$i],
+                'id_size' => $data['id_size'][$i],
+                'id_unit' => $data['id_unit'][$i],
+                'price' => $data['new_ma_assort_price'][$i],
+                'quantity' => $data['new_ma_assort_quantity'][$i]
+            ]);
+        }
+
+        Session::flash('sukses', 'Data Material Berhasil Ditambahkan');
+        return redirect('/purchasing/acc_orders/' . $data['id_poacc']);
+    }
+
+    public function editMaterial(Request $request)
+    {
+        $id = $request->id;
+        $result['poacc_m'] = Poacc_material::with('fabricconst','fabriccomp','salesorder','style')->where('id', $id)->first();
+        $result['material_type'] = ['FABRIC', 'COLLAR', 'CUFF'];
+        $result['poacc_m_br'] = Poacc_material_br::with('color','size', 'unit')->where('id_material', $result['poacc_m']['id'])->get();
+
+        return response()->json($result);
+    }
+
+    public function updateMaterial(Request $request)
+    {
+        $id = $request->id;
+        parse_str($request->form, $data);
+
+        // dd($data['id_color'][0]);
+        // die;
+
+        Poacc_material::where('id', $id)->update([
+            'id_sales_order' => $data['id_new_ma_number'],
+            'id_fabricconst' => $data['id_fabricconst'],
+            'id_fabriccomp' => $data['id_fabriccomp'],
+            'id_style' => $data['id_new_ma_style'],
+            'fabric_desc' => strtoupper($data['new_ma_fabdesc']),
+            'shipping_date' => $data['new_ma_shipping_date'],
+            'budget' => $data['new_ma_budget'],
+            'material_type' => strtoupper($data['new_ma_material_type'])
+        ]);
+
+        Poacc_material_br::where('id_material', $id)->delete();
+
+        for($i=0; $i<$data['ma_count']; $i++){
+            Poacc_material_br::create([
+                'id_material' => $id,
+                'id_color' => $data['id_color'][$i],
+                'id_size' => $data['id_size'][$i],
+                'id_unit' => $data['id_unit'][$i],
+                'price' => $data['new_ma_assort_price'][$i],
+                'quantity' => $data['new_ma_assort_quantity'][$i]
+            ]);
+        }
+
+        Session::flash('sukses', 'Data Material Berhasil Diupdate');
+        return response()->json(['url'=>url('/purchasing/acc_orders/' . $data['id_poacc'])]);
+    }
+
+    public function deleteMaterial(Request $request)
+    {
+        $id = $request->id;
+        $data = Poacc_material::where('id',$id)->first();
+        Poacc_material::where('id', $id)->delete();
+        Poacc_material_br::where('id_material', $id)->delete();
+
+        Session::flash('sukses', 'Data Material Berhasil dihapus');
+        return response()->json(['url'=>url('/purchasing/acc_orders/' . $data['id_poacc'])]);
+    }
+
+    public function convertUnit(Request $requset)
+    {
+        $data = $requset->input();
+        Poacc_convertunit::create([
+            'id_poacc' => $data['convert_unit_id_poacc'],
+            'id_source_unit' => $data['convert_unit_source'],
+            'id_target_unit' => $data['convert_unit_target'],
+            'faktor' => $data['convert_unit_factor'],
+        ]);
+
+        Session::flash('sukses', 'Data Convert Unit Berhasil ditambahkan');
+        return redirect('/purchasing/acc_orders/' . $data['convert_unit_id_poacc']);
+    }
+
+    public function deleteConvertUnit($id)
+    {
+        $data = Poacc_convertunit::where('id',$id)->first();
+        Poacc_convertunit::where('id', $id)->delete();
+
+        Session::flash('sukses', 'Data Convert Unit Berhasil dihapus');
+        return redirect('/purchasing/acc_orders/' . $data['id_poacc']);
     }
 }

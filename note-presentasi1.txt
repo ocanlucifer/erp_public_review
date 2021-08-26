@@ -1,4 +1,12 @@
-=== PO ===
+=== PO ACC ===
+== Doing
+-> beuatify javascript
+-> Round
+    - pembulatan setiap data material_br pada field quantity, nilai amount mengikuti
+-> convert unit,
+    - ketika add convert unit, semua material_br yang unitnya dicantumkan di source berubah jadi target, dan qtynya sesuai perhitungan
+    - ketika delete convert unit, semua material_br yang unitnya dicantumkan di target berubah jadi source, dan qtynya sesuai perhitungan
+
 == Main Index
 -> Show
 -> create (segala yang look up, tidak di buat dulu karena table belum ada)
@@ -6,6 +14,9 @@
 -> edit
 -> filter (unconfirmed, pending, reviewed, confirmed)
 -> search
+
+Rumus :
+Amount/Budget PO = Price * Quantity
 
 === Marker calculation ====
 => (print) pdf to image then input to the new document

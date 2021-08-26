@@ -86,12 +86,14 @@
                 @if ($cons->status == 'REVIEWED')
                 <div class="col-sm-4">
                     <div class="col-sm-4"><b>Reviewed By</b></div>
-                    <div class="col-sm-8">: {{$cons->reviewedBy['name']}} @if($cons->reviewed_by) ({{date('d-m-Y H:i:s', strtotime($cons->reviewed_at))}}) @endif</div>
+                    <div class="col-sm-8">: {{$cons->reviewedBy['name']}} @if($cons->reviewed_by)
+                        ({{date('d-m-Y H:i:s', strtotime($cons->reviewed_at))}}) @endif</div>
                 </div>
                 @elseif ($cons->status == 'CONFIRMED')
                 <div class="col-sm-4">
                     <div class="col-sm-4"><b>Confirmed By</b></div>
-                    <div class="col-sm-8">: {{$cons->confirmedBy['name']}} @if($cons->confirmed_by) ({{date('d-m-Y H:i:s', strtotime($cons->confirmed_at))}}) @endif</div>
+                    <div class="col-sm-8">: {{$cons->confirmedBy['name']}} @if($cons->confirmed_by)
+                        ({{date('d-m-Y H:i:s', strtotime($cons->confirmed_at))}}) @endif</div>
                 </div>
                 @else
                 <div class="col-sm-4">
@@ -100,7 +102,7 @@
                 </div>
                 @endif
             </div>
-            
+
             <div class="row">
                 <div class="col-sm-4">
                     <div class="col-sm-4"><b>Quotation</b></div>
@@ -112,7 +114,8 @@
                 </div>
                 <div class="col-sm-4">
                     <div class="col-sm-4"><b>Created By</b></div>
-                    <div class="col-sm-8">: {{$cons->createdBy['name']}} @if($cons->created_by) ({{date('d-m-Y H:i:s', strtotime($cons->created_at))}}) @endif</div>
+                    <div class="col-sm-8">: {{$cons->createdBy['name']}} @if($cons->created_by)
+                        ({{date('d-m-Y H:i:s', strtotime($cons->created_at))}}) @endif</div>
                 </div>
             </div>
 
@@ -123,11 +126,13 @@
                 </div>
                 <div class="col-sm-4">
                     <div class="col-sm-4"><b>Budget Status</b></div>
-                    <div class="col-sm-8">: <i class="@if($budget_status=='AMAN') btn-success @else btn-danger @endif"> &nbsp {{$budget_status}} &nbsp </i></div>
+                    <div class="col-sm-8">: <i class="@if($budget_status=='AMAN') btn-success @else btn-danger @endif">
+                            &nbsp {{$budget_status}} &nbsp </i></div>
                 </div>
                 <div class="col-sm-4">
                     <div class="col-sm-4"><b>Updated By</b></div>
-                    <div class="col-sm-8">: {{$cons->updatedBy['name']}} @if($cons->updated_by) ({{date('d-m-Y H:i:s', strtotime($cons->updated_at))}}) @endif</div>
+                    <div class="col-sm-8">: {{$cons->updatedBy['name']}} @if($cons->updated_by)
+                        ({{date('d-m-Y H:i:s', strtotime($cons->updated_at))}}) @endif</div>
                 </div>
             </div>
 
@@ -154,19 +159,22 @@
                     onclick="return confirm('Anda yakin untuk membatalkan konfirmasi?')">Unconfirm</a>
                 @endif
 
-                <a href="/consumption/print_consumption/{{$id}}" target="_blank" id="" class="btn btn-primary btn-sm">Print</a>
+                <a href="/consumption/print_consumption/{{$id}}" target="_blank" id=""
+                    class="btn btn-primary btn-sm">Print</a>
                 <a href="#" target="_blank" id="" class="btn btn-primary btn-sm">Purchase Request</a>
             </div>
             <br>
         </div>
     </div>
-<!-- start fabric table -->
+    <!-- start fabric table -->
     <div class="card mt-3">
         <div class="card-header">
-           @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" || $cons->status == "UNREVIEWED")
-                <a href="#" onclick="$('#jenis').val('FABRIC');$('#judul').html('NEW FABRIC CONSUMPTION');" data-toggle="modal" data-target="#modal_add_detail" class="btn btn-primary btn-sm">NEW FABRIC CONSUMPTION</a>
+            @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" || $cons->status == "UNREVIEWED")
+            <a href="#" onclick="$('#jenis').val('FABRIC');$('#judul').html('NEW FABRIC CONSUMPTION');"
+                data-toggle="modal" data-target="#modal_add_detail" class="btn btn-primary btn-sm">NEW FABRIC
+                CONSUMPTION</a>
             @else
-                <h7>FABRIC CONSUMPTION</h7>
+            <h7>FABRIC CONSUMPTION</h7>
             @endif
         </div>
         <div class="card-body text-size-small">
@@ -177,17 +185,22 @@
                         <tr class="card-header">
                             <td colspan="17">
                                 <div class="dropdown">
-                                    <button class="btn-light dropdown-toggle" type="button"
-                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false">
-                                        {{$consfab->fabricconst['name']}} {{$consfab->fabriccomp['name']}} {{$consfab->description}}
+                                    <button class="btn-light dropdown-toggle" type="button" id="dropdownMenuButton"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        {{$consfab->fabricconst['name']}} {{$consfab->fabriccomp['name']}}
+                                        {{$consfab->description}}
                                     </button>
                                     <div class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
-                                        @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" || $cons->status == "UNREVIEWED")
-                                        <a class="dropdown-item" href="" onclick="selectForm('fabric','{{$consfab->id}}');" data-toggle="modal" data-target="#modal_new_item">New Item</a>
+                                        @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" ||
+                                        $cons->status == "UNREVIEWED")
+                                        <a class="dropdown-item" href=""
+                                            onclick="selectForm('fabric','{{$consfab->id}}');" data-toggle="modal"
+                                            data-target="#modal_new_item">New Item</a>
+                                        <a class="dropdown-item" href="" data-toggle="modal"
+                                            data-target="#modal_edit_detail"
+                                            onclick="$('#judul_edit').html('EDIT FABRIC CONSUMPTION');ModalEditDetail('{{$consfab->id}}');">Edit</a>
                                         <a class="dropdown-item"
-                                            href="" data-toggle="modal" data-target="#modal_edit_detail" onclick="$('#judul_edit').html('EDIT FABRIC CONSUMPTION');ModalEditDetail('{{$consfab->id}}');">Edit</a>
-                                        <a class="dropdown-item" href="/consumption/delete_detail/{{$consfab->id}}/{{$id}}"
+                                            href="/consumption/delete_detail/{{$consfab->id}}/{{$id}}"
                                             onclick="return confirm('Lanjutkan untuk hapus?')">Destroy</a>
                                         @endif
 
@@ -219,7 +232,7 @@
                         </tr>
                     </tbody>
                     <tbody>
-                        <?php 
+                        <?php
                             $sumtotal_qty_fab = 0;
                             $sumkons_marker_fab = 0;
                             $sumqty_unit_fab = 0;
@@ -233,15 +246,18 @@
                         <tr>
                             <td colspan="17">
                                 <div class="dropdown">
-                                    <button class="dropdown-toggle" type="button"
-                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false">
+                                    <button class="dropdown-toggle" type="button" id="dropdownMenuButton"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         {{$consfabsup->supplier['nama']}}
                                     </button>
                                     <div class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
-                                        @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" || $cons->status == "UNREVIEWED")
-                                        <a class="dropdown-item" href="" onclick="selectEditForm('fabric','{{$consfabsup->id}}');" data-toggle="modal" data-target="#modal_edit_supplier">Edit</a>
-                                        <a class="dropdown-item" href="/consumption/delete_supplier/{{$consfabsup->id}}/{{$id}}"
+                                        @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" ||
+                                        $cons->status == "UNREVIEWED")
+                                        <a class="dropdown-item" href=""
+                                            onclick="selectEditForm('fabric','{{$consfabsup->id}}');"
+                                            data-toggle="modal" data-target="#modal_edit_supplier">Edit</a>
+                                        <a class="dropdown-item"
+                                            href="/consumption/delete_supplier/{{$consfabsup->id}}/{{$id}}"
                                             onclick="return confirm('Lanjutkan untuk hapus?')">Destroy</a>
                                         @endif
                                     </div>
@@ -268,7 +284,7 @@
                             <td>{{number_format($fabitem->amount,2)}}</td>
                             <td>{{number_format($fabitem->amount_freight,2)}}</td>
                         </tr>
-                        <?php 
+                        <?php
                             $sumtotal_qty_fab += $fabitem->total_qty;
                             $sumkons_marker_fab += $fabitem->kons_marker;
                             $sumqty_unit_fab += $fabitem->qty_unit;
@@ -296,7 +312,8 @@
                             <td></td>
                             <td><b>{{number_format($sumqty_purch_fab,2)}}</b></td>
                             <td></td>
-                            <td>{{number_format($sumsupplier_price_fab,2)}}</td></td>
+                            <td>{{number_format($sumsupplier_price_fab,2)}}</td>
+                            </td>
                             <td></td>
                             <td><b>{{number_format($sumamount_fab,2)}}</b></td>
                             <td><b>{{number_format($sumamount_freight_fab,2)}}</b></td>
@@ -307,15 +324,17 @@
             @endforeach
         </div>
     </div>
-<!-- end fabric table -->
+    <!-- end fabric table -->
 
-<!-- start collar table -->
+    <!-- start collar table -->
     <div class="card mt-3">
         <div class="card-header">
             @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" || $cons->status == "UNREVIEWED")
-                <a href="#" onclick="$('#jenis').val('COLLAR');$('#judul').html('NEW COLLAR CONSUMPTION');" data-toggle="modal" data-target="#modal_add_detail" class="btn btn-info btn-sm">NEW COLLAR CONSUMPTION</a>
+            <a href="#" onclick="$('#jenis').val('COLLAR');$('#judul').html('NEW COLLAR CONSUMPTION');"
+                data-toggle="modal" data-target="#modal_add_detail" class="btn btn-info btn-sm">NEW COLLAR
+                CONSUMPTION</a>
             @else
-                <h7>COLLAR CONSUMPTION</h7>
+            <h7>COLLAR CONSUMPTION</h7>
             @endif
         </div>
         <div class="card-body text-size-small">
@@ -326,18 +345,23 @@
                         <tr class="card-header">
                             <td colspan="17">
                                 <div class="dropdown">
-                                    <button class="btn-light dropdown-toggle" type="button"
-                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false">
-                                        {{$conscollar->fabricconst['name']}} {{$conscollar->fabriccomp['name']}} {{$conscollar->description}}
+                                    <button class="btn-light dropdown-toggle" type="button" id="dropdownMenuButton"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        {{$conscollar->fabricconst['name']}} {{$conscollar->fabriccomp['name']}}
+                                        {{$conscollar->description}}
                                     </button>
                                     <div class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
-                                        @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" || $cons->status == "UNREVIEWED")
-                                        <a class="dropdown-item" href="" onclick="selectForm('collar','{{$conscollar->id}}');" data-toggle="modal" data-target="#modal_new_item">New Item</a>
+                                        @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" ||
+                                        $cons->status == "UNREVIEWED")
+                                        <a class="dropdown-item" href=""
+                                            onclick="selectForm('collar','{{$conscollar->id}}');" data-toggle="modal"
+                                            data-target="#modal_new_item">New Item</a>
 
+                                        <a class="dropdown-item" href="" data-toggle="modal"
+                                            data-target="#modal_edit_detail"
+                                            onclick="$('#judul_edit').html('EDIT COLLAR CONSUMPTION');ModalEditDetail('{{$conscollar->id}}');">Edit</a>
                                         <a class="dropdown-item"
-                                            href="" data-toggle="modal" data-target="#modal_edit_detail" onclick="$('#judul_edit').html('EDIT COLLAR CONSUMPTION');ModalEditDetail('{{$conscollar->id}}');">Edit</a>
-                                        <a class="dropdown-item" href="/consumption/delete_detail/{{$conscollar->id}}/{{$id}}"
+                                            href="/consumption/delete_detail/{{$conscollar->id}}/{{$id}}"
                                             onclick="return confirm('Lanjutkan untuk hapus?')">Destroy</a>
                                         @endif
 
@@ -368,7 +392,7 @@
                         </tr>
                     </tbody>
                     <tbody>
-                        <?php 
+                        <?php
                             $sumtotal_qty_collar = 0;
                             $sumtotal_qty_unit_collar = 0;
                             $sumsupplier_price_collar = 0;
@@ -379,16 +403,21 @@
                         <tr>
                             <td colspan="17" bgcolor="#d6ffe8">
                                 <div class="dropdown">
-                                    <button class="dropdown-toggle" type="button"
-                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false">
+                                    <button class="dropdown-toggle" type="button" id="dropdownMenuButton"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         {{$conscollarsup->supplier['nama']}}
                                     </button>
                                     <div class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
-                                        @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" || $cons->status == "UNREVIEWED")
-                                        <a class="dropdown-item" href="" data-toggle="modal" data-target="#modal_collarcuff_new_item" onclick="CollarCuffGetIDsup('collar','{{$conscollarsup->id}}')">New Item</a>
-                                        <a class="dropdown-item" href="" onclick="selectEditForm('collar','{{$conscollarsup->id}}');" data-toggle="modal" data-target="#modal_edit_supplier">Edit</a>
-                                        <a class="dropdown-item" href="/consumption/delete_supplier/{{$conscollarsup->id}}/{{$id}}"
+                                        @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" ||
+                                        $cons->status == "UNREVIEWED")
+                                        <a class="dropdown-item" href="" data-toggle="modal"
+                                            data-target="#modal_collarcuff_new_item"
+                                            onclick="CollarCuffGetIDsup('collar','{{$conscollarsup->id}}')">New Item</a>
+                                        <a class="dropdown-item" href=""
+                                            onclick="selectEditForm('collar','{{$conscollarsup->id}}');"
+                                            data-toggle="modal" data-target="#modal_edit_supplier">Edit</a>
+                                        <a class="dropdown-item"
+                                            href="/consumption/delete_supplier/{{$conscollarsup->id}}/{{$id}}"
                                             onclick="return confirm('Lanjutkan untuk hapus?')">Destroy</a>
                                         @endif
                                     </div>
@@ -399,43 +428,56 @@
                         <tr>
                             <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">
                                 <div class="dropdown">
-                                    <button class="dropdown-toggle" type="button"
-                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false">
+                                    <button class="dropdown-toggle" type="button" id="dropdownMenuButton"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         {{$collaritem->fab_color['name']}}
                                     </button>
                                     <div class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
-                                        @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" || $cons->status == "UNREVIEWED")
-                                        <a class="dropdown-item" href="" onclick="selectCollarCuffEditForm('collar','{{$collaritem->id}}');" data-toggle="modal" data-target="#modal_edit_collar_cuff">Edit</a>
-                                        <a class="dropdown-item" href="/consumption/delete_collar_cuff_item/{{$collaritem->id}}/{{$id}}"
+                                        @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" ||
+                                        $cons->status == "UNREVIEWED")
+                                        <a class="dropdown-item" href=""
+                                            onclick="selectCollarCuffEditForm('collar','{{$collaritem->id}}');"
+                                            data-toggle="modal" data-target="#modal_edit_collar_cuff">Edit</a>
+                                        <a class="dropdown-item"
+                                            href="/consumption/delete_collar_cuff_item/{{$collaritem->id}}/{{$id}}"
                                             onclick="return confirm('Lanjutkan untuk hapus?')">Destroy</a>
                                         @endif
                                     </div>
                                 </div>
                             </td>
-                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->total_qty,2)}}</td>
-                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->tole,2)}}</td>
-                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->qty_unit,2)}}</td>
-                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->total_qty_unit_pcs,2)}}</td>
-                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->total_qty_unit,2)}}</td>
-                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->budget_price,2)}}</td>
-                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->supplier_price,2)}}</td>
-                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{$collaritem->unit}}</td>
-                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->amount,2)}}</td>
-                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->amount_freight,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">
+                                {{number_format($collaritem->total_qty,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">
+                                {{number_format($collaritem->tole,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">
+                                {{number_format($collaritem->qty_unit,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">
+                                {{number_format($collaritem->total_qty_unit_pcs,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">
+                                {{number_format($collaritem->total_qty_unit,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">
+                                {{number_format($collaritem->budget_price,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">
+                                {{number_format($collaritem->supplier_price,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">
+                                {{$collaritem->unit}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">
+                                {{number_format($collaritem->amount,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">
+                                {{number_format($collaritem->amount_freight,2)}}</td>
                             <td colspan="5">
                                 @foreach ($collaritem->collarcuffItemSize as $itemsize)
-                                <tr>
-                                    <td>{{$itemsize->dimension}}</td>
-                                    <td>{{$itemsize->itemSize['name']}}</td>
-                                    <td>{{number_format($itemsize->total,2)}}</td>
-                                    <td>{{number_format($itemsize->total_tole,2)}}</td>
-                                    <td>{{number_format($itemsize->total_rounded,2)}}</td>
-                                </tr>
-                                @endforeach
-                            </td>
+                        <tr>
+                            <td>{{$itemsize->dimension}}</td>
+                            <td>{{$itemsize->itemSize['name']}}</td>
+                            <td>{{number_format($itemsize->total,2)}}</td>
+                            <td>{{number_format($itemsize->total_tole,2)}}</td>
+                            <td>{{number_format($itemsize->total_rounded,2)}}</td>
                         </tr>
-                        <?php 
+                        @endforeach
+                        </td>
+                        </tr>
+                        <?php
                             $sumtotal_qty_collar += $collaritem->total_qty;
                             $sumtotal_qty_unit_collar += $collaritem->total_qty_unit_pcs;
                             $sumsupplier_price_collar += $collaritem->supplier_price;
@@ -454,7 +496,8 @@
                             <td><b>{{number_format($sumtotal_qty_unit_collar,2)}}</b></td>
                             <td></td>
                             <td></td>
-                            <td>{{number_format($sumsupplier_price_collar,2)}}</td></td>
+                            <td>{{number_format($sumsupplier_price_collar,2)}}</td>
+                            </td>
                             <td></td>
                             <td><b>{{number_format($sumamount_collar,2)}}</b></td>
                             <td><b>{{number_format($sumamount_freight_collar,2)}}</b></td>
@@ -476,9 +519,10 @@
     <div class="card mt-3">
         <div class="card-header">
             @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" || $cons->status == "UNREVIEWED")
-                <a href="#" onclick="$('#jenis').val('CUFF');$('#judul').html('NEW CUFF CONSUMPTION');" data-toggle="modal" data-target="#modal_add_detail" class="btn btn-danger btn-sm">NEW CUFF CONSUMPTION</a>
+            <a href="#" onclick="$('#jenis').val('CUFF');$('#judul').html('NEW CUFF CONSUMPTION');" data-toggle="modal"
+                data-target="#modal_add_detail" class="btn btn-danger btn-sm">NEW CUFF CONSUMPTION</a>
             @else
-                <h7>CUFF CONSUMPTION</h7>
+            <h7>CUFF CONSUMPTION</h7>
             @endif
         </div>
         <div class="card-body text-size-small">
@@ -489,18 +533,23 @@
                         <tr class="card-header">
                             <td colspan="17">
                                 <div class="dropdown">
-                                    <button class="btn-light dropdown-toggle" type="button"
-                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false">
-                                        {{$conscuff->fabricconst['name']}} {{$conscuff->fabriccomp['name']}} {{$conscuff->description}}
+                                    <button class="btn-light dropdown-toggle" type="button" id="dropdownMenuButton"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        {{$conscuff->fabricconst['name']}} {{$conscuff->fabriccomp['name']}}
+                                        {{$conscuff->description}}
                                     </button>
                                     <div class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
-                                        @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" || $cons->status == "UNREVIEWED")
-                                        <a class="dropdown-item" href="" onclick="selectForm('cuff','{{$conscuff->id}}');" data-toggle="modal" data-target="#modal_new_item">New Item</a>
+                                        @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" ||
+                                        $cons->status == "UNREVIEWED")
+                                        <a class="dropdown-item" href=""
+                                            onclick="selectForm('cuff','{{$conscuff->id}}');" data-toggle="modal"
+                                            data-target="#modal_new_item">New Item</a>
 
+                                        <a class="dropdown-item" href="" data-toggle="modal"
+                                            data-target="#modal_edit_detail"
+                                            onclick="$('#judul_edit').html('EDIT CUFF CONSUMPTION');ModalEditDetail('{{$conscuff->id}}');">Edit</a>
                                         <a class="dropdown-item"
-                                            href="" data-toggle="modal" data-target="#modal_edit_detail" onclick="$('#judul_edit').html('EDIT CUFF CONSUMPTION');ModalEditDetail('{{$conscuff->id}}');">Edit</a>
-                                        <a class="dropdown-item" href="/consumption/delete_detail/{{$conscuff->id}}/{{$id}}"
+                                            href="/consumption/delete_detail/{{$conscuff->id}}/{{$id}}"
                                             onclick="return confirm('Lanjutkan untuk hapus?')">Destroy</a>
                                         @endif
 
@@ -531,7 +580,7 @@
                         </tr>
                     </tbody>
                     <tbody>
-                        <?php 
+                        <?php
                             $sumtotal_qty_cuff = 0;
                             $sumtotal_qty_unit_cuff = 0;
                             $sumsupplier_price_cuff = 0;
@@ -542,16 +591,21 @@
                         <tr>
                             <td colspan="17" bgcolor="#d6ffe8">
                                 <div class="dropdown">
-                                    <button class="dropdown-toggle" type="button"
-                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false">
+                                    <button class="dropdown-toggle" type="button" id="dropdownMenuButton"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         {{$conscuffsup->supplier['nama']}}
                                     </button>
                                     <div class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
-                                        @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" || $cons->status == "UNREVIEWED")
-                                        <a class="dropdown-item" href="" data-toggle="modal" data-target="#modal_collarcuff_new_item" onclick="CollarCuffGetIDsup('cuff','{{$conscuffsup->id}}')">New Item</a>
-                                        <a class="dropdown-item" href="" onclick="selectEditForm('cuff','{{$conscuffsup->id}}');" data-toggle="modal" data-target="#modal_edit_supplier">Edit</a>
-                                        <a class="dropdown-item" href="/consumption/delete_supplier/{{$conscuffsup->id}}/{{$id}}"
+                                        @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" ||
+                                        $cons->status == "UNREVIEWED")
+                                        <a class="dropdown-item" href="" data-toggle="modal"
+                                            data-target="#modal_collarcuff_new_item"
+                                            onclick="CollarCuffGetIDsup('cuff','{{$conscuffsup->id}}')">New Item</a>
+                                        <a class="dropdown-item" href=""
+                                            onclick="selectEditForm('cuff','{{$conscuffsup->id}}');" data-toggle="modal"
+                                            data-target="#modal_edit_supplier">Edit</a>
+                                        <a class="dropdown-item"
+                                            href="/consumption/delete_supplier/{{$conscuffsup->id}}/{{$id}}"
                                             onclick="return confirm('Lanjutkan untuk hapus?')">Destroy</a>
                                         @endif
                                     </div>
@@ -562,43 +616,56 @@
                         <tr>
                             <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">
                                 <div class="dropdown">
-                                    <button class="dropdown-toggle" type="button"
-                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false">
+                                    <button class="dropdown-toggle" type="button" id="dropdownMenuButton"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         {{$collaritem->fab_color['name']}}
                                     </button>
                                     <div class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
-                                        @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" || $cons->status == "UNREVIEWED")
-                                        <a class="dropdown-item" href="" onclick="selectCollarCuffEditForm('cuff','{{$collaritem->id}}');" data-toggle="modal" data-target="#modal_edit_collar_cuff">Edit</a>
-                                        <a class="dropdown-item" href="/consumption/delete_collar_cuff_item/{{$collaritem->id}}/{{$id}}"
+                                        @if ($cons->status == "UNCONFIRMED" || $cons->status == "PENDING" ||
+                                        $cons->status == "UNREVIEWED")
+                                        <a class="dropdown-item" href=""
+                                            onclick="selectCollarCuffEditForm('cuff','{{$collaritem->id}}');"
+                                            data-toggle="modal" data-target="#modal_edit_collar_cuff">Edit</a>
+                                        <a class="dropdown-item"
+                                            href="/consumption/delete_collar_cuff_item/{{$collaritem->id}}/{{$id}}"
                                             onclick="return confirm('Lanjutkan untuk hapus?')">Destroy</a>
                                         @endif
                                     </div>
                                 </div>
                             </td>
-                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->total_qty,2)}}</td>
-                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->tole,2)}}</td>
-                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->qty_unit,2)}}</td>
-                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->total_qty_unit_pcs,2)}}</td>
-                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->total_qty_unit,2)}}</td>
-                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->budget_price,2)}}</td>
-                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->supplier_price,2)}}</td>
-                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{$collaritem->unit}}</td>
-                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->amount,2)}}</td>
-                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">{{number_format($collaritem->amount_freight,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">
+                                {{number_format($collaritem->total_qty,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">
+                                {{number_format($collaritem->tole,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">
+                                {{number_format($collaritem->qty_unit,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">
+                                {{number_format($collaritem->total_qty_unit_pcs,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">
+                                {{number_format($collaritem->total_qty_unit,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">
+                                {{number_format($collaritem->budget_price,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">
+                                {{number_format($collaritem->supplier_price,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">
+                                {{$collaritem->unit}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">
+                                {{number_format($collaritem->amount,2)}}</td>
+                            <td rowspan="{{$collaritem->collarcuffItemSize->count('dimension')+1}}">
+                                {{number_format($collaritem->amount_freight,2)}}</td>
                             <td colspan="5">
                                 @foreach ($collaritem->collarcuffItemSize as $itemsize)
-                                <tr>
-                                    <td>{{$itemsize->dimension}}</td>
-                                    <td>{{$itemsize->itemSize['name']}}</td>
-                                    <td>{{number_format($itemsize->total,2)}}</td>
-                                    <td>{{number_format($itemsize->total_tole,2)}}</td>
-                                    <td>{{number_format($itemsize->total_rounded,2)}}</td>
-                                </tr>
-                                @endforeach
-                            </td>
+                        <tr>
+                            <td>{{$itemsize->dimension}}</td>
+                            <td>{{$itemsize->itemSize['name']}}</td>
+                            <td>{{number_format($itemsize->total,2)}}</td>
+                            <td>{{number_format($itemsize->total_tole,2)}}</td>
+                            <td>{{number_format($itemsize->total_rounded,2)}}</td>
                         </tr>
-                        <?php 
+                        @endforeach
+                        </td>
+                        </tr>
+                        <?php
                             $sumtotal_qty_cuff += $collaritem->total_qty;
                             $sumtotal_qty_unit_cuff += $collaritem->total_qty_unit_pcs;
                             $sumsupplier_price_cuff += $collaritem->supplier_price;
@@ -617,7 +684,8 @@
                             <td><b>{{number_format($sumtotal_qty_unit_cuff,2)}}</b></td>
                             <td></td>
                             <td></td>
-                            <td>{{number_format($sumsupplier_price_cuff,2)}}</td></td>
+                            <td>{{number_format($sumsupplier_price_cuff,2)}}</td>
+                            </td>
                             <td></td>
                             <td><b>{{number_format($sumamount_cuff,2)}}</b></td>
                             <td><b>{{number_format($sumamount_freight_cuff,2)}}</b></td>
@@ -695,8 +763,8 @@
                             <div class="form-group">
                                 <div class="input-group">
                                     <label for="fabric_description">Fabric Descripstion</label>
-                                    <input type="text" name="description" id="fabric_description"
-                                        class="form-control" placeholder="Fabric Description">
+                                    <input type="text" name="description" id="fabric_description" class="form-control"
+                                        placeholder="Fabric Description">
                                 </div>
                             </div>
                             <br>
@@ -753,12 +821,10 @@
                                     <label for="supplier">Supplier</label>
                                     <input type="hidden" id="supplier_code" type="text"
                                         class="form-control @error('supplier_code') is-invalid @enderror"
-                                        name="supplier_code" required
-                                        autocomplete="off">
+                                        name="supplier_code" required autocomplete="off">
                                     <input id="supplier" type="text"
-                                        class="form-control @error('supplier') is-invalid @enderror"
-                                        name="supplier" required
-                                        autocomplete="off">
+                                        class="form-control @error('supplier') is-invalid @enderror" name="supplier"
+                                        required autocomplete="off">
                                     <span>
                                         <div id="supplier_codelist"></div>
                                     </span>
@@ -959,7 +1025,7 @@
                 }
             });
 
-            
+
         });
 
         function selectForm(action_name,id_detail){
@@ -1119,10 +1185,9 @@
             });
         }
 
-         
+
 </script>
 
 <script type="text/javascript">
     $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
 </script>
-
