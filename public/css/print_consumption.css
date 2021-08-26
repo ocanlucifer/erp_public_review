@@ -1,0 +1,163 @@
+@page {
+    size: portrait;
+}
+
+body {
+    size: 29.7cm 21cm;
+    margin-top: 2mm;
+    height: 21cm;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.page-break {
+    display: block;
+    page-break-before: always;
+}
+
+.logo-teo {
+    max-width: 100%;
+    max-height: auto;
+    vertical-align: middle;
+}
+
+.name-teo {
+    padding-left: 1em;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table,
+tr,
+td,
+th {
+    border: 0.5px solid black;
+    border-width: thin;
+    padding: 0px 10px 0px 10px;
+    text-align: center;
+}
+
+tr.no-border th,
+tr.no-border td {
+    border: 0;
+}
+
+tr.bg-col th,
+tr.bg-col td {
+    background-color: lightgrey;
+}
+
+.detail-marker {
+    page-break-inside: avoid;
+    page-break-after: auto;
+    position: relative;
+    display: block;
+}
+
+.avoid-break {
+    page-break-inside: avoid;
+}
+.watermark
+{
+    /*size: 9800.7cm 9001cm;*/
+    height: 22cm;
+    width: 70cm;
+    position:fixed;
+    top: 0px;
+    /*left: 690px;*/
+    /*color: #ff0000;*/
+    font-size:30px;
+    transform:rotate(30deg);
+    /*-webkit-transform:rotate(320deg);*/
+    color: #000;  
+    color: rgba(0, 0, 0, 0.14);
+    /*text-align: justify; */
+    /*margin-left: 6px; */
+    /*margin-right: 6px;*/
+}
+
+@media print {
+    @page {
+        size: portrait;
+    }
+
+    body {
+        size: 29.7cm 21cm;
+        height: 21cm;
+        font-size: 8px;
+        font-weight: bold;
+    }
+    .watermark
+    {
+    /*size: 9800.7cm 9001cm;*/
+        height: 22cm;
+        width: 70cm;
+        position:fixed;
+        top: 0px;
+        /*left: 690px;*/
+        /*color: #ff0000;*/
+        font-size:35px;
+        transform:rotate(30deg);
+        /*-webkit-transform:rotate(320deg);*/
+        color: #000;  
+        color: rgba(0, 0, 0, 0.14);
+        /*text-align: justify; */
+        /*margin-left: 6px; */
+        /*margin-right: 6px;*/
+    }
+
+    .page-break {
+        display: block;
+        page-break-before: always;
+    }
+
+    .logo-teo {
+        max-width: 100%;
+        max-height: auto;
+        vertical-align: middle;
+    }
+
+    .name-teo {
+        padding-left: 1em;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    table,
+    tr,
+    td,
+    th {
+        border: 0.5px solid black;
+        border-width: thin;
+        padding: 0px 10px 0px 10px;
+        text-align: center;
+    }
+
+    tr.no-border th,
+    tr.no-border td {
+        border: 0;
+    }
+
+    tr.bg-col th,
+    tr.bg-col td {
+        background-color: lightgrey;
+    }
+
+    .detail-marker {
+        page-break-inside: avoid;
+        page-break-after: auto;
+        position: relative;
+        display: block;
+    }
+
+    .avoid-break {
+        page-break-inside: avoid;
+    }
+
+}

@@ -416,6 +416,8 @@ Route::post('/consumption/edit_detail/update_collar_cuff_item/', 'ConsumptionCon
 
 Route::get('/consumption/delete_collar_cuff_item/{id}/{id_consumption}', 'ConsumptionController@delete_collar_cuff_item');
 Route::get('/consumption/print_consumption/{id}', 'ConsumptionController@print_consumption');
+Route::get('/consumption/print_purchase_request/{id}', 'ConsumptionController@print_purchase_request');
+
 
 // PO ACC
 // Route::get('/mp', 'MarkerproController@index');
@@ -438,3 +440,4 @@ Route::get('/purchasing/acc_orders/delete_convert_limit/{id}', 'PoaccController@
 // Route::get('/mp/delete_ws/{id}', 'MarkerproController@deletews');
 
 // PO ACC =====
+
