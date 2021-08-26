@@ -1,35 +1,35 @@
 <a href="##" class="btn btn-success" onclick="fabitem_addrow();">Add Item</a>
 <br>
 <table class="table-bordered table-hover  table-responsive">
-	<thead>
-		<th>Color</th>
-		<th>Total Qty</th>
-		<th>Kom</th>
-		<th>Width</th>
-		<th>W Unit</th>
-		<th>Kons. Budget</th>
-		<th>Kons. Marker</th>
-		<th>Marker Efi</th>
-		<th>Qty Unit</th>
-		<th>Tol</th>
-		<th>Qty Unit Tol</th>
-		<th>Qty Sample</th>
-		<th>Qty Purc</th>
-		<th>Budget Pri</th>
-		<th>Sup Price</th>
-		<th>Amount</th>
-		<th>Freight</th>
-		<th>Amount + Freight</th>
-		<th>Unit</th>
-		<th>#</th>
-	</thead>
-	<tbody id="fabitem_tbody">
-		
-	</tbody>
+    <thead>
+        <th>Color</th>
+        <th>Total Qty</th>
+        <th>Kom</th>
+        <th>Width</th>
+        <th>W Unit</th>
+        <th>Kons. Budget</th>
+        <th>Kons. Marker</th>
+        <th>Marker Efi</th>
+        <th>Qty Unit</th>
+        <th>Tol</th>
+        <th>Qty Unit Tol</th>
+        <th>Qty Sample</th>
+        <th>Qty Purc</th>
+        <th>Budget Pri</th>
+        <th>Sup Price</th>
+        <th>Amount</th>
+        <th>Freight</th>
+        <th>Amount + Freight</th>
+        <th>Unit</th>
+        <th>#</th>
+    </thead>
+    <tbody id="fabitem_tbody">
+
+    </tbody>
 </table>
 
 <script type="text/javascript">
-	var count = 1;
+    var count = 1;
     // MCP WORKSHEET
     function fabitem_addrow(){
         count++;

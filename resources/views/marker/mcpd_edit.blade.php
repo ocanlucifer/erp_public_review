@@ -272,8 +272,8 @@
                     for(i=0; i<data.length; i++){
                         baris = '<tr>' +
                             '<input class="form-control form-detail" type="hidden" name="input_id_mcpa[]" id="input_id_mcpa'+i+'" value="'+data[i].id+'" readonly>'+
-                            '<td>' +'<input class="form-control form-detail" type="text" name="input_det_size[]" id="input_det_size_'+i+'" value="'+data[i].size+'" readonly>'+'</td>'+
-                            '<td>'+'<input class="form-control form-detail" type="number" name="input_det_qty[]" id="input_det_qty_'+i+'" value="'+data[i].qty_ws+'" readonly>'+'</td>'+
+                            '<td>' +'<input class="form-control form-detail" type="text" name="input_det_size[]" id="input_det_size_'+i+'"'+' style="background-color: #FFB09F !important;"'+'" value="'+data[i].size+'" readonly>'+'</td>'+
+                            '<td>'+'<input class="form-control form-detail" type="number" name="input_det_qty[]" id="input_det_qty_'+i+'"'+' style="background-color: #FFB09F !important;"'+'" value="'+data[i].qty_ws+'" readonly>'+'</td>'+
                             '<td>'+'<input class="form-control form-detail" type="number" name="input_det_scale[]" id="input_det_scale_'+i+'" value="'+data[i].scale+'">'+'</td>'+
                             '<td>'+'<input class="form-control form-detail" type="number" name="input_det_scales[]" id="input_det_scales_'+i+'"'+' style="background-color: #FFB09F !important;"'+' value="'+jml_ampar * data[i].scale+'" readonly>'+'</td>'+
                             '</tr>'

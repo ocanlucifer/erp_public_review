@@ -395,12 +395,13 @@ Route::get('/consumption/edit/{id}', 'ConsumptionController@edit');
 Route::post('/consumption/create', 'ConsumptionController@create');
 Route::post('/consumption/update', 'ConsumptionController@update');
 Route::get('/consumption/view/{id}', 'ConsumptionController@view');
+
 Route::get('/consumption/update_status/{id}/{status}', 'ConsumptionController@update_status');
 Route::post('/consumption/add_detail', 'ConsumptionController@add_detail');
 Route::get('/consumption/delete_detail/{id_detail}/{id_consumption}', 'ConsumptionController@delete_detail');
 Route::get('/consumption/edit_detail_form', 'ConsumptionController@edit_detail_form');
 Route::post('/consumption/update_detail', 'ConsumptionController@update_detail');
-Route::get('/consumption/newItem_Fabric',function(){
+Route::get('/consumption/newItem_Fabric', function () {
     return View::make('consumption.new_item_fabric')->render();
 });
 Route::post('/consumption/add_detail/fabric', 'ConsumptionController@add_fabric_item');
@@ -416,3 +417,27 @@ Route::post('/consumption/edit_detail/update_collar_cuff_item/', 'ConsumptionCon
 Route::get('/consumption/delete_collar_cuff_item/{id}/{id_consumption}', 'ConsumptionController@delete_collar_cuff_item');
 Route::get('/consumption/print_consumption/{id}', 'ConsumptionController@print_consumption');
 Route::get('/consumption/print_purchase_request/{id}', 'ConsumptionController@print_purchase_request');
+
+
+// PO ACC
+// Route::get('/mp', 'MarkerproController@index');
+Route::get('/purchasing/acc_orders', 'PoaccController@index');
+Route::post('/purchasing/acc_orders/create', 'PoaccController@create');
+// Route::get('/mp/detail/{id}', 'MarkerproController@detail');
+Route::post('/purchasing/acc_orders/{id}/edit', 'PoaccController@edit');
+Route::post('/purcashing/acc_orders/update', 'PoaccController@update');
+Route::get('/purchasing/acc_orders/{id}/delete', 'PoaccController@delete');
+Route::get('/purchasing/acc_orders/{filter}/filter', 'PoaccController@filter');
+Route::get('/purchasing/acc_orders/{id}', 'PoaccController@detail');
+Route::post('/purchasing/acc_orders/get_material', 'PoaccController@getMaterial');
+Route::post('/purchasing/acc_orders/create_material', 'PoaccController@createMaterial');
+Route::post('/purchasing/acc_orders/material/{id}/edit', 'PoaccController@editMaterial');
+Route::post('/purchasing/acc_orders/{id}/update', 'PoaccController@updateMaterial');
+Route::post('/purchasing/acc_orders/{id}/delete_material', 'PoaccController@deleteMaterial');
+Route::post('/purchasing/acc_orders/convert_unit', 'PoaccController@convertUnit');
+Route::get('/purchasing/acc_orders/delete_convert_limit/{id}', 'PoaccController@deleteConvertUnit');
+// Route::post('/mp/update', 'MarkerproController@update');
+// Route::get('/mp/delete_ws/{id}', 'MarkerproController@deletews');
+
+// PO ACC =====
+

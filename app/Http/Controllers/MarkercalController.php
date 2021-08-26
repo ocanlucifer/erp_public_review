@@ -133,10 +133,26 @@ class MarkercalController extends Controller
     public function delete(Request $request)
     {
         $id = $request->id;
-        $mcd = Markercal_d::where('id_markercal', $id)->first();
+        $mcd = Markercal_d::where('id_markercal', $id)->get();
+        if (count($mcd) > 0) {
+            foreach ($mcd as $d) {
+                $mcg = Markercal_g::where('id_markercal_d', $d['id'])->get();
+                if (count($mcg) > 0) {
+                    Markercal_g::where('id_markercal_d', $d['id'])->delete();
+                }
+            }
+        }
 
-        Markercal_g::where('id_markercal_d', $mcd['id'])->delete();
-        Markercal_d::where('id_markercal', $id)->delete();
+        $mc = Markercal::where('id', $id)->get();
+        if (count($mc) > 0) {
+            foreach ($mc as $c) {
+                $mcd = Markercal_d::where('id_markercal', $id)->get();
+                if (count($mcd) > 0) {
+                    Markercal_d::where('id_markercal', $id)->delete();
+                }
+            }
+        }
+
         Markercal::where('id', $id)->delete();
 
         Session::flash('sukses', 'Data berhasil dihapus');
